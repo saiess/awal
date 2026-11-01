@@ -1,0 +1,15 @@
+{
+  "source": "record-sample.ogg",
+  "source_sha256": "69bb26beced32315c4ac201f38db2d9c74b5b77a25546e30ef092fb87cec1063",
+  "wav": "benchmarks\\results\\reference\\reference.wav",
+  "wav_sha256": "fc03ae6e7225642e8cf83e5160aff1d7f0b3cf17e23045c006d945bdc8b93931",
+  "duration_seconds": 19.1135,
+  "sample_rate": 48000,
+  "channels": 1,
+  "peak": 1.0063122510910034,
+  "samples_above_full_scale": 8,
+  "conversion": "OGG decoded to float WAV; no trimming, gain, or denoising",
+  "consent_status": "confirmed by user",
+  "consent_statement": "Yes, it\u2019s my voice and I permit cloning and commercial publication.",
+  "confirmed_at": "2026-11-01T14:59:49.671580+00:00"
+}

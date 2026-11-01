@@ -1,0 +1,1364 @@
+{
+  "reports": [
+    {
+      "model": "chatterbox",
+      "revision": "5bb1f6ee58e50c3b8d408bc82a6d3740c2db6e18",
+      "pid": 31792,
+      "code_revision_reviewed": "5de7a54aa4e5e2baadb0182dde554908b48b85c2",
+      "package_versions": {
+        "torch": "2.6.0+cu124",
+        "torchaudio": "2.6.0+cu124",
+        "chatterbox-tts": "0.1.7"
+      },
+      "started_at": "2026-11-01T15:00:03.705165+00:00",
+      "seed": 1234,
+      "load_seconds": 11.54430019999927,
+      "sample_rate": 24000,
+      "device": "NVIDIA GeForce RTX 4070 Laptop GPU",
+      "voice": {
+        "identity": "User-owned voice recording record-sample.ogg",
+        "rights_confirmed": true,
+        "scope": "User permits cloning and commercial publication of generated narration",
+        "statement": "Yes, it\u2019s my voice and I permit cloning and commercial publication.",
+        "confirmed_at": "2026-11-01T14:59:49.671580+00:00",
+        "source_sha256": "69bb26beced32315c4ac201f38db2d9c74b5b77a25546e30ef092fb87cec1063",
+        "reference_sha256": "fc03ae6e7225642e8cf83e5160aff1d7f0b3cf17e23045c006d945bdc8b93931"
+      },
+      "reference_sha256": "fc03ae6e7225642e8cf83e5160aff1d7f0b3cf17e23045c006d945bdc8b93931",
+      "cache": "C:\\Users\\saide\\AppData\\Local\\Temp\\local-youtube-tts-cache",
+      "python": "3.12.2 (tags/v3.12.2:6abddd9, Feb  6 2024, 21:26:36) [MSC v.1937 64 bit (AMD64)]",
+      "parameters": {
+        "temperature": 0.8,
+        "repetition_penalty": 1.2,
+        "cfg_weight": 0.5,
+        "exaggeration": 0.5,
+        "upstream_other_defaults": true
+      },
+      "case": "documentary",
+      "status": "ok",
+      "segments": [
+        {
+          "text": "At dawn, the island looked deserted. Then a light appeared in the old lighthouse. \"Did you see that?\" Maya whispered. Her brother stopped rowing. For thirty years, nobody had lived beyond the harbor wall, yet someone was climbing the spiral stairs. A door slammed. Three gulls lifted into the wind, and the light went dark.",
+          "generation_seconds": 10.236329100000148,
+          "duration_seconds": 16.92,
+          "peak": 1.1296522617340088,
+          "file": "benchmarks\\results\\chatterbox\\documentary-segments\\000.wav"
+        },
+        {
+          "text": "Was it a warning, a mistake, or simply a reflection from the rising sun? The answer would begin with a notebook, a rusted key, and a photograph taken before either of them was born. By sunset, one small discovery would change the story everyone in the village thought they knew. But first, they had to reach the shore.",
+          "generation_seconds": 10.145164600000498,
+          "duration_seconds": 16.48,
+          "peak": 1.1281347274780273,
+          "file": "benchmarks\\results\\chatterbox\\documentary-segments\\001.wav"
+        }
+      ],
+      "text_sha256": "d21ce274c349fbd65c852855c50dddabbe0c2f4f45a1837d56621899358d4125",
+      "generation_seconds": 20.381493700000647,
+      "wall_seconds": 20.41219959999944,
+      "audio_seconds": 33.4,
+      "real_time_factor": 0.6102243622754685,
+      "peak_allocated_bytes": 3699848192,
+      "peak_reserved_bytes": 4219469824,
+      "file": "benchmarks\\results\\chatterbox\\documentary.wav",
+      "audio_sha256": "0c4c863dfcad11010d79c834aba592592d0651d9b8543ddda86380dcb9252ae5",
+      "pcm_float32_sha256": "fe7156d5dc6650bd027c3ce040e87f7f125d3ace3126d272a5639d36779e0656",
+      "validated_pcm_sha256": "fe7156d5dc6650bd027c3ce040e87f7f125d3ace3126d272a5639d36779e0656",
+      "wav_validation": "pass: finite, decodable, sample rate, duration, file hash, segment duration sum"
+    },
+    {
+      "model": "chatterbox",
+      "revision": "5bb1f6ee58e50c3b8d408bc82a6d3740c2db6e18",
+      "status": "loaded_only_no_speech_generated",
+      "device": "NVIDIA GeForce RTX 4070 Laptop GPU",
+      "load_seconds": 34.04988020000019,
+      "peak_allocated_bytes": 3207263232,
+      "peak_reserved_bytes": 3238002688
+    },
+    {
+      "model": "chatterbox",
+      "revision": "5bb1f6ee58e50c3b8d408bc82a6d3740c2db6e18",
+      "pid": 31792,
+      "code_revision_reviewed": "5de7a54aa4e5e2baadb0182dde554908b48b85c2",
+      "package_versions": {
+        "torch": "2.6.0+cu124",
+        "torchaudio": "2.6.0+cu124",
+        "chatterbox-tts": "0.1.7"
+      },
+      "started_at": "2026-11-01T15:00:03.705165+00:00",
+      "seed": 1234,
+      "load_seconds": 11.54430019999927,
+      "sample_rate": 24000,
+      "device": "NVIDIA GeForce RTX 4070 Laptop GPU",
+      "voice": {
+        "identity": "User-owned voice recording record-sample.ogg",
+        "rights_confirmed": true,
+        "scope": "User permits cloning and commercial publication of generated narration",
+        "statement": "Yes, it\u2019s my voice and I permit cloning and commercial publication.",
+        "confirmed_at": "2026-11-01T14:59:49.671580+00:00",
+        "source_sha256": "69bb26beced32315c4ac201f38db2d9c74b5b77a25546e30ef092fb87cec1063",
+        "reference_sha256": "fc03ae6e7225642e8cf83e5160aff1d7f0b3cf17e23045c006d945bdc8b93931"
+      },
+      "reference_sha256": "fc03ae6e7225642e8cf83e5160aff1d7f0b3cf17e23045c006d945bdc8b93931",
+      "cache": "C:\\Users\\saide\\AppData\\Local\\Temp\\local-youtube-tts-cache",
+      "python": "3.12.2 (tags/v3.12.2:6abddd9, Feb  6 2024, 21:26:36) [MSC v.1937 64 bit (AMD64)]",
+      "parameters": {
+        "temperature": 0.8,
+        "repetition_penalty": 1.2,
+        "cfg_weight": 0.5,
+        "exaggeration": 0.5,
+        "upstream_other_defaults": true
+      },
+      "case": "long",
+      "status": "ok",
+      "segments": [
+        {
+          "text": "Before sunrise, a coastal town begins to wake. Delivery vans turn into narrow streets, a baker opens the shutters, and the first fishing boats leave the harbor. Most people are thinking about the day ahead. Few are thinking about the network beneath their feet.",
+          "generation_seconds": 9.092836100000568,
+          "duration_seconds": 14.8,
+          "peak": 1.164700984954834,
+          "file": "benchmarks\\results\\chatterbox\\long-segments\\000.wav"
+        },
+        {
+          "text": "Yet every street, building, and public square depends on systems that must work together. Water, power, transport, and communication make ordinary life possible. Their history tells us how a town grows, how it survives trouble, and how it prepares for an uncertain future. Start with water.",
+          "generation_seconds": 10.55233909999879,
+          "duration_seconds": 17.56,
+          "peak": 1.1141903400421143,
+          "file": "benchmarks\\results\\chatterbox\\long-segments\\001.wav"
+        },
+        {
+          "text": "A river may appear to offer an endless supply, but its flow changes with the seasons. Heavy rain can turn a quiet channel into a dangerous current. A dry summer can reveal stones that have been hidden for years. Engineers study those changes before deciding where to place a reservoir or treatment plant.",
+          "generation_seconds": 10.520375300000524,
+          "duration_seconds": 17.24,
+          "peak": 1.1254281997680664,
+          "file": "benchmarks\\results\\chatterbox\\long-segments\\002.wav"
+        },
+        {
+          "text": "They measure the landscape, inspect the ground, and compare records from many different years. Good planning begins with evidence. It also begins with a simple admission: a system designed for yesterday may need to change tomorrow. Inside the treatment plant, water passes through several stages. Large screens catch branches and other debris.",
+          "generation_seconds": 11.174159700000018,
+          "duration_seconds": 18.56,
+          "peak": 1.2147785425186157,
+          "file": "benchmarks\\results\\chatterbox\\long-segments\\003.wav"
+        },
+        {
+          "text": "Smaller particles settle or are filtered out. Operators monitor the process and adjust it when conditions change. The details vary from place to place, but the goal remains clear. People need water they can trust. That trust depends on maintenance as much as on impressive equipment.",
+          "generation_seconds": 9.593686199999865,
+          "duration_seconds": 15.76,
+          "peak": 1.1614770889282227,
+          "file": "benchmarks\\results\\chatterbox\\long-segments\\004.wav"
+        },
+        {
+          "text": "A small sensor, checked regularly, may prevent a much larger problem. A written record can help a new operator understand what happened during the previous shift. Now follow a pipe back toward the town center. Some sections were installed decades ago, when fewer people lived here. Others are recent replacements.",
+          "generation_seconds": 10.76400090000061,
+          "duration_seconds": 17.92,
+          "peak": 1.1213221549987793,
+          "file": "benchmarks\\results\\chatterbox\\long-segments\\005.wav"
+        },
+        {
+          "text": "A repair crew cannot simply close every road at once. It must coordinate with bus routes, businesses, emergency services, and the people who live nearby. This is why a seemingly simple repair can take careful preparation. The crew must locate other buried cables, choose a safe working area, and arrange access to the damaged section.",
+          "generation_seconds": 10.700162499999351,
+          "duration_seconds": 17.76,
+          "peak": 1.122600793838501,
+          "file": "benchmarks\\results\\chatterbox\\long-segments\\006.wav"
+        },
+        {
+          "text": "The digging is only one visible part of a much larger job. Above ground, electricity follows another network. Power arrives at a substation, where equipment changes its voltage before it continues toward homes and shops. Demand rises when people cook dinner, charge devices, or turn on heating. Operators watch the balance between supply and use.",
+          "generation_seconds": 11.57308059999923,
+          "duration_seconds": 18.68,
+          "peak": 1.1272629499435425,
+          "file": "benchmarks\\results\\chatterbox\\long-segments\\007.wav"
+        },
+        {
+          "text": "A network needs enough capacity for busy periods, but building capacity takes time and money. Local solar panels and batteries can help, although they also change the way energy moves. The challenge is to make the whole system reliable while its individual parts keep evolving. Consider a storm arriving from the sea.",
+          "generation_seconds": 11.782667800000127,
+          "duration_seconds": 19.24,
+          "peak": 1.1229441165924072,
+          "file": "benchmarks\\results\\chatterbox\\long-segments\\008.wav"
+        },
+        {
+          "text": "Wind bends trees, rain fills drains, and salt spray blows across the harbor. One damaged cable may affect a street. A flooded control room may affect a much wider area. Planners therefore look for places where several systems could fail together. Backup power is useful only if it can be reached and started safely.",
+          "generation_seconds": 11.54404059999979,
+          "duration_seconds": 18.76,
+          "peak": 1.1728134155273438,
+          "file": "benchmarks\\results\\chatterbox\\long-segments\\009.wav"
+        },
+        {
+          "text": "Emergency instructions are useful only if people understand them. Practice matters because a difficult night is a poor time to discover that two teams are using different maps or outdated telephone numbers. Transport presents a different kind of puzzle. The main road must carry deliveries, commuters, buses, bicycles, and pedestrians.",
+          "generation_seconds": 11.513549900000726,
+          "duration_seconds": 18.56,
+          "peak": 1.120595932006836,
+          "file": "benchmarks\\results\\chatterbox\\long-segments\\010.wav"
+        },
+        {
+          "text": "Each group experiences the same street differently. A wide turning lane may help a truck while making a crossing longer for someone on foot. A bus stop may improve access while reducing space for parked cars. There is rarely a single design that solves every problem. Instead, planners count journeys, observe delays, and listen to residents.",
+          "generation_seconds": 12.589625399999932,
+          "duration_seconds": 20.24,
+          "peak": 1.1507000923156738,
+          "file": "benchmarks\\results\\chatterbox\\long-segments\\011.wav"
+        },
+        {
+          "text": "Clear priorities help them explain why a change is needed and how its effects will be measured. At the railway station, the morning crowd becomes a stream of individual decisions. One person checks a departure board. Another helps a child with a heavy bag. A visitor searches for the exit.",
+          "generation_seconds": 10.120298799998636,
+          "duration_seconds": 16.04,
+          "peak": 1.117797613143921,
+          "file": "benchmarks\\results\\chatterbox\\long-segments\\012.wav"
+        },
+        {
+          "text": "Signs, lighting, and clear walking routes reduce confusion without requiring anyone to think about the design. This quiet usefulness is a mark of good infrastructure. The best improvement may be a shelter that keeps people dry, a ramp that makes a platform accessible, or a timetable that connects with the last bus home.",
+          "generation_seconds": 11.263622300000861,
+          "duration_seconds": 18.36,
+          "peak": 1.1361809968948364,
+          "file": "benchmarks\\results\\chatterbox\\long-segments\\013.wav"
+        },
+        {
+          "text": "Small changes can make a daily journey much easier. Communication links these activities together. A repair team sends a report. A shop places an order. A family receives a warning about an approaching storm. Reliable networks help information reach the right people at the right time. But a message must also be understandable.",
+          "generation_seconds": 10.901198400000794,
+          "duration_seconds": 17.76,
+          "peak": 1.117452621459961,
+          "file": "benchmarks\\results\\chatterbox\\long-segments\\014.wav"
+        },
+        {
+          "text": "A precise technical report may be appropriate for an engineer, while residents need a short explanation of what has happened and what they should do next. Useful communication begins by considering its audience. More information is not always better information, especially when time and attention are limited.",
+          "generation_seconds": 9.926309000000401,
+          "duration_seconds": 16.2,
+          "peak": 1.1548113822937012,
+          "file": "benchmarks\\results\\chatterbox\\long-segments\\015.wav"
+        },
+        {
+          "text": "By late afternoon, the town looks ordinary again. Children leave school, the bakery closes, and the fishing boats return. Beneath these familiar scenes, thousands of connected tasks continue. Some are automated, and others depend on judgment learned through years of experience.",
+          "generation_seconds": 8.420779699999912,
+          "duration_seconds": 14.04,
+          "peak": 1.1415055990219116,
+          "file": "benchmarks\\results\\chatterbox\\long-segments\\016.wav"
+        },
+        {
+          "text": "The future will bring new equipment, different weather patterns, and changing needs. No single invention will remove the need for care. What keeps a town working is the patient combination of planning, measurement, repair, and cooperation.",
+          "generation_seconds": 8.15269360000093,
+          "duration_seconds": 13.32,
+          "peak": 1.0921642780303955,
+          "file": "benchmarks\\results\\chatterbox\\long-segments\\017.wav"
+        },
+        {
+          "text": "Tomorrow morning, when the first tap opens and the first light comes on, that quiet work will already be underway.",
+          "generation_seconds": 3.8062368000009883,
+          "duration_seconds": 5.88,
+          "peak": 1.079932689666748,
+          "file": "benchmarks\\results\\chatterbox\\long-segments\\018.wav"
+        }
+      ],
+      "text_sha256": "da7ef041e40c9910de33cb3c0622456278deda55df39ffc6d8b4cbbfa85998c8",
+      "generation_seconds": 193.99166270000205,
+      "wall_seconds": 194.20924969999942,
+      "audio_seconds": 316.68,
+      "real_time_factor": 0.6125794578123092,
+      "peak_allocated_bytes": 3809637888,
+      "peak_reserved_bytes": 4802478080,
+      "file": "benchmarks\\results\\chatterbox\\long.wav",
+      "audio_sha256": "4ded9a6de6b3bf5fa2a5f085176f185f8c5c41c75a16a4eeb2e328c9adecaad4",
+      "pcm_float32_sha256": "8d0c6ff79db931ef3626bd4a5daaae07e9733449d817fbc53f70a41f58689165",
+      "validated_pcm_sha256": "8d0c6ff79db931ef3626bd4a5daaae07e9733449d817fbc53f70a41f58689165",
+      "wav_validation": "pass: finite, decodable, sample rate, duration, file hash, segment duration sum"
+    },
+    {
+      "model": "chatterbox",
+      "revision": "5bb1f6ee58e50c3b8d408bc82a6d3740c2db6e18",
+      "pid": 31792,
+      "code_revision_reviewed": "5de7a54aa4e5e2baadb0182dde554908b48b85c2",
+      "package_versions": {
+        "torch": "2.6.0+cu124",
+        "torchaudio": "2.6.0+cu124",
+        "chatterbox-tts": "0.1.7"
+      },
+      "started_at": "2026-11-01T15:00:03.705165+00:00",
+      "seed": 1234,
+      "load_seconds": 11.54430019999927,
+      "sample_rate": 24000,
+      "device": "NVIDIA GeForce RTX 4070 Laptop GPU",
+      "voice": {
+        "identity": "User-owned voice recording record-sample.ogg",
+        "rights_confirmed": true,
+        "scope": "User permits cloning and commercial publication of generated narration",
+        "statement": "Yes, it\u2019s my voice and I permit cloning and commercial publication.",
+        "confirmed_at": "2026-11-01T14:59:49.671580+00:00",
+        "source_sha256": "69bb26beced32315c4ac201f38db2d9c74b5b77a25546e30ef092fb87cec1063",
+        "reference_sha256": "fc03ae6e7225642e8cf83e5160aff1d7f0b3cf17e23045c006d945bdc8b93931"
+      },
+      "reference_sha256": "fc03ae6e7225642e8cf83e5160aff1d7f0b3cf17e23045c006d945bdc8b93931",
+      "cache": "C:\\Users\\saide\\AppData\\Local\\Temp\\local-youtube-tts-cache",
+      "python": "3.12.2 (tags/v3.12.2:6abddd9, Feb  6 2024, 21:26:36) [MSC v.1937 64 bit (AMD64)]",
+      "parameters": {
+        "temperature": 0.8,
+        "repetition_penalty": 1.2,
+        "cfg_weight": 0.5,
+        "exaggeration": 0.5,
+        "upstream_other_defaults": true
+      },
+      "case": "neutral",
+      "status": "ok",
+      "segments": [
+        {
+          "text": "Every time you open a tap, you take part in a journey that began far from your kitchen. Rain falls on hills, collects in rivers, and slowly enters underground layers of rock. Along the way, water carries tiny particles and dissolved minerals. Treatment plants remove unwanted material, check the water, and send it through a network of pipes.",
+          "generation_seconds": 24.44639659999848,
+          "duration_seconds": 18.24,
+          "peak": 1.1777585744857788,
+          "file": "benchmarks\\results\\chatterbox\\neutral-segments\\000.wav"
+        },
+        {
+          "text": "Pressure keeps that water moving, even when the road rises uphill. A storage tank helps the system meet the rush of demand each morning. The next time you fill a glass, pause for a moment. That ordinary action depends on careful engineering, regular testing, and thousands of people doing work that usually stays out of sight.",
+          "generation_seconds": 10.52751569999964,
+          "duration_seconds": 17.0,
+          "peak": 1.1380906105041504,
+          "file": "benchmarks\\results\\chatterbox\\neutral-segments\\001.wav"
+        }
+      ],
+      "text_sha256": "26d92c5f86a0c095ccbcaa4e1ee79c923a2a981c245a8bbd287cc401ff5ba562",
+      "generation_seconds": 34.97391229999812,
+      "wall_seconds": 34.995587700001124,
+      "audio_seconds": 35.24,
+      "real_time_factor": 0.9924492707150431,
+      "peak_allocated_bytes": 3743119360,
+      "peak_reserved_bytes": 4219469824,
+      "file": "benchmarks\\results\\chatterbox\\neutral.wav",
+      "audio_sha256": "943915ff0dacf18b125b4cd4f7a193adf1d87502caaaf79fb7f525d535f5c422",
+      "pcm_float32_sha256": "22a63d4e516e82ed1f1b14f5c4ada2cfa887a9a5109619070ef5ee2b5cb8d6e2",
+      "validated_pcm_sha256": "22a63d4e516e82ed1f1b14f5c4ada2cfa887a9a5109619070ef5ee2b5cb8d6e2",
+      "wav_validation": "pass: finite, decodable, sample rate, duration, file hash, segment duration sum"
+    },
+    {
+      "model": "chatterbox",
+      "revision": "5bb1f6ee58e50c3b8d408bc82a6d3740c2db6e18",
+      "pid": 31792,
+      "code_revision_reviewed": "5de7a54aa4e5e2baadb0182dde554908b48b85c2",
+      "package_versions": {
+        "torch": "2.6.0+cu124",
+        "torchaudio": "2.6.0+cu124",
+        "chatterbox-tts": "0.1.7"
+      },
+      "started_at": "2026-11-01T15:00:03.705165+00:00",
+      "seed": 1234,
+      "load_seconds": 11.54430019999927,
+      "sample_rate": 24000,
+      "device": "NVIDIA GeForce RTX 4070 Laptop GPU",
+      "voice": {
+        "identity": "User-owned voice recording record-sample.ogg",
+        "rights_confirmed": true,
+        "scope": "User permits cloning and commercial publication of generated narration",
+        "statement": "Yes, it\u2019s my voice and I permit cloning and commercial publication.",
+        "confirmed_at": "2026-11-01T14:59:49.671580+00:00",
+        "source_sha256": "69bb26beced32315c4ac201f38db2d9c74b5b77a25546e30ef092fb87cec1063",
+        "reference_sha256": "fc03ae6e7225642e8cf83e5160aff1d7f0b3cf17e23045c006d945bdc8b93931"
+      },
+      "reference_sha256": "fc03ae6e7225642e8cf83e5160aff1d7f0b3cf17e23045c006d945bdc8b93931",
+      "cache": "C:\\Users\\saide\\AppData\\Local\\Temp\\local-youtube-tts-cache",
+      "python": "3.12.2 (tags/v3.12.2:6abddd9, Feb  6 2024, 21:26:36) [MSC v.1937 64 bit (AMD64)]",
+      "parameters": {
+        "temperature": 0.8,
+        "repetition_penalty": 1.2,
+        "cfg_weight": 0.5,
+        "exaggeration": 0.5,
+        "upstream_other_defaults": true
+      },
+      "case": "pronunciation",
+      "status": "ok",
+      "segments": [
+        {
+          "text": "On November 1, 2026, Dr. Elena Voss presented NASA's new report to UNESCO. The estimate rose from $1,250.75 to $2.4 million, an increase of 12.5 percent. At 6:45 a.m., the GPS receiver recorded 33.5731 degrees north. Can an RTX 4070 process 48 kHz audio through a USB-C cable? Please compare SQL, API, CPU, and GPU.",
+          "generation_seconds": 15.506704400000672,
+          "duration_seconds": 24.56,
+          "peak": 1.1546781063079834,
+          "file": "benchmarks\\results\\chatterbox\\pronunciation-segments\\000.wav"
+        },
+        {
+          "text": "The route connects Reykjavik, Edinburgh, Worcester, and Ouarzazate. Meanwhile, Saoirse, Siobhan, and Nguyen discussed the work of Richard Feynman and Srinivasa Ramanujan. Version 3.11 differs from section 3, paragraph 11. The temperature was minus 7 degrees Celsius, and the distance was 1,024 kilometers.",
+          "generation_seconds": 11.389335600000777,
+          "duration_seconds": 18.52,
+          "peak": 1.2580080032348633,
+          "file": "benchmarks\\results\\chatterbox\\pronunciation-segments\\001.wav"
+        }
+      ],
+      "text_sha256": "c85c330385e32626b0b52be326e6e7ec39f7374a1efd50f18a419de2026f6c75",
+      "generation_seconds": 26.89604000000145,
+      "wall_seconds": 26.91979480000009,
+      "audio_seconds": 43.08,
+      "real_time_factor": 0.6243277623027264,
+      "peak_allocated_bytes": 3972851712,
+      "peak_reserved_bytes": 4701814784,
+      "file": "benchmarks\\results\\chatterbox\\pronunciation.wav",
+      "audio_sha256": "ed6bb0255fcdca52be9db0605bfc693f93c9e6d5a01da1f2d90f4e09e86aee96",
+      "pcm_float32_sha256": "00f57c8d3baddc20b039ea79dbcdf2058225040c36bf5c931e549b71ca3fc65a",
+      "validated_pcm_sha256": "00f57c8d3baddc20b039ea79dbcdf2058225040c36bf5c931e549b71ca3fc65a",
+      "wav_validation": "pass: finite, decodable, sample rate, duration, file hash, segment duration sum"
+    },
+    {
+      "model": "chatterbox",
+      "revision": "5bb1f6ee58e50c3b8d408bc82a6d3740c2db6e18",
+      "pid": 28804,
+      "code_revision_reviewed": "5de7a54aa4e5e2baadb0182dde554908b48b85c2",
+      "package_versions": {
+        "torch": "2.6.0+cu124",
+        "torchaudio": "2.6.0+cu124",
+        "chatterbox-tts": "0.1.7"
+      },
+      "started_at": "2026-11-01T15:05:02.393171+00:00",
+      "seed": 1234,
+      "load_seconds": 11.649444500000754,
+      "sample_rate": 24000,
+      "device": "NVIDIA GeForce RTX 4070 Laptop GPU",
+      "voice": {
+        "identity": "User-owned voice recording record-sample.ogg",
+        "rights_confirmed": true,
+        "scope": "User permits cloning and commercial publication of generated narration",
+        "statement": "Yes, it\u2019s my voice and I permit cloning and commercial publication.",
+        "confirmed_at": "2026-11-01T14:59:49.671580+00:00",
+        "source_sha256": "69bb26beced32315c4ac201f38db2d9c74b5b77a25546e30ef092fb87cec1063",
+        "reference_sha256": "fc03ae6e7225642e8cf83e5160aff1d7f0b3cf17e23045c006d945bdc8b93931"
+      },
+      "reference_sha256": "fc03ae6e7225642e8cf83e5160aff1d7f0b3cf17e23045c006d945bdc8b93931",
+      "cache": "C:\\Users\\saide\\AppData\\Local\\Temp\\local-youtube-tts-cache",
+      "python": "3.12.2 (tags/v3.12.2:6abddd9, Feb  6 2024, 21:26:36) [MSC v.1937 64 bit (AMD64)]",
+      "parameters": {
+        "temperature": 0.8,
+        "repetition_penalty": 1.2,
+        "cfg_weight": 0.5,
+        "exaggeration": 0.5,
+        "upstream_other_defaults": true
+      },
+      "case": "restart",
+      "status": "ok",
+      "segments": [
+        {
+          "text": "Every time you open a tap, you take part in a journey that began far from your kitchen. Rain falls on hills, collects in rivers, and slowly enters underground layers of rock. Along the way, water carries tiny particles and dissolved minerals. Treatment plants remove unwanted material, check the water, and send it through a network of pipes.",
+          "generation_seconds": 13.922526000000289,
+          "duration_seconds": 18.24,
+          "peak": 1.1777585744857788,
+          "file": "benchmarks\\results\\chatterbox\\restart-segments\\000.wav"
+        },
+        {
+          "text": "Pressure keeps that water moving, even when the road rises uphill. A storage tank helps the system meet the rush of demand each morning. The next time you fill a glass, pause for a moment. That ordinary action depends on careful engineering, regular testing, and thousands of people doing work that usually stays out of sight.",
+          "generation_seconds": 10.151870300000155,
+          "duration_seconds": 17.0,
+          "peak": 1.1380906105041504,
+          "file": "benchmarks\\results\\chatterbox\\restart-segments\\001.wav"
+        }
+      ],
+      "text_sha256": "26d92c5f86a0c095ccbcaa4e1ee79c923a2a981c245a8bbd287cc401ff5ba562",
+      "generation_seconds": 24.074396300000444,
+      "wall_seconds": 24.1059323999998,
+      "audio_seconds": 35.24,
+      "real_time_factor": 0.6831554001135199,
+      "peak_allocated_bytes": 3743119360,
+      "peak_reserved_bytes": 4219469824,
+      "file": "benchmarks\\results\\chatterbox\\restart.wav",
+      "audio_sha256": "34b46e54bcb1710495b588ec999b950d5f158fa45898cfba3fae5672022ab205",
+      "pcm_float32_sha256": "22a63d4e516e82ed1f1b14f5c4ada2cfa887a9a5109619070ef5ee2b5cb8d6e2",
+      "validated_pcm_sha256": "22a63d4e516e82ed1f1b14f5c4ada2cfa887a9a5109619070ef5ee2b5cb8d6e2",
+      "wav_validation": "pass: finite, decodable, sample rate, duration, file hash, segment duration sum"
+    },
+    {
+      "model": "kokoro",
+      "revision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+      "pid": 20496,
+      "code_revision_reviewed": "dfb907a02bba8152ca444717ca5d78747ccb4bec",
+      "package_versions": {
+        "torch": "2.6.0+cu124",
+        "torchaudio": "2.6.0+cu124",
+        "kokoro": "0.9.4"
+      },
+      "started_at": "2026-11-01T14:14:33.077341+00:00",
+      "seed": 1234,
+      "load_seconds": 4.379417799999828,
+      "sample_rate": 24000,
+      "device": "NVIDIA GeForce RTX 4070 Laptop GPU",
+      "voice": "af_heart preset (not a unique clone)",
+      "reference_sha256": null,
+      "cache": "C:\\Users\\saide\\AppData\\Local\\Temp\\local-youtube-tts-cache",
+      "python": "3.12.2 (tags/v3.12.2:6abddd9, Feb  6 2024, 21:26:36) [MSC v.1937 64 bit (AMD64)]",
+      "parameters": {
+        "voice": "af_heart",
+        "speed": 1
+      },
+      "case": "documentary",
+      "status": "ok",
+      "segments": [
+        {
+          "text": "At dawn, the island looked deserted. Then a light appeared in the old lighthouse. \"Did you see that?\" Maya whispered. Her brother stopped rowing. For thirty years, nobody had lived beyond the harbor wall, yet someone was climbing the spiral stairs. A door slammed. Three gulls lifted into the wind, and the light went dark.",
+          "generation_seconds": 0.32484929999918677,
+          "duration_seconds": 18.975,
+          "peak": 0.3714185655117035,
+          "file": "benchmarks\\results\\kokoro\\documentary-segments\\000.wav"
+        },
+        {
+          "text": "Was it a warning, a mistake, or simply a reflection from the rising sun? The answer would begin with a notebook, a rusted key, and a photograph taken before either of them was born. By sunset, one small discovery would change the story everyone in the village thought they knew. But first, they had to reach the shore.",
+          "generation_seconds": 0.3256379999993442,
+          "duration_seconds": 19.6,
+          "peak": 0.5685093402862549,
+          "file": "benchmarks\\results\\kokoro\\documentary-segments\\001.wav"
+        }
+      ],
+      "text_sha256": "d21ce274c349fbd65c852855c50dddabbe0c2f4f45a1837d56621899358d4125",
+      "generation_seconds": 0.6504872999985309,
+      "wall_seconds": 0.6883438000004389,
+      "audio_seconds": 38.575,
+      "real_time_factor": 0.016862924173649537,
+      "peak_allocated_bytes": 959548416,
+      "peak_reserved_bytes": 1180696576,
+      "file": "benchmarks\\results\\kokoro\\documentary.wav",
+      "audio_sha256": "89d37fddb3e118b838804beff3275897069c5157e9d1c4bcd08ec66e7b46585a",
+      "pcm_float32_sha256": "3adb8c869aebbcc845ae1b5557592b65ebc5dea0c8b66329e5f19dd5b2205640",
+      "validated_pcm_sha256": "3adb8c869aebbcc845ae1b5557592b65ebc5dea0c8b66329e5f19dd5b2205640",
+      "wav_validation": "pass: finite, decodable, sample rate, duration, file hash, segment duration sum"
+    },
+    {
+      "model": "kokoro",
+      "revision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+      "pid": 20496,
+      "code_revision_reviewed": "dfb907a02bba8152ca444717ca5d78747ccb4bec",
+      "package_versions": {
+        "torch": "2.6.0+cu124",
+        "torchaudio": "2.6.0+cu124",
+        "kokoro": "0.9.4"
+      },
+      "started_at": "2026-11-01T14:14:33.077341+00:00",
+      "seed": 1234,
+      "load_seconds": 4.379417799999828,
+      "sample_rate": 24000,
+      "device": "NVIDIA GeForce RTX 4070 Laptop GPU",
+      "voice": "af_heart preset (not a unique clone)",
+      "reference_sha256": null,
+      "cache": "C:\\Users\\saide\\AppData\\Local\\Temp\\local-youtube-tts-cache",
+      "python": "3.12.2 (tags/v3.12.2:6abddd9, Feb  6 2024, 21:26:36) [MSC v.1937 64 bit (AMD64)]",
+      "parameters": {
+        "voice": "af_heart",
+        "speed": 1
+      },
+      "case": "long",
+      "status": "ok",
+      "segments": [
+        {
+          "text": "Before sunrise, a coastal town begins to wake. Delivery vans turn into narrow streets, a baker opens the shutters, and the first fishing boats leave the harbor. Most people are thinking about the day ahead. Few are thinking about the network beneath their feet.",
+          "generation_seconds": 0.2840209000005416,
+          "duration_seconds": 16.3,
+          "peak": 0.472371369600296,
+          "file": "benchmarks\\results\\kokoro\\long-segments\\000.wav"
+        },
+        {
+          "text": "Yet every street, building, and public square depends on systems that must work together. Water, power, transport, and communication make ordinary life possible. Their history tells us how a town grows, how it survives trouble, and how it prepares for an uncertain future. Start with water.",
+          "generation_seconds": 0.32167740000022604,
+          "duration_seconds": 18.4,
+          "peak": 0.5052868723869324,
+          "file": "benchmarks\\results\\kokoro\\long-segments\\001.wav"
+        },
+        {
+          "text": "A river may appear to offer an endless supply, but its flow changes with the seasons. Heavy rain can turn a quiet channel into a dangerous current. A dry summer can reveal stones that have been hidden for years. Engineers study those changes before deciding where to place a reservoir or treatment plant.",
+          "generation_seconds": 0.3261555999997654,
+          "duration_seconds": 19.625,
+          "peak": 0.48142269253730774,
+          "file": "benchmarks\\results\\kokoro\\long-segments\\002.wav"
+        },
+        {
+          "text": "They measure the landscape, inspect the ground, and compare records from many different years. Good planning begins with evidence. It also begins with a simple admission: a system designed for yesterday may need to change tomorrow. Inside the treatment plant, water passes through several stages. Large screens catch branches and other debris.",
+          "generation_seconds": 0.34323159999985364,
+          "duration_seconds": 21.0,
+          "peak": 0.5274375081062317,
+          "file": "benchmarks\\results\\kokoro\\long-segments\\003.wav"
+        },
+        {
+          "text": "Smaller particles settle or are filtered out. Operators monitor the process and adjust it when conditions change. The details vary from place to place, but the goal remains clear. People need water they can trust. That trust depends on maintenance as much as on impressive equipment.",
+          "generation_seconds": 0.2984203999994861,
+          "duration_seconds": 18.375,
+          "peak": 0.5349986553192139,
+          "file": "benchmarks\\results\\kokoro\\long-segments\\004.wav"
+        },
+        {
+          "text": "A small sensor, checked regularly, may prevent a much larger problem. A written record can help a new operator understand what happened during the previous shift. Now follow a pipe back toward the town center. Some sections were installed decades ago, when fewer people lived here. Others are recent replacements.",
+          "generation_seconds": 0.31529690000024857,
+          "duration_seconds": 19.375,
+          "peak": 0.45125696063041687,
+          "file": "benchmarks\\results\\kokoro\\long-segments\\005.wav"
+        },
+        {
+          "text": "A repair crew cannot simply close every road at once. It must coordinate with bus routes, businesses, emergency services, and the people who live nearby. This is why a seemingly simple repair can take careful preparation. The crew must locate other buried cables, choose a safe working area, and arrange access to the damaged section.",
+          "generation_seconds": 0.36305709999942337,
+          "duration_seconds": 21.95,
+          "peak": 0.6947113871574402,
+          "file": "benchmarks\\results\\kokoro\\long-segments\\006.wav"
+        },
+        {
+          "text": "The digging is only one visible part of a much larger job. Above ground, electricity follows another network. Power arrives at a substation, where equipment changes its voltage before it continues toward homes and shops. Demand rises when people cook dinner, charge devices, or turn on heating. Operators watch the balance between supply and use.",
+          "generation_seconds": 0.37052309999944555,
+          "duration_seconds": 22.725,
+          "peak": 0.4033051133155823,
+          "file": "benchmarks\\results\\kokoro\\long-segments\\007.wav"
+        },
+        {
+          "text": "A network needs enough capacity for busy periods, but building capacity takes time and money. Local solar panels and batteries can help, although they also change the way energy moves. The challenge is to make the whole system reliable while its individual parts keep evolving. Consider a storm arriving from the sea.",
+          "generation_seconds": 0.3167702000000645,
+          "duration_seconds": 20.05,
+          "peak": 0.4539205729961395,
+          "file": "benchmarks\\results\\kokoro\\long-segments\\008.wav"
+        },
+        {
+          "text": "Wind bends trees, rain fills drains, and salt spray blows across the harbor. One damaged cable may affect a street. A flooded control room may affect a much wider area. Planners therefore look for places where several systems could fail together. Backup power is useful only if it can be reached and started safely.",
+          "generation_seconds": 0.3559141000005184,
+          "duration_seconds": 20.925,
+          "peak": 0.5098927021026611,
+          "file": "benchmarks\\results\\kokoro\\long-segments\\009.wav"
+        },
+        {
+          "text": "Emergency instructions are useful only if people understand them. Practice matters because a difficult night is a poor time to discover that two teams are using different maps or outdated telephone numbers. Transport presents a different kind of puzzle. The main road must carry deliveries, commuters, buses, bicycles, and pedestrians.",
+          "generation_seconds": 0.3494895000003453,
+          "duration_seconds": 21.275,
+          "peak": 0.6006551384925842,
+          "file": "benchmarks\\results\\kokoro\\long-segments\\010.wav"
+        },
+        {
+          "text": "Each group experiences the same street differently. A wide turning lane may help a truck while making a crossing longer for someone on foot. A bus stop may improve access while reducing space for parked cars. There is rarely a single design that solves every problem. Instead, planners count journeys, observe delays, and listen to residents.",
+          "generation_seconds": 0.35145990000000893,
+          "duration_seconds": 21.8,
+          "peak": 0.7092912793159485,
+          "file": "benchmarks\\results\\kokoro\\long-segments\\011.wav"
+        },
+        {
+          "text": "Clear priorities help them explain why a change is needed and how its effects will be measured. At the railway station, the morning crowd becomes a stream of individual decisions. One person checks a departure board. Another helps a child with a heavy bag. A visitor searches for the exit.",
+          "generation_seconds": 0.2994063999994978,
+          "duration_seconds": 18.125,
+          "peak": 0.4475579559803009,
+          "file": "benchmarks\\results\\kokoro\\long-segments\\012.wav"
+        },
+        {
+          "text": "Signs, lighting, and clear walking routes reduce confusion without requiring anyone to think about the design. This quiet usefulness is a mark of good infrastructure. The best improvement may be a shelter that keeps people dry, a ramp that makes a platform accessible, or a timetable that connects with the last bus home.",
+          "generation_seconds": 0.3334557999996832,
+          "duration_seconds": 20.45,
+          "peak": 0.4218689501285553,
+          "file": "benchmarks\\results\\kokoro\\long-segments\\013.wav"
+        },
+        {
+          "text": "Small changes can make a daily journey much easier. Communication links these activities together. A repair team sends a report. A shop places an order. A family receives a warning about an approaching storm. Reliable networks help information reach the right people at the right time. But a message must also be understandable.",
+          "generation_seconds": 0.3619323999992048,
+          "duration_seconds": 20.975,
+          "peak": 0.45361629128456116,
+          "file": "benchmarks\\results\\kokoro\\long-segments\\014.wav"
+        },
+        {
+          "text": "A precise technical report may be appropriate for an engineer, while residents need a short explanation of what has happened and what they should do next. Useful communication begins by considering its audience. More information is not always better information, especially when time and attention are limited.",
+          "generation_seconds": 0.3266161000001375,
+          "duration_seconds": 19.05,
+          "peak": 0.6391612887382507,
+          "file": "benchmarks\\results\\kokoro\\long-segments\\015.wav"
+        },
+        {
+          "text": "By late afternoon, the town looks ordinary again. Children leave school, the bakery closes, and the fishing boats return. Beneath these familiar scenes, thousands of connected tasks continue. Some are automated, and others depend on judgment learned through years of experience.",
+          "generation_seconds": 0.3072746999996525,
+          "duration_seconds": 18.1,
+          "peak": 0.6367732286453247,
+          "file": "benchmarks\\results\\kokoro\\long-segments\\016.wav"
+        },
+        {
+          "text": "The future will bring new equipment, different weather patterns, and changing needs. No single invention will remove the need for care. What keeps a town working is the patient combination of planning, measurement, repair, and cooperation.",
+          "generation_seconds": 0.26357540000026347,
+          "duration_seconds": 14.875,
+          "peak": 0.4606257975101471,
+          "file": "benchmarks\\results\\kokoro\\long-segments\\017.wav"
+        },
+        {
+          "text": "Tomorrow morning, when the first tap opens and the first light comes on, that quiet work will already be underway.",
+          "generation_seconds": 0.13587330000063957,
+          "duration_seconds": 7.1,
+          "peak": 0.40319204330444336,
+          "file": "benchmarks\\results\\kokoro\\long-segments\\018.wav"
+        }
+      ],
+      "text_sha256": "da7ef041e40c9910de33cb3c0622456278deda55df39ffc6d8b4cbbfa85998c8",
+      "generation_seconds": 6.024150799999006,
+      "wall_seconds": 6.29043830000046,
+      "audio_seconds": 360.475,
+      "real_time_factor": 0.016711702059779475,
+      "peak_allocated_bytes": 1025996288,
+      "peak_reserved_bytes": 1635778560,
+      "file": "benchmarks\\results\\kokoro\\long.wav",
+      "audio_sha256": "e015a904547011c1875b81187bb8982546412adbf5f4a9c4aae9f38ec3bb08e6",
+      "pcm_float32_sha256": "484712ec36238a4c0010d027e54eca07ceb7abd92b3fb706f5746cc843246cdd",
+      "validated_pcm_sha256": "484712ec36238a4c0010d027e54eca07ceb7abd92b3fb706f5746cc843246cdd",
+      "wav_validation": "pass: finite, decodable, sample rate, duration, file hash, segment duration sum"
+    },
+    {
+      "model": "kokoro",
+      "revision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+      "pid": 20496,
+      "code_revision_reviewed": "dfb907a02bba8152ca444717ca5d78747ccb4bec",
+      "package_versions": {
+        "torch": "2.6.0+cu124",
+        "torchaudio": "2.6.0+cu124",
+        "kokoro": "0.9.4"
+      },
+      "started_at": "2026-11-01T14:14:33.077341+00:00",
+      "seed": 1234,
+      "load_seconds": 4.379417799999828,
+      "sample_rate": 24000,
+      "device": "NVIDIA GeForce RTX 4070 Laptop GPU",
+      "voice": "af_heart preset (not a unique clone)",
+      "reference_sha256": null,
+      "cache": "C:\\Users\\saide\\AppData\\Local\\Temp\\local-youtube-tts-cache",
+      "python": "3.12.2 (tags/v3.12.2:6abddd9, Feb  6 2024, 21:26:36) [MSC v.1937 64 bit (AMD64)]",
+      "parameters": {
+        "voice": "af_heart",
+        "speed": 1
+      },
+      "case": "neutral",
+      "status": "ok",
+      "segments": [
+        {
+          "text": "Every time you open a tap, you take part in a journey that began far from your kitchen. Rain falls on hills, collects in rivers, and slowly enters underground layers of rock. Along the way, water carries tiny particles and dissolved minerals. Treatment plants remove unwanted material, check the water, and send it through a network of pipes.",
+          "generation_seconds": 0.9075038000000859,
+          "duration_seconds": 21.075,
+          "peak": 0.5020020604133606,
+          "file": "benchmarks\\results\\kokoro\\neutral-segments\\000.wav"
+        },
+        {
+          "text": "Pressure keeps that water moving, even when the road rises uphill. A storage tank helps the system meet the rush of demand each morning. The next time you fill a glass, pause for a moment. That ordinary action depends on careful engineering, regular testing, and thousands of people doing work that usually stays out of sight.",
+          "generation_seconds": 0.3476852999992843,
+          "duration_seconds": 20.325,
+          "peak": 0.44651997089385986,
+          "file": "benchmarks\\results\\kokoro\\neutral-segments\\001.wav"
+        }
+      ],
+      "text_sha256": "26d92c5f86a0c095ccbcaa4e1ee79c923a2a981c245a8bbd287cc401ff5ba562",
+      "generation_seconds": 1.2551890999993702,
+      "wall_seconds": 1.2770053000003827,
+      "audio_seconds": 41.4,
+      "real_time_factor": 0.03031857729467078,
+      "peak_allocated_bytes": 984337408,
+      "peak_reserved_bytes": 1180696576,
+      "file": "benchmarks\\results\\kokoro\\neutral.wav",
+      "audio_sha256": "f531d3ecde2ef3109405e14d5a317810bb45c2adc483b8e15a84c161beca9020",
+      "pcm_float32_sha256": "44084bf08ae9681fa5ed4b5aa80dea62ffd1d2e83d9c9fb6948dd1f472480960",
+      "validated_pcm_sha256": "44084bf08ae9681fa5ed4b5aa80dea62ffd1d2e83d9c9fb6948dd1f472480960",
+      "wav_validation": "pass: finite, decodable, sample rate, duration, file hash, segment duration sum"
+    },
+    {
+      "model": "kokoro",
+      "revision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+      "pid": 20496,
+      "code_revision_reviewed": "dfb907a02bba8152ca444717ca5d78747ccb4bec",
+      "package_versions": {
+        "torch": "2.6.0+cu124",
+        "torchaudio": "2.6.0+cu124",
+        "kokoro": "0.9.4"
+      },
+      "started_at": "2026-11-01T14:14:33.077341+00:00",
+      "seed": 1234,
+      "load_seconds": 4.379417799999828,
+      "sample_rate": 24000,
+      "device": "NVIDIA GeForce RTX 4070 Laptop GPU",
+      "voice": "af_heart preset (not a unique clone)",
+      "reference_sha256": null,
+      "cache": "C:\\Users\\saide\\AppData\\Local\\Temp\\local-youtube-tts-cache",
+      "python": "3.12.2 (tags/v3.12.2:6abddd9, Feb  6 2024, 21:26:36) [MSC v.1937 64 bit (AMD64)]",
+      "parameters": {
+        "voice": "af_heart",
+        "speed": 1
+      },
+      "case": "pronunciation",
+      "status": "ok",
+      "segments": [
+        {
+          "text": "On November 1, 2026, Dr. Elena Voss presented NASA's new report to UNESCO. The estimate rose from $1,250.75 to $2.4 million, an increase of 12.5 percent. At 6:45 a.m., the GPS receiver recorded 33.5731 degrees north. Can an RTX 4070 process 48 kHz audio through a USB-C cable? Please compare SQL, API, CPU, and GPU.",
+          "generation_seconds": 0.569060000000718,
+          "duration_seconds": 32.45,
+          "peak": 0.6617861986160278,
+          "file": "benchmarks\\results\\kokoro\\pronunciation-segments\\000.wav"
+        },
+        {
+          "text": "The route connects Reykjavik, Edinburgh, Worcester, and Ouarzazate. Meanwhile, Saoirse, Siobhan, and Nguyen discussed the work of Richard Feynman and Srinivasa Ramanujan. Version 3.11 differs from section 3, paragraph 11. The temperature was minus 7 degrees Celsius, and the distance was 1,024 kilometers.",
+          "generation_seconds": 0.37211500000012165,
+          "duration_seconds": 21.775,
+          "peak": 0.4487617015838623,
+          "file": "benchmarks\\results\\kokoro\\pronunciation-segments\\001.wav"
+        }
+      ],
+      "text_sha256": "c85c330385e32626b0b52be326e6e7ec39f7374a1efd50f18a419de2026f6c75",
+      "generation_seconds": 0.9411750000008396,
+      "wall_seconds": 0.9659053999994285,
+      "audio_seconds": 54.225,
+      "real_time_factor": 0.01735684647304453,
+      "peak_allocated_bytes": 1130641920,
+      "peak_reserved_bytes": 1633681408,
+      "file": "benchmarks\\results\\kokoro\\pronunciation.wav",
+      "audio_sha256": "d014051c51fd9fc709ebcd3f9b7d512c923f5f9ae7c6b7dbc3fa49e6e3320da9",
+      "pcm_float32_sha256": "87860af336b3deb34294b2ba6741dcae55ba3e848c87196d262a91ac02fa5ee8",
+      "validated_pcm_sha256": "87860af336b3deb34294b2ba6741dcae55ba3e848c87196d262a91ac02fa5ee8",
+      "wav_validation": "pass: finite, decodable, sample rate, duration, file hash, segment duration sum"
+    },
+    {
+      "model": "kokoro",
+      "revision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+      "pid": 23112,
+      "code_revision_reviewed": "dfb907a02bba8152ca444717ca5d78747ccb4bec",
+      "package_versions": {
+        "torch": "2.6.0+cu124",
+        "torchaudio": "2.6.0+cu124",
+        "kokoro": "0.9.4"
+      },
+      "started_at": "2026-11-01T14:19:15.473933+00:00",
+      "seed": 1234,
+      "load_seconds": 5.079681700000037,
+      "sample_rate": 24000,
+      "device": "NVIDIA GeForce RTX 4070 Laptop GPU",
+      "voice": "af_heart preset (not a unique clone)",
+      "reference_sha256": null,
+      "cache": "C:\\Users\\saide\\AppData\\Local\\Temp\\local-youtube-tts-cache",
+      "python": "3.12.2 (tags/v3.12.2:6abddd9, Feb  6 2024, 21:26:36) [MSC v.1937 64 bit (AMD64)]",
+      "parameters": {
+        "voice": "af_heart",
+        "speed": 1
+      },
+      "case": "restart",
+      "status": "ok",
+      "segments": [
+        {
+          "text": "Every time you open a tap, you take part in a journey that began far from your kitchen. Rain falls on hills, collects in rivers, and slowly enters underground layers of rock. Along the way, water carries tiny particles and dissolved minerals. Treatment plants remove unwanted material, check the water, and send it through a network of pipes.",
+          "generation_seconds": 1.017439999999624,
+          "duration_seconds": 21.075,
+          "peak": 0.5020020604133606,
+          "file": "benchmarks\\results\\kokoro\\restart-segments\\000.wav"
+        },
+        {
+          "text": "Pressure keeps that water moving, even when the road rises uphill. A storage tank helps the system meet the rush of demand each morning. The next time you fill a glass, pause for a moment. That ordinary action depends on careful engineering, regular testing, and thousands of people doing work that usually stays out of sight.",
+          "generation_seconds": 0.3471104000000196,
+          "duration_seconds": 20.325,
+          "peak": 0.44651997089385986,
+          "file": "benchmarks\\results\\kokoro\\restart-segments\\001.wav"
+        }
+      ],
+      "text_sha256": "26d92c5f86a0c095ccbcaa4e1ee79c923a2a981c245a8bbd287cc401ff5ba562",
+      "generation_seconds": 1.3645503999996436,
+      "wall_seconds": 1.3859484999993583,
+      "audio_seconds": 41.4,
+      "real_time_factor": 0.03296015458936337,
+      "peak_allocated_bytes": 984337408,
+      "peak_reserved_bytes": 1180696576,
+      "file": "benchmarks\\results\\kokoro\\restart.wav",
+      "audio_sha256": "67072aa293bfb3fa5cadc35cb75e6e30aed4db05a28d79994762a9af3e947e82",
+      "pcm_float32_sha256": "44084bf08ae9681fa5ed4b5aa80dea62ffd1d2e83d9c9fb6948dd1f472480960",
+      "validated_pcm_sha256": "44084bf08ae9681fa5ed4b5aa80dea62ffd1d2e83d9c9fb6948dd1f472480960",
+      "wav_validation": "pass: finite, decodable, sample rate, duration, file hash, segment duration sum"
+    },
+    {
+      "model": "kokoro",
+      "revision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+      "pid": 21576,
+      "started_at": "2026-11-01T14:10:48.222004+00:00",
+      "seed": 1234,
+      "load_seconds": 10.489881999999852,
+      "sample_rate": 24000,
+      "device": "NVIDIA GeForce RTX 4070 Laptop GPU",
+      "voice": "af_heart preset (not a unique clone)",
+      "reference_sha256": null,
+      "cache": "C:\\Users\\saide\\AppData\\Local\\Temp\\local-youtube-tts-cache",
+      "python": "3.12.2 (tags/v3.12.2:6abddd9, Feb  6 2024, 21:26:36) [MSC v.1937 64 bit (AMD64)]",
+      "case": "smoke",
+      "status": "ok",
+      "segments": [
+        {
+          "text": "The morning light fills the room.",
+          "generation_seconds": 0.71080129999973,
+          "duration_seconds": 2.175,
+          "peak": 0.3686600923538208,
+          "file": "benchmarks\\results\\kokoro\\smoke-segments\\000.wav"
+        }
+      ],
+      "text_sha256": "379224344a424568d2fec4d45615b31a3f417e2005533d360c654f903119f48d",
+      "generation_seconds": 0.71080129999973,
+      "wall_seconds": 0.7208177000002252,
+      "audio_seconds": 2.175,
+      "real_time_factor": 0.32680519540217473,
+      "peak_allocated_bytes": 624609280,
+      "peak_reserved_bytes": 671088640,
+      "file": "benchmarks\\results\\kokoro\\smoke.wav",
+      "audio_sha256": "c57b9a062b1f0e7fab43279a5ae7e206c24504a85f6b805806a7c0c6a80bd6cf",
+      "validated_pcm_sha256": "cca86bb1837fac6da134f7c0c1b741821e09e10acf4bc299fe99a438cd64cc48",
+      "wav_validation": "pass: finite, decodable, sample rate, duration, file hash, segment duration sum"
+    },
+    {
+      "model": "turbo",
+      "revision": "749d1c1a46eb10492095d68fbcf55691ccf137cd",
+      "pid": 17532,
+      "code_revision_reviewed": "5de7a54aa4e5e2baadb0182dde554908b48b85c2",
+      "package_versions": {
+        "torch": "2.6.0+cu124",
+        "torchaudio": "2.6.0+cu124",
+        "chatterbox-tts": "0.1.7"
+      },
+      "started_at": "2026-11-01T15:05:52.478040+00:00",
+      "seed": 1234,
+      "load_seconds": 11.106038699999772,
+      "sample_rate": 24000,
+      "device": "NVIDIA GeForce RTX 4070 Laptop GPU",
+      "voice": {
+        "identity": "User-owned voice recording record-sample.ogg",
+        "rights_confirmed": true,
+        "scope": "User permits cloning and commercial publication of generated narration",
+        "statement": "Yes, it\u2019s my voice and I permit cloning and commercial publication.",
+        "confirmed_at": "2026-11-01T14:59:49.671580+00:00",
+        "source_sha256": "69bb26beced32315c4ac201f38db2d9c74b5b77a25546e30ef092fb87cec1063",
+        "reference_sha256": "fc03ae6e7225642e8cf83e5160aff1d7f0b3cf17e23045c006d945bdc8b93931"
+      },
+      "reference_sha256": "fc03ae6e7225642e8cf83e5160aff1d7f0b3cf17e23045c006d945bdc8b93931",
+      "cache": "C:\\Users\\saide\\AppData\\Local\\Temp\\local-youtube-tts-cache",
+      "python": "3.12.2 (tags/v3.12.2:6abddd9, Feb  6 2024, 21:26:36) [MSC v.1937 64 bit (AMD64)]",
+      "parameters": {
+        "temperature": 0.8,
+        "repetition_penalty": 1.2,
+        "cfg_weight": 0.0,
+        "exaggeration": 0.0,
+        "upstream_other_defaults": true
+      },
+      "case": "documentary",
+      "status": "ok",
+      "segments": [
+        {
+          "text": "At dawn, the island looked deserted. Then a light appeared in the old lighthouse. \"Did you see that?\" Maya whispered. Her brother stopped rowing. For thirty years, nobody had lived beyond the harbor wall, yet someone was climbing the spiral stairs. A door slammed. Three gulls lifted into the wind, and the light went dark.",
+          "generation_seconds": 6.982890200000838,
+          "duration_seconds": 22.04,
+          "peak": 1.0634703636169434,
+          "file": "benchmarks\\results\\turbo\\documentary-segments\\000.wav"
+        },
+        {
+          "text": "Was it a warning, a mistake, or simply a reflection from the rising sun? The answer would begin with a notebook, a rusted key, and a photograph taken before either of them was born. By sunset, one small discovery would change the story everyone in the village thought they knew. But first, they had to reach the shore.",
+          "generation_seconds": 7.451935700000831,
+          "duration_seconds": 24.12,
+          "peak": 1.0449504852294922,
+          "file": "benchmarks\\results\\turbo\\documentary-segments\\001.wav"
+        }
+      ],
+      "text_sha256": "d21ce274c349fbd65c852855c50dddabbe0c2f4f45a1837d56621899358d4125",
+      "generation_seconds": 14.43482590000167,
+      "wall_seconds": 14.466847499999858,
+      "audio_seconds": 46.16,
+      "real_time_factor": 0.3127128661178871,
+      "peak_allocated_bytes": 3546914304,
+      "peak_reserved_bytes": 4244635648,
+      "file": "benchmarks\\results\\turbo\\documentary.wav",
+      "audio_sha256": "86c7be3174bd37730d2ed4008edc7de8b380607ca349507748564eef767bb424",
+      "pcm_float32_sha256": "09af19048b185c63381959c816f92ce8528f4ab57fbc807fced21ef71be512a4",
+      "validated_pcm_sha256": "09af19048b185c63381959c816f92ce8528f4ab57fbc807fced21ef71be512a4",
+      "wav_validation": "pass: finite, decodable, sample rate, duration, file hash, segment duration sum"
+    },
+    {
+      "model": "turbo",
+      "revision": "749d1c1a46eb10492095d68fbcf55691ccf137cd",
+      "status": "loaded_only_no_speech_generated",
+      "device": "NVIDIA GeForce RTX 4070 Laptop GPU",
+      "load_seconds": 10.843661800000518,
+      "peak_allocated_bytes": 2796828672,
+      "peak_reserved_bytes": 2831155200
+    },
+    {
+      "model": "turbo",
+      "revision": "749d1c1a46eb10492095d68fbcf55691ccf137cd",
+      "pid": 17532,
+      "code_revision_reviewed": "5de7a54aa4e5e2baadb0182dde554908b48b85c2",
+      "package_versions": {
+        "torch": "2.6.0+cu124",
+        "torchaudio": "2.6.0+cu124",
+        "chatterbox-tts": "0.1.7"
+      },
+      "started_at": "2026-11-01T15:05:52.478040+00:00",
+      "seed": 1234,
+      "load_seconds": 11.106038699999772,
+      "sample_rate": 24000,
+      "device": "NVIDIA GeForce RTX 4070 Laptop GPU",
+      "voice": {
+        "identity": "User-owned voice recording record-sample.ogg",
+        "rights_confirmed": true,
+        "scope": "User permits cloning and commercial publication of generated narration",
+        "statement": "Yes, it\u2019s my voice and I permit cloning and commercial publication.",
+        "confirmed_at": "2026-11-01T14:59:49.671580+00:00",
+        "source_sha256": "69bb26beced32315c4ac201f38db2d9c74b5b77a25546e30ef092fb87cec1063",
+        "reference_sha256": "fc03ae6e7225642e8cf83e5160aff1d7f0b3cf17e23045c006d945bdc8b93931"
+      },
+      "reference_sha256": "fc03ae6e7225642e8cf83e5160aff1d7f0b3cf17e23045c006d945bdc8b93931",
+      "cache": "C:\\Users\\saide\\AppData\\Local\\Temp\\local-youtube-tts-cache",
+      "python": "3.12.2 (tags/v3.12.2:6abddd9, Feb  6 2024, 21:26:36) [MSC v.1937 64 bit (AMD64)]",
+      "parameters": {
+        "temperature": 0.8,
+        "repetition_penalty": 1.2,
+        "cfg_weight": 0.0,
+        "exaggeration": 0.0,
+        "upstream_other_defaults": true
+      },
+      "case": "long",
+      "status": "ok",
+      "segments": [
+        {
+          "text": "Before sunrise, a coastal town begins to wake. Delivery vans turn into narrow streets, a baker opens the shutters, and the first fishing boats leave the harbor. Most people are thinking about the day ahead. Few are thinking about the network beneath their feet.",
+          "generation_seconds": 5.823228400000517,
+          "duration_seconds": 19.84,
+          "peak": 0.941207766532898,
+          "file": "benchmarks\\results\\turbo\\long-segments\\000.wav"
+        },
+        {
+          "text": "Yet every street, building, and public square depends on systems that must work together. Water, power, transport, and communication make ordinary life possible. Their history tells us how a town grows, how it survives trouble, and how it prepares for an uncertain future. Start with water.",
+          "generation_seconds": 5.616762099998596,
+          "duration_seconds": 19.08,
+          "peak": 0.9363201260566711,
+          "file": "benchmarks\\results\\turbo\\long-segments\\001.wav"
+        },
+        {
+          "text": "A river may appear to offer an endless supply, but its flow changes with the seasons. Heavy rain can turn a quiet channel into a dangerous current. A dry summer can reveal stones that have been hidden for years. Engineers study those changes before deciding where to place a reservoir or treatment plant.",
+          "generation_seconds": 5.9462600000006205,
+          "duration_seconds": 20.36,
+          "peak": 0.98814457654953,
+          "file": "benchmarks\\results\\turbo\\long-segments\\002.wav"
+        },
+        {
+          "text": "They measure the landscape, inspect the ground, and compare records from many different years. Good planning begins with evidence. It also begins with a simple admission: a system designed for yesterday may need to change tomorrow. Inside the treatment plant, water passes through several stages. Large screens catch branches and other debris.",
+          "generation_seconds": 6.828415600000881,
+          "duration_seconds": 22.68,
+          "peak": 0.9881147742271423,
+          "file": "benchmarks\\results\\turbo\\long-segments\\003.wav"
+        },
+        {
+          "text": "Smaller particles settle or are filtered out. Operators monitor the process and adjust it when conditions change. The details vary from place to place, but the goal remains clear. People need water they can trust. That trust depends on maintenance as much as on impressive equipment.",
+          "generation_seconds": 5.855736400000751,
+          "duration_seconds": 19.96,
+          "peak": 0.9033781290054321,
+          "file": "benchmarks\\results\\turbo\\long-segments\\004.wav"
+        },
+        {
+          "text": "A small sensor, checked regularly, may prevent a much larger problem. A written record can help a new operator understand what happened during the previous shift. Now follow a pipe back toward the town center. Some sections were installed decades ago, when fewer people lived here. Others are recent replacements.",
+          "generation_seconds": 6.651868599999943,
+          "duration_seconds": 22.0,
+          "peak": 1.006819248199463,
+          "file": "benchmarks\\results\\turbo\\long-segments\\005.wav"
+        },
+        {
+          "text": "A repair crew cannot simply close every road at once. It must coordinate with bus routes, businesses, emergency services, and the people who live nearby. This is why a seemingly simple repair can take careful preparation. The crew must locate other buried cables, choose a safe working area, and arrange access to the damaged section.",
+          "generation_seconds": 7.018072900000334,
+          "duration_seconds": 23.2,
+          "peak": 0.9780168533325195,
+          "file": "benchmarks\\results\\turbo\\long-segments\\006.wav"
+        },
+        {
+          "text": "The digging is only one visible part of a much larger job. Above ground, electricity follows another network. Power arrives at a substation, where equipment changes its voltage before it continues toward homes and shops. Demand rises when people cook dinner, charge devices, or turn on heating. Operators watch the balance between supply and use.",
+          "generation_seconds": 6.914042000000336,
+          "duration_seconds": 22.96,
+          "peak": 1.0323117971420288,
+          "file": "benchmarks\\results\\turbo\\long-segments\\007.wav"
+        },
+        {
+          "text": "A network needs enough capacity for busy periods, but building capacity takes time and money. Local solar panels and batteries can help, although they also change the way energy moves. The challenge is to make the whole system reliable while its individual parts keep evolving. Consider a storm arriving from the sea.",
+          "generation_seconds": 5.881350599998768,
+          "duration_seconds": 19.6,
+          "peak": 1.1300204992294312,
+          "file": "benchmarks\\results\\turbo\\long-segments\\008.wav"
+        },
+        {
+          "text": "Wind bends trees, rain fills drains, and salt spray blows across the harbor. One damaged cable may affect a street. A flooded control room may affect a much wider area. Planners therefore look for places where several systems could fail together. Backup power is useful only if it can be reached and started safely.",
+          "generation_seconds": 6.4780205999995815,
+          "duration_seconds": 21.56,
+          "peak": 0.932510256767273,
+          "file": "benchmarks\\results\\turbo\\long-segments\\009.wav"
+        },
+        {
+          "text": "Emergency instructions are useful only if people understand them. Practice matters because a difficult night is a poor time to discover that two teams are using different maps or outdated telephone numbers. Transport presents a different kind of puzzle. The main road must carry deliveries, commuters, buses, bicycles, and pedestrians.",
+          "generation_seconds": 6.175699100000202,
+          "duration_seconds": 21.0,
+          "peak": 1.0669032335281372,
+          "file": "benchmarks\\results\\turbo\\long-segments\\010.wav"
+        },
+        {
+          "text": "Each group experiences the same street differently. A wide turning lane may help a truck while making a crossing longer for someone on foot. A bus stop may improve access while reducing space for parked cars. There is rarely a single design that solves every problem. Instead, planners count journeys, observe delays, and listen to residents.",
+          "generation_seconds": 7.174548099999811,
+          "duration_seconds": 24.0,
+          "peak": 1.0294616222381592,
+          "file": "benchmarks\\results\\turbo\\long-segments\\011.wav"
+        },
+        {
+          "text": "Clear priorities help them explain why a change is needed and how its effects will be measured. At the railway station, the morning crowd becomes a stream of individual decisions. One person checks a departure board. Another helps a child with a heavy bag. A visitor searches for the exit.",
+          "generation_seconds": 5.602049699999043,
+          "duration_seconds": 19.08,
+          "peak": 0.9803157448768616,
+          "file": "benchmarks\\results\\turbo\\long-segments\\012.wav"
+        },
+        {
+          "text": "Signs, lighting, and clear walking routes reduce confusion without requiring anyone to think about the design. This quiet usefulness is a mark of good infrastructure. The best improvement may be a shelter that keeps people dry, a ramp that makes a platform accessible, or a timetable that connects with the last bus home.",
+          "generation_seconds": 6.487648000000263,
+          "duration_seconds": 21.72,
+          "peak": 1.014032006263733,
+          "file": "benchmarks\\results\\turbo\\long-segments\\013.wav"
+        },
+        {
+          "text": "Small changes can make a daily journey much easier. Communication links these activities together. A repair team sends a report. A shop places an order. A family receives a warning about an approaching storm. Reliable networks help information reach the right people at the right time. But a message must also be understandable.",
+          "generation_seconds": 6.48976330000005,
+          "duration_seconds": 21.6,
+          "peak": 1.052512526512146,
+          "file": "benchmarks\\results\\turbo\\long-segments\\014.wav"
+        },
+        {
+          "text": "A precise technical report may be appropriate for an engineer, while residents need a short explanation of what has happened and what they should do next. Useful communication begins by considering its audience. More information is not always better information, especially when time and attention are limited.",
+          "generation_seconds": 5.914319299999988,
+          "duration_seconds": 20.04,
+          "peak": 0.9249440431594849,
+          "file": "benchmarks\\results\\turbo\\long-segments\\015.wav"
+        },
+        {
+          "text": "By late afternoon, the town looks ordinary again. Children leave school, the bakery closes, and the fishing boats return. Beneath these familiar scenes, thousands of connected tasks continue. Some are automated, and others depend on judgment learned through years of experience.",
+          "generation_seconds": 5.589653900000485,
+          "duration_seconds": 19.0,
+          "peak": 0.9723176956176758,
+          "file": "benchmarks\\results\\turbo\\long-segments\\016.wav"
+        },
+        {
+          "text": "The future will bring new equipment, different weather patterns, and changing needs. No single invention will remove the need for care. What keeps a town working is the patient combination of planning, measurement, repair, and cooperation.",
+          "generation_seconds": 4.548900400001003,
+          "duration_seconds": 15.64,
+          "peak": 0.8346408605575562,
+          "file": "benchmarks\\results\\turbo\\long-segments\\017.wav"
+        },
+        {
+          "text": "Tomorrow morning, when the first tap opens and the first light comes on, that quiet work will already be underway.",
+          "generation_seconds": 2.129670599999372,
+          "duration_seconds": 7.28,
+          "peak": 0.7612464427947998,
+          "file": "benchmarks\\results\\turbo\\long-segments\\018.wav"
+        }
+      ],
+      "text_sha256": "da7ef041e40c9910de33cb3c0622456278deda55df39ffc6d8b4cbbfa85998c8",
+      "generation_seconds": 113.12600960000054,
+      "wall_seconds": 113.39159280000058,
+      "audio_seconds": 380.6,
+      "real_time_factor": 0.29723071361009074,
+      "peak_allocated_bytes": 3541495808,
+      "peak_reserved_bytes": 4901044224,
+      "file": "benchmarks\\results\\turbo\\long.wav",
+      "audio_sha256": "428ba091715526cdc86bd2f28f20ded0b9def1a28deaa74197cb77c5dc725d77",
+      "pcm_float32_sha256": "4350e41ac3426d46fe4d8826df9df1984dd3510751758b7538e0eab994818ba3",
+      "validated_pcm_sha256": "4350e41ac3426d46fe4d8826df9df1984dd3510751758b7538e0eab994818ba3",
+      "wav_validation": "pass: finite, decodable, sample rate, duration, file hash, segment duration sum"
+    },
+    {
+      "model": "turbo",
+      "revision": "749d1c1a46eb10492095d68fbcf55691ccf137cd",
+      "pid": 17532,
+      "code_revision_reviewed": "5de7a54aa4e5e2baadb0182dde554908b48b85c2",
+      "package_versions": {
+        "torch": "2.6.0+cu124",
+        "torchaudio": "2.6.0+cu124",
+        "chatterbox-tts": "0.1.7"
+      },
+      "started_at": "2026-11-01T15:05:52.478040+00:00",
+      "seed": 1234,
+      "load_seconds": 11.106038699999772,
+      "sample_rate": 24000,
+      "device": "NVIDIA GeForce RTX 4070 Laptop GPU",
+      "voice": {
+        "identity": "User-owned voice recording record-sample.ogg",
+        "rights_confirmed": true,
+        "scope": "User permits cloning and commercial publication of generated narration",
+        "statement": "Yes, it\u2019s my voice and I permit cloning and commercial publication.",
+        "confirmed_at": "2026-11-01T14:59:49.671580+00:00",
+        "source_sha256": "69bb26beced32315c4ac201f38db2d9c74b5b77a25546e30ef092fb87cec1063",
+        "reference_sha256": "fc03ae6e7225642e8cf83e5160aff1d7f0b3cf17e23045c006d945bdc8b93931"
+      },
+      "reference_sha256": "fc03ae6e7225642e8cf83e5160aff1d7f0b3cf17e23045c006d945bdc8b93931",
+      "cache": "C:\\Users\\saide\\AppData\\Local\\Temp\\local-youtube-tts-cache",
+      "python": "3.12.2 (tags/v3.12.2:6abddd9, Feb  6 2024, 21:26:36) [MSC v.1937 64 bit (AMD64)]",
+      "parameters": {
+        "temperature": 0.8,
+        "repetition_penalty": 1.2,
+        "cfg_weight": 0.0,
+        "exaggeration": 0.0,
+        "upstream_other_defaults": true
+      },
+      "case": "neutral",
+      "status": "ok",
+      "segments": [
+        {
+          "text": "Every time you open a tap, you take part in a journey that began far from your kitchen. Rain falls on hills, collects in rivers, and slowly enters underground layers of rock. Along the way, water carries tiny particles and dissolved minerals. Treatment plants remove unwanted material, check the water, and send it through a network of pipes.",
+          "generation_seconds": 8.292849499999647,
+          "duration_seconds": 22.84,
+          "peak": 1.0014336109161377,
+          "file": "benchmarks\\results\\turbo\\neutral-segments\\000.wav"
+        },
+        {
+          "text": "Pressure keeps that water moving, even when the road rises uphill. A storage tank helps the system meet the rush of demand each morning. The next time you fill a glass, pause for a moment. That ordinary action depends on careful engineering, regular testing, and thousands of people doing work that usually stays out of sight.",
+          "generation_seconds": 6.450011200000517,
+          "duration_seconds": 20.76,
+          "peak": 1.0266324281692505,
+          "file": "benchmarks\\results\\turbo\\neutral-segments\\001.wav"
+        }
+      ],
+      "text_sha256": "26d92c5f86a0c095ccbcaa4e1ee79c923a2a981c245a8bbd287cc401ff5ba562",
+      "generation_seconds": 14.742860700000165,
+      "wall_seconds": 14.775687400000606,
+      "audio_seconds": 43.6,
+      "real_time_factor": 0.3381390068807377,
+      "peak_allocated_bytes": 3497288192,
+      "peak_reserved_bytes": 3776970752,
+      "file": "benchmarks\\results\\turbo\\neutral.wav",
+      "audio_sha256": "f5076246f68af49d8de715ba24ad80f6c7e24cc6df0c4c97db68fa5e17a678c3",
+      "pcm_float32_sha256": "6386fd081c8b41464f8b6bfccb196a46547c7e1951bae7d9a5a4e40ae86ef5e1",
+      "validated_pcm_sha256": "6386fd081c8b41464f8b6bfccb196a46547c7e1951bae7d9a5a4e40ae86ef5e1",
+      "wav_validation": "pass: finite, decodable, sample rate, duration, file hash, segment duration sum"
+    },
+    {
+      "model": "turbo",
+      "revision": "749d1c1a46eb10492095d68fbcf55691ccf137cd",
+      "pid": 17532,
+      "code_revision_reviewed": "5de7a54aa4e5e2baadb0182dde554908b48b85c2",
+      "package_versions": {
+        "torch": "2.6.0+cu124",
+        "torchaudio": "2.6.0+cu124",
+        "chatterbox-tts": "0.1.7"
+      },
+      "started_at": "2026-11-01T15:05:52.478040+00:00",
+      "seed": 1234,
+      "load_seconds": 11.106038699999772,
+      "sample_rate": 24000,
+      "device": "NVIDIA GeForce RTX 4070 Laptop GPU",
+      "voice": {
+        "identity": "User-owned voice recording record-sample.ogg",
+        "rights_confirmed": true,
+        "scope": "User permits cloning and commercial publication of generated narration",
+        "statement": "Yes, it\u2019s my voice and I permit cloning and commercial publication.",
+        "confirmed_at": "2026-11-01T14:59:49.671580+00:00",
+        "source_sha256": "69bb26beced32315c4ac201f38db2d9c74b5b77a25546e30ef092fb87cec1063",
+        "reference_sha256": "fc03ae6e7225642e8cf83e5160aff1d7f0b3cf17e23045c006d945bdc8b93931"
+      },
+      "reference_sha256": "fc03ae6e7225642e8cf83e5160aff1d7f0b3cf17e23045c006d945bdc8b93931",
+      "cache": "C:\\Users\\saide\\AppData\\Local\\Temp\\local-youtube-tts-cache",
+      "python": "3.12.2 (tags/v3.12.2:6abddd9, Feb  6 2024, 21:26:36) [MSC v.1937 64 bit (AMD64)]",
+      "parameters": {
+        "temperature": 0.8,
+        "repetition_penalty": 1.2,
+        "cfg_weight": 0.0,
+        "exaggeration": 0.0,
+        "upstream_other_defaults": true
+      },
+      "case": "pronunciation",
+      "status": "ok",
+      "segments": [
+        {
+          "text": "On November 1, 2026, Dr. Elena Voss presented NASA's new report to UNESCO. The estimate rose from $1,250.75 to $2.4 million, an increase of 12.5 percent. At 6:45 a.m., the GPS receiver recorded 33.5731 degrees north. Can an RTX 4070 process 48 kHz audio through a USB-C cable? Please compare SQL, API, CPU, and GPU.",
+          "generation_seconds": 11.373885599999994,
+          "duration_seconds": 34.96,
+          "peak": 0.9050898551940918,
+          "file": "benchmarks\\results\\turbo\\pronunciation-segments\\000.wav"
+        },
+        {
+          "text": "The route connects Reykjavik, Edinburgh, Worcester, and Ouarzazate. Meanwhile, Saoirse, Siobhan, and Nguyen discussed the work of Richard Feynman and Srinivasa Ramanujan. Version 3.11 differs from section 3, paragraph 11. The temperature was minus 7 degrees Celsius, and the distance was 1,024 kilometers.",
+          "generation_seconds": 7.29764780000005,
+          "duration_seconds": 23.84,
+          "peak": 1.0114688873291016,
+          "file": "benchmarks\\results\\turbo\\pronunciation-segments\\001.wav"
+        }
+      ],
+      "text_sha256": "c85c330385e32626b0b52be326e6e7ec39f7374a1efd50f18a419de2026f6c75",
+      "generation_seconds": 18.671533400000044,
+      "wall_seconds": 18.707983100001,
+      "audio_seconds": 58.8,
+      "real_time_factor": 0.31754308503401435,
+      "peak_allocated_bytes": 4040344064,
+      "peak_reserved_bytes": 4896849920,
+      "file": "benchmarks\\results\\turbo\\pronunciation.wav",
+      "audio_sha256": "8d004cb3e8053bf2117057e1ce68b4471f0b8154086acfb411c57f157c10a452",
+      "pcm_float32_sha256": "bb44d94daf993bbf7ed0de89d9c223a55abe03a3e4c50803d9da11bc5db11ec8",
+      "validated_pcm_sha256": "bb44d94daf993bbf7ed0de89d9c223a55abe03a3e4c50803d9da11bc5db11ec8",
+      "wav_validation": "pass: finite, decodable, sample rate, duration, file hash, segment duration sum"
+    },
+    {
+      "model": "turbo",
+      "revision": "749d1c1a46eb10492095d68fbcf55691ccf137cd",
+      "pid": 15620,
+      "code_revision_reviewed": "5de7a54aa4e5e2baadb0182dde554908b48b85c2",
+      "package_versions": {
+        "torch": "2.6.0+cu124",
+        "torchaudio": "2.6.0+cu124",
+        "chatterbox-tts": "0.1.7"
+      },
+      "started_at": "2026-11-01T15:08:55.578505+00:00",
+      "seed": 1234,
+      "load_seconds": 11.411451500000112,
+      "sample_rate": 24000,
+      "device": "NVIDIA GeForce RTX 4070 Laptop GPU",
+      "voice": {
+        "identity": "User-owned voice recording record-sample.ogg",
+        "rights_confirmed": true,
+        "scope": "User permits cloning and commercial publication of generated narration",
+        "statement": "Yes, it\u2019s my voice and I permit cloning and commercial publication.",
+        "confirmed_at": "2026-11-01T14:59:49.671580+00:00",
+        "source_sha256": "69bb26beced32315c4ac201f38db2d9c74b5b77a25546e30ef092fb87cec1063",
+        "reference_sha256": "fc03ae6e7225642e8cf83e5160aff1d7f0b3cf17e23045c006d945bdc8b93931"
+      },
+      "reference_sha256": "fc03ae6e7225642e8cf83e5160aff1d7f0b3cf17e23045c006d945bdc8b93931",
+      "cache": "C:\\Users\\saide\\AppData\\Local\\Temp\\local-youtube-tts-cache",
+      "python": "3.12.2 (tags/v3.12.2:6abddd9, Feb  6 2024, 21:26:36) [MSC v.1937 64 bit (AMD64)]",
+      "parameters": {
+        "temperature": 0.8,
+        "repetition_penalty": 1.2,
+        "cfg_weight": 0.0,
+        "exaggeration": 0.0,
+        "upstream_other_defaults": true
+      },
+      "case": "restart",
+      "status": "ok",
+      "segments": [
+        {
+          "text": "Every time you open a tap, you take part in a journey that began far from your kitchen. Rain falls on hills, collects in rivers, and slowly enters underground layers of rock. Along the way, water carries tiny particles and dissolved minerals. Treatment plants remove unwanted material, check the water, and send it through a network of pipes.",
+          "generation_seconds": 8.12998940000034,
+          "duration_seconds": 22.84,
+          "peak": 1.0014336109161377,
+          "file": "benchmarks\\results\\turbo\\restart-segments\\000.wav"
+        },
+        {
+          "text": "Pressure keeps that water moving, even when the road rises uphill. A storage tank helps the system meet the rush of demand each morning. The next time you fill a glass, pause for a moment. That ordinary action depends on careful engineering, regular testing, and thousands of people doing work that usually stays out of sight.",
+          "generation_seconds": 6.296541499999876,
+          "duration_seconds": 20.76,
+          "peak": 1.0266324281692505,
+          "file": "benchmarks\\results\\turbo\\restart-segments\\001.wav"
+        }
+      ],
+      "text_sha256": "26d92c5f86a0c095ccbcaa4e1ee79c923a2a981c245a8bbd287cc401ff5ba562",
+      "generation_seconds": 14.426530900000216,
+      "wall_seconds": 14.45344870000008,
+      "audio_seconds": 43.6,
+      "real_time_factor": 0.33088373623853706,
+      "peak_allocated_bytes": 3497288192,
+      "peak_reserved_bytes": 3776970752,
+      "file": "benchmarks\\results\\turbo\\restart.wav",
+      "audio_sha256": "d4fd3daf1167022652a4471ade1b58ddc12abae41af7401209a5ae9cc64c1b32",
+      "pcm_float32_sha256": "6386fd081c8b41464f8b6bfccb196a46547c7e1951bae7d9a5a4e40ae86ef5e1",
+      "validated_pcm_sha256": "6386fd081c8b41464f8b6bfccb196a46547c7e1951bae7d9a5a4e40ae86ef5e1",
+      "wav_validation": "pass: finite, decodable, sample rate, duration, file hash, segment duration sum"
+    }
+  ],
+  "restart_comparison": {
+    "kokoro": {
+      "process_a": 20496,
+      "process_b": 23112,
+      "different_processes": true,
+      "identical_decoded_pcm": true,
+      "listening_score": null
+    },
+    "chatterbox": {
+      "process_a": 31792,
+      "process_b": 28804,
+      "different_processes": true,
+      "identical_decoded_pcm": true,
+      "listening_score": null
+    },
+    "turbo": {
+      "process_a": 17532,
+      "process_b": 15620,
+      "different_processes": true,
+      "identical_decoded_pcm": true,
+      "listening_score": null
+    }
+  },
+  "notes": [
+    "Peak allocated/reserved are PyTorch CUDA allocator statistics; driver/context and other GPU allocations are excluded.",
+    "Generation seconds includes shared chunk text processing and reference preparation when supplied; model load is separate.",
+    "One measured run per case; timings are observations, not statistical confidence intervals.",
+    "Numerical checks do not establish naturalness, correct pronunciation, or speaker consent."
+  ]
+}

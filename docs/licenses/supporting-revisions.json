@@ -1,0 +1,52 @@
+{
+  "espeakng-loader": {
+    "repo": "thewh1teagle/espeakng-loader",
+    "requested_ref": "main",
+    "revision": "0ddc87adf77e5850d7eeb542ac8a87d421b64daa",
+    "evidence": [
+      {
+        "url": "https://raw.githubusercontent.com/thewh1teagle/espeakng-loader/0ddc87adf77e5850d7eeb542ac8a87d421b64daa/LICENSE",
+        "file": "espeakng-loader-LICENSE",
+        "sha256": "b05c73bb1335b4320ec97edff106b3991c12d0acdc6e899c96f061a15039119f",
+        "bytes": 1069
+      },
+      {
+        "url": "https://raw.githubusercontent.com/thewh1teagle/espeakng-loader/0ddc87adf77e5850d7eeb542ac8a87d421b64daa/README.md",
+        "file": "espeakng-loader-README.md",
+        "sha256": "a920e64a67349bb73c6c157c6981e8afbd8afbadeb8efbf40d1f4f09002d5a9a",
+        "bytes": 1068
+      },
+      {
+        "url": "https://raw.githubusercontent.com/thewh1teagle/espeakng-loader/0ddc87adf77e5850d7eeb542ac8a87d421b64daa/pyproject.toml",
+        "file": "espeakng-loader-pyproject.toml",
+        "sha256": "5a73d7088c71c778ee68032261c26b7b1ec7db77a0fbe791c3433b340748acb5",
+        "bytes": 484
+      }
+    ]
+  },
+  "espeak-ng": {
+    "repo": "espeak-ng/espeak-ng",
+    "requested_ref": "1.52.0",
+    "revision": "4870adfa25b1a32b4361592f1be8a40337c58d6c",
+    "evidence": [
+      {
+        "url": "https://raw.githubusercontent.com/espeak-ng/espeak-ng/4870adfa25b1a32b4361592f1be8a40337c58d6c/COPYING",
+        "file": "espeak-ng-COPYING",
+        "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+        "bytes": 35147
+      },
+      {
+        "url": "https://raw.githubusercontent.com/espeak-ng/espeak-ng/4870adfa25b1a32b4361592f1be8a40337c58d6c/README.md",
+        "file": "espeak-ng-README.md",
+        "sha256": "765e894f83a47e2d003bd2256e86d1ae412e6e0078c3092d66ece293b051e278",
+        "bytes": 6741
+      }
+    ]
+  },
+  "spacy-en": {
+    "repo": "explosion/spacy-models",
+    "requested_ref": "en_core_web_sm-3.8.0",
+    "revision": "374ece89b2099818244f5a65ef466b89c0c392ae",
+    "evidence": []
+  }
+}

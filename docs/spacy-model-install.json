@@ -1,0 +1,44 @@
+{
+  "version": "1",
+  "pip_version": "24.0",
+  "install": [
+    {
+      "download_info": {
+        "url": "https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl",
+        "archive_info": {
+          "hash": "sha256=1932429db727d4bff3deed6b34cfc05df17794f4a52eeb26cf8928f7c1a0fb85",
+          "hashes": {
+            "sha256": "1932429db727d4bff3deed6b34cfc05df17794f4a52eeb26cf8928f7c1a0fb85"
+          }
+        }
+      },
+      "is_direct": true,
+      "is_yanked": false,
+      "requested": true,
+      "metadata": {
+        "metadata_version": "2.1",
+        "name": "en_core_web_sm",
+        "version": "3.8.0",
+        "summary": "English pipeline optimized for CPU. Components: tok2vec, tagger, parser, senter, ner, attribute_ruler, lemmatizer.",
+        "description": "### Details: https://spacy.io/models/en#en_core_web_sm\n\nEnglish pipeline optimized for CPU. Components: tok2vec, tagger, parser, senter, ner, attribute_ruler, lemmatizer.\n\n| Feature | Description |\n| --- | --- |\n| **Name** | `en_core_web_sm` |\n| **Version** | `3.8.0` |\n| **spaCy** | `>=3.8.0,<3.9.0` |\n| **Default Pipeline** | `tok2vec`, `tagger`, `parser`, `attribute_ruler`, `lemmatizer`, `ner` |\n| **Components** | `tok2vec`, `tagger`, `parser`, `senter`, `attribute_ruler`, `lemmatizer`, `ner` |\n| **Vectors** | 0 keys, 0 unique vectors (0 dimensions) |\n| **Sources** | [OntoNotes 5](https://catalog.ldc.upenn.edu/LDC2013T19) (Ralph Weischedel, Martha Palmer, Mitchell Marcus, Eduard Hovy, Sameer Pradhan, Lance Ramshaw, Nianwen Xue, Ann Taylor, Jeff Kaufman, Michelle Franchini, Mohammed El-Bachouti, Robert Belvin, Ann Houston)<br />[ClearNLP Constituent-to-Dependency Conversion](https://github.com/clir/clearnlp-guidelines/blob/master/md/components/dependency_conversion.md) (Emory University)<br />[WordNet 3.0](https://wordnet.princeton.edu/) (Princeton University) |\n| **License** | `MIT` |\n| **Author** | [Explosion](https://explosion.ai) |\n\n### Label Scheme\n\n<details>\n\n<summary>View label scheme (113 labels for 3 components)</summary>\n\n| Component | Labels |\n| --- | --- |\n| **`tagger`** | `$`, `''`, `,`, `-LRB-`, `-RRB-`, `.`, `:`, `ADD`, `AFX`, `CC`, `CD`, `DT`, `EX`, `FW`, `HYPH`, `IN`, `JJ`, `JJR`, `JJS`, `LS`, `MD`, `NFP`, `NN`, `NNP`, `NNPS`, `NNS`, `PDT`, `POS`, `PRP`, `PRP$`, `RB`, `RBR`, `RBS`, `RP`, `SYM`, `TO`, `UH`, `VB`, `VBD`, `VBG`, `VBN`, `VBP`, `VBZ`, `WDT`, `WP`, `WP$`, `WRB`, `XX`, `_SP`, ```` |\n| **`parser`** | `ROOT`, `acl`, `acomp`, `advcl`, `advmod`, `agent`, `amod`, `appos`, `attr`, `aux`, `auxpass`, `case`, `cc`, `ccomp`, `compound`, `conj`, `csubj`, `csubjpass`, `dative`, `dep`, `det`, `dobj`, `expl`, `intj`, `mark`, `meta`, `neg`, `nmod`, `npadvmod`, `nsubj`, `nsubjpass`, `nummod`, `oprd`, `parataxis`, `pcomp`, `pobj`, `poss`, `preconj`, `predet`, `prep`, `prt`, `punct`, `quantmod`, `relcl`, `xcomp` |\n| **`ner`** | `CARDINAL`, `DATE`, `EVENT`, `FAC`, `GPE`, `LANGUAGE`, `LAW`, `LOC`, `MONEY`, `NORP`, `ORDINAL`, `ORG`, `PERCENT`, `PERSON`, `PRODUCT`, `QUANTITY`, `TIME`, `WORK_OF_ART` |\n\n</details>\n\n### Accuracy\n\n| Type | Score |\n| --- | --- |\n| `TOKEN_ACC` | 99.86 |\n| `TOKEN_P` | 99.57 |\n| `TOKEN_R` | 99.58 |\n| `TOKEN_F` | 99.57 |\n| `TAG_ACC` | 97.29 |\n| `SENTS_P` | 92.01 |\n| `SENTS_R` | 89.39 |\n| `SENTS_F` | 90.68 |\n| `DEP_UAS` | 91.77 |\n| `DEP_LAS` | 89.92 |\n| `ENTS_P` | 84.30 |\n| `ENTS_R` | 84.36 |\n| `ENTS_F` | 84.33 |\n",
+        "home_page": "https://explosion.ai",
+        "author": "Explosion",
+        "author_email": "contact@explosion.ai",
+        "license": "MIT"
+      }
+    }
+  ],
+  "environment": {
+    "implementation_name": "cpython",
+    "implementation_version": "3.12.2",
+    "os_name": "nt",
+    "platform_machine": "AMD64",
+    "platform_release": "11",
+    "platform_system": "Windows",
+    "platform_version": "10.0.26300",
+    "python_full_version": "3.12.2",
+    "platform_python_implementation": "CPython",
+    "python_version": "3.12",
+    "sys_platform": "win32"
+  }
+}

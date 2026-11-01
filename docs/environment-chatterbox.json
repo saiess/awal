@@ -1,0 +1,37 @@
+{
+  "platform": "Windows-11-10.0.26300-SP0",
+  "python": "3.12.2 (tags/v3.12.2:6abddd9, Feb  6 2024, 21:26:36) [MSC v.1937 64 bit (AMD64)]",
+  "executable": "C:\\Users\\saide\\Desktop\\awal\\.venv-chatterbox\\Scripts\\python.exe",
+  "disk": {
+    "total": 1021821579264,
+    "used": 818698625024,
+    "free": 203122954240
+  },
+  "nvidia_smi": {
+    "command": [
+      "nvidia-smi",
+      "--query-gpu=name,driver_version,memory.total,memory.free",
+      "--format=csv"
+    ],
+    "returncode": 0,
+    "stdout": "name, driver_version, memory.total [MiB], memory.free [MiB]\nNVIDIA GeForce RTX 4070 Laptop GPU, 560.81, 8188 MiB, 7580 MiB\n",
+    "stderr": ""
+  },
+  "ffmpeg": null,
+  "ram": {
+    "total_bytes": 42676903936,
+    "available_bytes": 19464146944
+  },
+  "torch": {
+    "version": "2.6.0+cu124",
+    "cuda_build": "12.4",
+    "available": true,
+    "device": "NVIDIA GeForce RTX 4070 Laptop GPU",
+    "finite": true,
+    "peak_allocated_bytes": 24248320
+  },
+  "torch_distribution": "2.6.0+cu124",
+  "torchaudio_distribution": "2.6.0+cu124",
+  "chatterbox-tts_distribution": "0.1.7",
+  "torchaudio_import": "2.6.0+cu124"
+}

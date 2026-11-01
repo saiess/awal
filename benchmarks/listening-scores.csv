@@ -1,0 +1,16 @@
+model,case,naturalness_1_to_5,pronunciation_1_to_5,stability_1_to_5,reference_similarity_1_to_5,artifact_freedom_1_to_5,notes
+kokoro,neutral,,,,,,Not listened; similarity N/A for preset
+kokoro,documentary,,,,,,Not listened; similarity N/A for preset
+kokoro,pronunciation,,,,,,Not listened; similarity N/A for preset
+kokoro,long,,,,,,Review first middle last segments; similarity N/A
+kokoro,restart,,,,,,Compare narrator with neutral sample
+chatterbox,neutral,,,,,,Not listened; consented reference used
+chatterbox,documentary,,,,,,Not listened; consented reference used
+chatterbox,pronunciation,,,,,,Not listened; consented reference used
+chatterbox,long,,,,,,Not listened; consented reference used
+chatterbox,restart,,,,,,Not listened; consented reference used
+turbo,neutral,,,,,,Not listened; consented reference used
+turbo,documentary,,,,,,Not listened; consented reference used
+turbo,pronunciation,,,,,,Not listened; consented reference used
+turbo,long,,,,,,Not listened; consented reference used
+turbo,restart,,,,,,Not listened; consented reference used

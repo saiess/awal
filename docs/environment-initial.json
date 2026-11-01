@@ -1,0 +1,23 @@
+{
+  "platform": "Windows-11-10.0.26300-SP0",
+  "python": "3.12.2 (tags/v3.12.2:6abddd9, Feb  6 2024, 21:26:36) [MSC v.1937 64 bit (AMD64)]",
+  "executable": "C:\\Users\\saide\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+  "disk": {
+    "total": 1021821579264,
+    "used": 792009613312,
+    "free": 229811965952
+  },
+  "nvidia_smi": {
+    "command": [
+      "nvidia-smi",
+      "--query-gpu=name,driver_version,memory.total,memory.free",
+      "--format=csv"
+    ],
+    "returncode": 0,
+    "stdout": "name, driver_version, memory.total [MiB], memory.free [MiB]\nNVIDIA GeForce RTX 4070 Laptop GPU, 560.81, 8188 MiB, 7948 MiB\n",
+    "stderr": ""
+  },
+  "ffmpeg": null,
+  "torch_error": "ModuleNotFoundError(\"No module named 'torch'\")",
+  "torchaudio_error": "ModuleNotFoundError(\"No module named 'torchaudio'\")"
+}
