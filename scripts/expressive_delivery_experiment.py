@@ -1,4 +1,4 @@
-"""One-off, offline, three-configuration experiment; never imported by the app.
+"""Offline delivery experiment and segmentation control; never imported by the app.
 
 Reuses TurboEngine, segmentation, audio verification, and the existing ignored
 benchmarks/results location. Creates an exclusive run directory, never projects.
@@ -81,6 +81,8 @@ def waveform_metrics(a, sr):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True, help="New directory under benchmarks/results")
+    parser.add_argument("--segmentation-control-from", type=Path,
+                        help="Existing completed A/B/C run; generate only D with A settings and C segmentation")
     args = parser.parse_args()
     out = args.output.resolve()
     allowed = (ROOT / "benchmarks/results").resolve()
@@ -92,6 +94,21 @@ def main():
     data_paths = [p for folder in ("projects", "narrators") for p in (settings.data_root/folder).rglob("*") if p.is_file()]
     production_paths = [p for folder in ("app", "frontend/src") for p in (ROOT/folder).rglob("*") if p.is_file() and "__pycache__" not in p.parts]
     before_data, before_code = hashes(data_paths), hashes(production_paths)
+    previous = None
+    previous_files = []
+    if args.segmentation_control_from:
+        previous_root = args.segmentation_control_from.resolve()
+        if not previous_root.is_relative_to(allowed) or not previous_root.is_dir():
+            raise ValueError("Comparison must use an existing benchmarks/results run.")
+        previous = json.loads((previous_root/"measurements.json").read_text(encoding="utf-8"))
+        if previous["status"] != "completed" or previous["code_revision"] != CODE_REVISION or previous["model_revision"] != MODEL_REVISION:
+            raise ValueError("Expected the completed experiment with the same pinned model/code.")
+        if previous["script_sha256"] != hashlib.sha256(SCRIPT.encode()).hexdigest():
+            raise ValueError("The script differs from the original experiment.")
+        if (previous_root/"script.txt").read_text(encoding="utf-8").rstrip("\n") != SCRIPT:
+            raise ValueError("The saved comparison script has changed.")
+        previous_files = [p for p in previous_root.rglob("*") if p.is_file()]
+    before_previous = hashes(previous_files)
     import httpx
     try:
         response = httpx.get("http://127.0.0.1:8000/api/health", trust_env=False, timeout=4)
@@ -126,6 +143,19 @@ def main():
         ("B_expressive", expressive, segment_text(SCRIPT, settings.segment_chars)),
         ("C_context", expressive, context_sections(SCRIPT)),
     ]
+    if previous is not None:
+        a, _, c = previous["configurations"]
+        if a["id"] != "A_baseline" or c["id"] != "C_context" or a["parameters"] != baseline:
+            raise ValueError("Original baseline parameters differ from this control.")
+        if previous["reference"]["sha256"] != profile["reference_sha256"]:
+            raise ValueError("Reference differs from the original experiment.")
+        sections = context_sections(SCRIPT)
+        if sections != [s["text"] for s in c["sections"]]:
+            raise ValueError("Context segmentation differs from C.")
+        for record in (a, c):
+            if file_hash(previous_root/record["raw_file"]) != record["raw_sha256"]:
+                raise ValueError("An original comparison master has changed.")
+        configs = [("D_baseline_context", dict(a["parameters"]), sections)]
     for _, _, sections in configs:
         assert " ".join(SCRIPT.split()) == " ".join(" ".join(sections).split())
     (out/"script.txt").write_text(SCRIPT+"\n", encoding="utf-8")
@@ -137,6 +167,9 @@ def main():
               "script_word_count": len(SCRIPT.split()), "offline_external_tcp_blocked": True,
               "live_app_before": health, "production_source_sha256": before_code,
               "user_data_sha256_before": before_data, "configurations": []}
+    if previous is not None:
+        report["comparison_run"] = str(previous_root.relative_to(ROOT))
+        report["previous_experiment_sha256_before"] = before_previous
     def save():
         (out/"measurements.json").write_text(json.dumps(report, indent=2, allow_nan=False), encoding="utf-8")
     save()
@@ -158,6 +191,8 @@ def main():
                                   "vram_bytes": torch.cuda.get_device_properties(0).total_memory}
         report["installed_source_sha256"] = {str(Path(m.__file__).relative_to(ROOT)): file_hash(m.__file__)
                                                  for m in (turbo, t3_module, cond_enc)}
+        if previous is not None and report["installed_source_sha256"] != previous["installed_source_sha256"]:
+            raise ValueError("Installed Turbo sources differ from the original run.")
         report["generate_signature"] = str(inspect.signature(turbo.ChatterboxTurboTTS.generate))
         report["reference"]["duration_seconds"] = sf.info(reference).duration
         started = time.perf_counter()
@@ -220,7 +255,6 @@ def main():
             write_raw(raw_path, combined, 24000)
             tempo_path = out/f"{name}_tempo_1.10x.wav"
             convert(raw_path, tempo_path, 1.1)
-            normalized_path = out/f"{name}_listening_levelmatch_1.00x.wav"
             # Shared listening level is finalized below after seeing all three peaks.
             record.update(raw_file=raw_path.name, raw_sha256=file_hash(raw_path), tempo_file=tempo_path.name,
                           inserted_boundary_gap_seconds=inserted, waveform=waveform_metrics(combined, 24000),
@@ -231,8 +265,13 @@ def main():
             save()
         # Avoid a louder-is-better bias. Same integrated LUFS target for all raw
         # listening copies; lower the common target if any would exceed -1 dBFS.
+        listening_records = report['configurations']
+        if previous is not None:
+            # Derive A/C comparison copies in this NEW directory if needed;
+            # never overwrite any original masters or listening files.
+            listening_records = [previous['configurations'][0], previous['configurations'][2], *listening_records]
         target = min(-23.0, *(r['waveform']['integrated_lufs']-1-r['waveform']['sample_peak_dbfs']
-                             for r in report['configurations']))
+                             for r in listening_records))
         report["shared_listening_lufs"] = target
         for record in report['configurations']:
             a, sr = sf.read(out/record['raw_file'], dtype='float32')
@@ -242,6 +281,15 @@ def main():
             write_raw(path, a, sr)
             record['levelmatched_listening'] = {"file": path.name, "gain_db": gain, "waveform": waveform_metrics(a,sr)}
             assert file_hash(out/record['raw_file']) == record['raw_sha256']
+        if previous is not None:
+            report['existing_comparisons'] = []
+            for record in (previous['configurations'][0], previous['configurations'][2]):
+                a, sr = sf.read(previous_root/record['raw_file'], dtype='float32')
+                gain = target-record['waveform']['integrated_lufs']
+                path = out/f"{record['id']}_listening_levelmatch_1.00x.wav"
+                write_raw(path, a * 10**(gain/20), sr)
+                report['existing_comparisons'].append({'id': record['id'], 'source_raw': str((previous_root/record['raw_file']).relative_to(ROOT)),
+                    'file': path.name, 'gain_db': gain, 'waveform': waveform_metrics(a * 10**(gain/20), sr)})
         report['status'] = 'completed'
     except BaseException as error:
         report['status'] = 'failed'
@@ -251,9 +299,13 @@ def main():
         report['production_source_unchanged'] = hashes(production_paths) == before_code
         report['user_data_unchanged'] = hashes(data_paths) == before_data
         report['reference_unchanged'] = file_hash(reference) == profile['reference_sha256']
+        if previous is not None:
+            report['previous_experiment_unchanged'] = hashes(previous_files) == before_previous
         save()
     assert report['production_source_unchanged'] and report['user_data_unchanged'] and report['reference_unchanged']
-    print(f"Completed exactly three configurations. Results: {out}", flush=True)
+    if previous is not None:
+        assert report['previous_experiment_unchanged']
+    print(f"Completed {len(configs)} new configuration(s). Results: {out}", flush=True)
 
 
 if __name__ == '__main__':

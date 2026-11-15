@@ -2,7 +2,9 @@
 
 Experiment date: 2026-11-15. **Listening approval pending. Nothing is integrated into production.**
 
-## Result and decision
+**Segmentation-only follow-up:** reviewers preferred C's sentence continuity, but its temperature change was a confound. One additional configuration, D, now tests A's exact baseline sampling with C's exact segmentation. D removes the same boundary without higher temperature; it also has a longer pause that needs listening review. **Review D next and prefer it if delivery is at least as good as C; production remains on A.** See [the A/D/C control comparison](#segmentation-only-control-adc) below. The original A/B/C experiment and audio are preserved.
+
+## Initial three-way result and decision
 
 Exactly three configurations use the same authorized Voice C reference and the same 174-word documentary script. A is the current generation baseline; B tests a modest sampling change; C adds complete-sentence, paragraph-aware context to B. These names describe hypotheses, not quality rankings.
 
@@ -136,3 +138,71 @@ Run again into a **different, new directory**:
 The script refuses an existing output directory, records settings and per-section timings/memory, and verifies production source/reference/project hashes afterward. [measurements.json](../benchmarks/results/expressive-delivery/2026-11-15/measurements.json) is the machine-readable evidence. Production settings, project records, raw audio, selective regeneration, references, export behavior, UI, and model versions have not been changed. A context candidate above 350 characters is not a drop-in production setting: the current section editor/API also have a 350-character limit, which would need a separately approved design if C wins.
 
 **Stop point: experiment and report only. Await listening review before integration.**
+
+## Segmentation-only control: A/D/C
+
+The reviewer preference for C motivates this control; it is not approval to integrate C. **D is baseline sampling plus C's segmentation**, not a newly tuned model. Exactly one new configuration was generated, with no retries, best-of selection, new dependencies, or production changes. A and C are reused from the original run, not regenerated.
+
+| Variable | Existing A | New D | Existing C |
+| --- | --- | --- | --- |
+| Temperature | 0.8 | **0.8** | 0.9 |
+| Grouping | Existing 350-character splitting | **C's complete-sentence, paragraph-aware grouping** | Complete-sentence, paragraph-aware grouping |
+| Actual section lengths | 348, 72, 339, 260 | **421, 339, 260** | 421, 339, 260 |
+| Seed per call | 1234 | **1234** | 1234 |
+| All other sampling/reference settings | Original baseline | **Exactly original baseline** | Original baseline |
+
+Thus **A versus D isolates segmentation**, and **D versus C isolates temperature** at the same segmentation. Same script SHA256, reference SHA256, model/code revisions, installed Turbo source hashes, and reference-normalization settings are checked by the runner. D has top-p 0.95, top-k 1000, repetition penalty 1.2, `norm_loudness=true`, CFG/exaggeration 0.0, and default inactive min-p 0.0. No new reference conditioning, punctuation rewriting, or export cleanup is introduced. The existing 600-character context bound is unchanged.
+
+### Listening files
+
+Start with these statically level-matched **1.00x** copies; only D involves new speech synthesis:
+
+- [Existing A, comparison copy](../benchmarks/results/expressive-delivery/2026-11-15-segmentation-control/A_baseline_listening_levelmatch_1.00x.wav)
+- [New D, baseline sampling with context](../benchmarks/results/expressive-delivery/2026-11-15-segmentation-control/D_baseline_context_listening_levelmatch_1.00x.wav)
+- [Existing C, comparison copy](../benchmarks/results/expressive-delivery/2026-11-15-segmentation-control/C_context_listening_levelmatch_1.00x.wav)
+
+The A/C comparison files are derived into the **new** run directory, so the old raw and listening files are never overwritten. Level matching uses the same original method: choose a common integrated target of -23 LUFS or lower if any raw peak requires it to maintain -1 dBFS headroom, then apply static gain only. No compression, fades, time changes, or pause trimming affect this comparison.
+
+D's untouched [raw 1.00x master](../benchmarks/results/expressive-delivery/2026-11-15-segmentation-control/D_baseline_context_raw_1.00x.wav) and its three emitted `D_baseline_context/section-NN_raw.wav` files are retained. An optional [tempo-only 1.10x copy](../benchmarks/results/expressive-delivery/2026-11-15-segmentation-control/D_baseline_context_tempo_1.10x.wav) is separate; use the 1.00x files to judge delivery. The [new measurement manifest](../benchmarks/results/expressive-delivery/2026-11-15-segmentation-control/measurements.json) records all settings, traces, measurements, comparisons, and integrity checks.
+
+### Results
+
+| Configuration | Raw duration (s) | Generation (s) | Peak allocated / reserved (GiB) | Script-implied WPM | Internal quiet runs >=200 ms | Longest quiet run (s) |
+| --- | --- | --- | --- | --- | --- | --- |
+| A | 65.16 | 52.39 | 3.24 / 3.78 | 160.2 | 20 | 0.64 |
+| D | 67.76 | 54.85 | 3.49 / 3.90 | 154.1 | 15 | 1.63 |
+| C | 64.48 | 45.41 | 3.43 / 4.54 | 161.9 | 14 | 0.71 |
+
+D's separate native-runtime preparation took 20.09 s and its verified model load took 16.85 s. Generation timing excludes these and includes first-call warm-up. A/C timings are historical measurements; cross-run timing and allocator cache differences prevent a fair speed ranking. No new performance conclusion is drawn.
+
+All three comparison copies use the **same original -24.455 LUFS target**. The A/C copies decode to exactly the same samples as their original listening files. D requires -2.55 dB static gain and then peaks at -2.36 dBFS. Its raw peak is +0.195 dBFS (four float samples above full scale); this is retained in the raw file, not hard-clipped or normalized away. Use the level-matched copy for safe comparison.
+
+D has no generation errors, nonfinite samples, or detected speech-token-limit hits; its sections contain 719, 555, and 411 speech tokens. The last two paragraphs produce **bit-identical decoded samples to A** at the unchanged settings, despite the fresh process. Only the opening paragraph changes between A and D, providing a particularly clean segmentation comparison.
+
+The opening paragraph is 28.88 s in D versus 26.28 s across A's first two sections, so D is 2.60 s longer overall than A and 3.28 s longer than C. D contains a detected **1.63 s quiet run at 24.11-25.74 s** of its raw/level-matched master, near the end of the opening paragraph. C's longest detected internal quiet run is 0.71 s. This could be a meaningful pause or an awkward delay: listen rather than treating it as improvement. Lower temperature does not automatically mean smoother rhythm. No word-level alignment or ASR was used to assign that pause to specific words.
+
+D's reference speaker-cosine range is 0.869-0.888, within the ranges already seen. Adjacent-section cosines are 0.978, 0.971. These are identity proxies, not proof of human-perceived consistency or a quality ranking. Word accuracy and audible artifacts require listening.
+
+Integrity checks confirm all original experiment files, saved narration/reference files, and production source files are unchanged. The app was idle but holding the model in VRAM; the development server was stopped only to free GPU memory and was restored afterward. No project was created or edited. The earlier launch was blocked before any synthesis because that model was resident; the successful run synthesized D only.
+
+### Listening decision and remaining questions
+
+The structural benefit does not require temperature 0.9: D also removes the mid-sentence cut after “most residents.” Whether that change provides the perceived naturalness benefit must still be judged from D's audio. No unperformed human listening, pronunciation audit, or artifact assessment is reported as completed.
+
+| Criterion | What this control establishes | Listening approval still needed |
+| --- | --- | --- |
+| Sentence flow | D retains the complete opening sentence, like C | Does D fix the awkward restart as convincingly as C? Does its long opening sentence have natural breath groups? |
+| Pronunciation and words | Same exact source words; generation finishes without detected token-limit truncation | Listen against the script for omissions, additions, repeats, and the pronunciation of “harbor,” “breakwater,” and “coordinated” |
+| Rhythm and emphasis | Timings and quiet-run statistics are descriptive only | Compare the weather question, “the right person,” and “the surprising part”; avoid preferring speed alone |
+| Artifacts | Finite waveform and peak/headroom checks | Listen for buzzing, rough joins, warble, and unnatural breaths |
+| Narrator identity | Same authorized conditioning; embedding proxies recorded | Does it still sound like Voice C, with a consistent accent and delivery across all three paragraphs? |
+
+**Conditional recommendation: prefer D if its sentence flow is improved over A and its pronunciation, rhythm, artifacts, and identity are at least as good as C.** That retains the original sampling settings and makes only the segmentation change. Higher temperature is not justified merely by C's earlier preference. If C is noticeably better than D, temperature may matter; record where before considering it. If D does not reliably improve flow, keep A and investigate further. A single script/seed is not evidence of broad reliability or long-form identity stability.
+
+Production remains on A. No segmentation limits, editor/API behavior, sampling defaults, regeneration behavior, references, or export processing have been integrated or changed. Listen in an order such as D, A, C, then C, D, A, and approve explicitly before any integration.
+
+Reproduce only this control into another new directory:
+
+```powershell
+.\.venv-chatterbox\Scripts\python.exe -B -u scripts\expressive_delivery_experiment.py --segmentation-control-from benchmarks\results\expressive-delivery\2026-11-15 --output benchmarks\results\expressive-delivery\another-segmentation-control
+```
