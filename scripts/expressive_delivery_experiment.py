@@ -83,7 +83,14 @@ def main():
     parser.add_argument("--output", type=Path, required=True, help="New directory under benchmarks/results")
     parser.add_argument("--segmentation-control-from", type=Path,
                         help="Existing completed A/B/C run; generate only D with A settings and C segmentation")
+    parser.add_argument("--long-form-script", type=Path,
+                        help="Different documentary script; validate only C without changing production")
     args = parser.parse_args()
+    if args.long_form_script and args.segmentation_control_from:
+        parser.error("Choose long-form validation or the segmentation control, not both.")
+    text_script = args.long_form_script.read_text(encoding="utf-8").strip() if args.long_form_script else SCRIPT
+    if args.long_form_script and not 900 <= len(text_script.split()) <= 1500:
+        raise ValueError("Long-form validation expects 900-1500 script words.")
     out = args.output.resolve()
     allowed = (ROOT / "benchmarks/results").resolve()
     if not out.is_relative_to(allowed) or out == allowed:
@@ -139,10 +146,12 @@ def main():
     baseline = dict(PARAMETERS)
     expressive = {**baseline, "temperature": .9}
     configs = [
-        ("A_baseline", baseline, segment_text(SCRIPT, settings.segment_chars)),
-        ("B_expressive", expressive, segment_text(SCRIPT, settings.segment_chars)),
-        ("C_context", expressive, context_sections(SCRIPT)),
+        ("A_baseline", baseline, segment_text(text_script, settings.segment_chars)),
+        ("B_expressive", expressive, segment_text(text_script, settings.segment_chars)),
+        ("C_context", expressive, context_sections(text_script)),
     ]
+    if args.long_form_script:
+        configs = [("C_long_form", expressive, context_sections(text_script))]
     if previous is not None:
         a, _, c = previous["configurations"]
         if a["id"] != "A_baseline" or c["id"] != "C_context" or a["parameters"] != baseline:
@@ -157,16 +166,23 @@ def main():
                 raise ValueError("An original comparison master has changed.")
         configs = [("D_baseline_context", dict(a["parameters"]), sections)]
     for _, _, sections in configs:
-        assert " ".join(SCRIPT.split()) == " ".join(" ".join(sections).split())
-    (out/"script.txt").write_text(SCRIPT+"\n", encoding="utf-8")
+        assert " ".join(text_script.split()) == " ".join(" ".join(sections).split())
+        if args.long_form_script:
+            original_sentences = [s for p in re.split(r"\n\s*\n", text_script) for s in sentences(" ".join(p.split()))]
+            generated_sentences = [s for section in sections for s in sentences(section)]
+            assert original_sentences == generated_sentences, "Sentence boundary or coverage mismatch."
+    (out/"script.txt").write_text(text_script+"\n", encoding="utf-8")
     report = {"created_utc": datetime.now(timezone.utc).isoformat(), "status": "running",
               "code_revision": CODE_REVISION, "model_repo": MODEL_REPO, "model_revision": MODEL_REVISION,
               "reference": {"id": profile["id"], "label": profile["label"], "path": profile["reference_audio_relative_path"],
                             "sha256": profile["reference_sha256"], "rights_confirmed": True},
-              "script_sha256": hashlib.sha256(SCRIPT.encode()).hexdigest(),
-              "script_word_count": len(SCRIPT.split()), "offline_external_tcp_blocked": True,
+              "script_sha256": hashlib.sha256(text_script.encode()).hexdigest(),
+              "script_word_count": len(text_script.split()), "offline_external_tcp_blocked": True,
               "live_app_before": health, "production_source_sha256": before_code,
               "user_data_sha256_before": before_data, "configurations": []}
+    if args.long_form_script:
+        report['long_form_validation'] = {'complete_sentence_coverage_verified': True,
+                                        'source': str(args.long_form_script), 'sentence_count': len(original_sentences)}
     if previous is not None:
         report["comparison_run"] = str(previous_root.relative_to(ROOT))
         report["previous_experiment_sha256_before"] = before_previous
@@ -255,13 +271,23 @@ def main():
             write_raw(raw_path, combined, 24000)
             tempo_path = out/f"{name}_tempo_1.10x.wav"
             convert(raw_path, tempo_path, 1.1)
+            tempo_protection = None
+            if args.long_form_script:
+                # Listening headroom only; the raw master is never modified.
+                from app.audio import protect_peak
+                tempo_protection = protect_peak(tempo_path)
             # Shared listening level is finalized below after seeing all three peaks.
             record.update(raw_file=raw_path.name, raw_sha256=file_hash(raw_path), tempo_file=tempo_path.name,
                           inserted_boundary_gap_seconds=inserted, waveform=waveform_metrics(combined, 24000),
-                          measured_words_per_minute=60*len(SCRIPT.split())/(len(combined)/24000),
+                          measured_words_per_minute=60*len(text_script.split())/(len(combined)/24000),
                           peak_allocated_bytes=max(s["peak_allocated_bytes"] for s in record["sections"]),
                           peak_reserved_bytes=max(s["peak_reserved_bytes"] for s in record["sections"]),
                           adjacent_section_speaker_cosines=[cosine(a,b) for a,b in zip(embeddings,embeddings[1:])])
+            if args.long_form_script:
+                record['tempo_peak_protection'] = tempo_protection
+                record['speaker_cosines_to_first_section'] = [cosine(embeddings[0], e) for e in embeddings]
+                record['sentence_boundaries_verified'] = True
+                record['duration_in_5_to_10_minute_target'] = 300 <= len(combined)/24000 <= 600
             save()
         # Avoid a louder-is-better bias. Same integrated LUFS target for all raw
         # listening copies; lower the common target if any would exceed -1 dBFS.
