@@ -3,4 +3,17 @@ __pycache__/
 benchmarks/results/
 *.pyc
 /record-sample.ogg
+data/
+.pytest_cache/
+test-results/
+website-data/
+dist/
+.local-config.json
+.local-config.json.tmp
+model-cache/
+frontend/node_modules/
+frontend/.vite/
+/app/static/ui/
+/app/static/index.html
+/app/static/index.html.tmp
 

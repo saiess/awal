@@ -32,6 +32,8 @@ for dist in sorted(md.distributions(), key=lambda d: d.metadata["Name"].lower())
         if path.is_file():
             data = path.read_bytes()
             target = re.sub(r"[^a-zA-Z0-9_.-]", "_", name)
+            if target.lower().endswith(".md"):
+                target = target[:-3] + ".txt"
             (out / target).write_bytes(data)
             row["license_files"].append({"file": target, "sha256": hashlib.sha256(data).hexdigest()})
     rows.append(row)
