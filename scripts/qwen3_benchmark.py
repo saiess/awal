@@ -20,9 +20,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--config', choices=['chatterbox_C', 'qwen06_default', 'qwen06_fulltext'], required=True)
     parser.add_argument('--restart', action='store_true')
+    parser.add_argument('--run', type=Path, help='Existing frozen plan directory under benchmarks/results')
     args = parser.parse_args()
-    root = ROOT / 'benchmarks/results/qwen3-vs-chatterbox/2026-11-18'
-    plan = json.loads((root / 'plan.json').read_text())
+    root = (args.run or ROOT / 'benchmarks/results/qwen3-vs-chatterbox/2026-11-18').resolve()
+    if not root.is_relative_to((ROOT/'benchmarks/results').resolve()):
+        raise ValueError('Run must be an isolated benchmark directory.')
+    plan = json.loads((root / 'plan.json').read_text(encoding='utf-8'))
     reference = Path(plan['reference_path'])
     assert hashlib.sha256(reference.read_bytes()).hexdigest() == plan['reference_sha256']
     try:
@@ -67,7 +70,9 @@ def main():
             assert asset['downloaded']
             engine = Qwen3TTSModel.from_pretrained(asset['snapshot'], device_map='cuda:0',
                         dtype=torch.bfloat16, attn_implementation='sdpa', local_files_only=True)
-            result['settings'] = engine._merge_generate_kwargs(max_new_tokens=plan['qwen_max_new_tokens'])
+            overrides = ({'max_new_tokens': plan['qwen_max_new_tokens']}
+                         if plan.get('qwen_max_new_tokens') is not None else {})
+            result['settings'] = engine._merge_generate_kwargs(**overrides)
             result['settings']['non_streaming_mode'] = args.config == 'qwen06_fulltext'
             result['dtype'] = str(next(engine.model.parameters()).dtype)
             result['attention_requested'] = 'sdpa'
@@ -105,7 +110,7 @@ def main():
                 with torch.inference_mode():
                     wavs, sr = engine.generate_voice_clone(text=passage['text'], language='English',
                         voice_clone_prompt=prompt, non_streaming_mode=args.config == 'qwen06_fulltext',
-                        max_new_tokens=plan['qwen_max_new_tokens'])
+                        **overrides)
                 wav = np.asarray(wavs[0], dtype=np.float32).squeeze()
             torch.cuda.synchronize()
             assert wav.ndim == 1 and np.isfinite(wav).all() and np.max(np.abs(wav)) > 0
@@ -115,7 +120,7 @@ def main():
                 'peak_reserved_bytes': torch.cuda.max_memory_reserved()}
             if args.config != 'chatterbox_C':
                 record['codec_frames'] = list(code_lengths)
-                record['hit_token_cap'] = any(n >= plan['qwen_max_new_tokens'] for n in code_lengths)
+                record['hit_token_cap'] = any(n >= result['settings']['max_new_tokens']-1 for n in code_lengths)
             path = out / (passage['id'] + '.wav')
             sf.write(path, wav, sr, subtype='FLOAT')
             record['sha256'] = hashlib.sha256(path.read_bytes()).hexdigest()
