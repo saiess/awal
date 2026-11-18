@@ -58,7 +58,7 @@ def main():
         started = time.perf_counter()
         if args.config == 'chatterbox_C':
             from app.config import Settings
-            from app.tts.engine import TurboEngine
+            from scripts.legacy_turbo_engine import TurboEngine
             engine = TurboEngine(Settings())
             engine.prepare_runtime()
             engine.load()

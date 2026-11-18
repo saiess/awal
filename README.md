@@ -1,6 +1,6 @@
-# Local Narration
+# Local Narration (Awal)
 
-A local Windows narration app using **React + TypeScript + Vite**, **Python/FastAPI**, **Chatterbox Turbo**, PyTorch/CUDA, and FFmpeg. No hosting or login.
+Local Windows narration with React/TypeScript/Vite, FastAPI, **Qwen3-TTS 0.6B Base**, PyTorch/CUDA, and FFmpeg. One local backend, no hosting or login. Existing Chatterbox projects and recordings remain available for playback and export.
 
 ## Run
 
@@ -8,15 +8,15 @@ A local Windows narration app using **React + TypeScript + Vite**, **Python/Fast
 .\start.bat
 ```
 
-Open **http://127.0.0.1:8000** and keep the terminal open. Run `check.bat` for diagnostics. Press **Ctrl+C** and let an active generation finish before closing the terminal.
+Open **http://127.0.0.1:8000** and keep the terminal open. For development, run `.\dev` from the project root and open **http://127.0.0.1:3000**. The root `npm.cmd run dev` does the same thing. Stop an older running backend before starting the Qwen version. Ctrl+C finishes the active section and leaves remaining sections resumable.
 
-Requirements: 64-bit Windows, Python 3.12, and an NVIDIA CUDA GPU. The verified baseline is an RTX 4070 Laptop with approximately 8 GB VRAM. Intel/AMD graphics, CPU-only inference, Macs, and phones are not supported by this release.
+Requirements: 64-bit Windows, Python 3.12, NVIDIA CUDA GPU; validated on RTX 4070 Laptop, 8 GB. The model is lazy-loaded and requires at least 6 GiB free GPU memory before loading. This release does not support Intel/AMD graphics, CPU-only generation, Macs, or phones.
 
-## First setup
+## Setup
 
-Install Python 3.12, Git for Windows, and an appropriate NVIDIA driver, then run `setup.bat`. Setup downloads pinned dependencies/model files and verifies them. Initial setup needs internet and several GB of downloads; allow roughly 20 GB plus room for audio. Interrupted setup can be retried. Normal use is offline after a successful setup.
+`setup.bat` installs the pinned runtime into **`.venv-qwen3`** and verifies/downloads the pinned model. Initial setup needs internet; normal inference and export are local/offline. The existing `.venv-chatterbox` is preserved, not upgraded or used for Qwen generation. On this development machine the already-validated Qwen snapshot is reused through `.local-config.json`.
 
-A sharing package includes the built interface, so normal users need no Node.js. Developers using a fresh source checkout build the frontend before setup:
+For a fresh source checkout, build the interface first (Node.js 22.12+):
 
 ```powershell
 npm.cmd --prefix frontend ci
@@ -24,79 +24,62 @@ npm.cmd --prefix frontend run build
 .\setup.bat
 ```
 
-Python versions are pinned in `requirements.txt` and `requirements-runtime.lock.txt`. Do not upgrade individual packages without checking compatibility.
+Run `check.bat` for read-only dependency, CUDA, FFmpeg, model/code checksum diagnostics. Runtime versions are pinned in `requirements.txt` and `requirements-qwen.lock.txt`; legacy requirements remain in `requirements-chatterbox.txt` and `requirements-runtime.lock.txt` for rollback.
 
-## Use
+## Narration and references
 
-1. Upload your own authorized, clear 10-30-second WAV, OGG/Opus, FLAC, MP3, or M4A reference (up to 15 MB), and confirm the voice rights statement. Existing projects retain their saved narrator when the active reference changes.
-2. Enter an English script/title, preview sections, then generate. Edit, save, and regenerate individual sections. Each retry uses a fresh random seed to produce another take; its exact seed is saved with the section. Failed attempts preserve prior good audio; missing/changed generation resumes unfinished sections.
-3. Preview raw sections or export a master WAV, MP3, or selected-section ZIP. Master previews are saved export snapshots; create a new export after editing/regeneration.
+Upload a clean authorized 10?30-second reference and enter its **exact spoken transcript**. Existing saved references can receive a transcript without replacing their WAV/profile. This installation keeps Voice C and its previously confirmed transcript. Each new project snapshots its reference hash, transcript, engine revision, and generation settings, so later changes do not change that project's narrator.
 
-Raw audio stays at original speed as 24 kHz mono float WAV. Processed exports default to adjustable, pitch-preserving **1.10x** tempo (0.50x to 2.00x). Original-speed exports ignore the tempo field. Existing quiet counts toward the default 0.12-second minimum boundary gap. Original uploads and successful raw versions remain intact.
+Paste an English script, preview complete-sentence paragraph-aware sections, and create/generate. Sections group complete sentences up to 600 characters. An oversized individual sentence is rejected rather than split mid-thought. The original project script and section text are preserved.
 
-Processed masters conservatively shorten internal section-edge silence only when it stays below -55 dBFS for at least 0.5 seconds, retaining 0.15 seconds on each affected side. Interior pauses and the recording's outer edges are retained; entirely quiet sections are not trimmed. Tiny 3 ms fades soften internal joins without overlapping speech. Selected-section files keep their original pauses. Processed exports also apply attenuation when needed for a -1 dBFS sample-peak ceiling, including a decoded MP3 check and re-encoding if needed. This is sample-peak protection, not guaranteed true-peak mastering. Optional volume adjustment remains off by default and uses bounded static gain. Turning off export processing bypasses join cleanup and peak attenuation.
+In Review, edit **inference text** to correct pronunciation, such as `17,400` ? `seventeen thousand four hundred`, then save and deliberately regenerate that section. Original script text stays separate; there is no automatic rewriting. Every attempt records its input, parameters, seed, and result. Successful raw WAV versions and their metadata remain immutable; failed regeneration keeps previous audio. Closing the browser does not stop the server.
 
-## Develop
+Old Chatterbox projects cannot silently regenerate with Qwen. Their previews and exports use the existing recordings, including the last saved take if old edits are stale. Create a **new Qwen project** from the desired script to generate new narration. There is no model selector or automatic project migration.
 
-Start both FastAPI and the frontend dev server with one command:
+## Export and pacing
+
+Processed exports default to **1.10? pitch-preserving tempo**. Qwen's optional trailing-silence control is enabled for new projects: only tails quieter than ?45 dBFS for at least 0.8 seconds are shortened, retaining 0.35 seconds after the last above-threshold sample. All internal pauses and retained speech samples stay unchanged during trimming. The exact per-section cuts are recorded in export metadata. No raw WAV is modified.
+
+Turn off trailing-silence trimming to keep the full generated tail. Turn off processing for original-speed audio. WAV, MP3, and selected-section ZIP exports remain available. Processed audio receives attenuation-only sample-peak protection; optional conservative volume adjustment remains available. Legacy Chatterbox processed exports retain their previous edge processing. Saved exports are snapshots; creating another never overwrites them.
+
+## Storage, compatibility, and rollback
+
+- `data/projects/`: project JSON, immutable raw versions, and saved exports.
+- `data/narrators/`: profiles, reference WAVs/uploads, and reference-hash-bound transcript sidecars.
+- `data/logs/app.log`: local application log.
+- `.local-config.json`: persistent `cache_root` and optional absolute `qwen_model_dir`.
+- `docs/qwen-download.json`: approved model and code fingerprints.
+- `docs/licenses/` and `THIRD_PARTY_NOTICES.txt`: retained third-party notices.
+
+`TTS_DATA_DIR` selects an isolated data directory before startup. `HF_HOME` controls the hub cache; `AWAL_QWEN_MODEL` can select the approved local model folder, still subject to checksum validation. `TTS_FFMPEG` selects an FFmpeg executable. Startup/inference never silently downloads another model.
+
+New projects are schema 2 with the Qwen engine identity; old projects are not batch-rewritten. See [integration design, rollback, tests, and limitations](docs/qwen-production-integration.md). Stop the server before rollback. Preserve new Qwen project directories outside the old application's project list before using pre-integration code `2e25b97` with `.venv-chatterbox`; old code is not Qwen-schema aware. Existing Chatterbox files do not need conversion. No historical recording is deleted by integration.
+
+## Verification and optional packaging
 
 ```powershell
-.\dev
-```
-
-Open **http://127.0.0.1:3000** once the terminal says ready. The root `npm.cmd run dev` command does the same thing. It starts FastAPI on port 8000 if needed and waits for readiness before starting Vite. Existing servers are reused. Keep this terminal open; Ctrl+C gracefully stops servers started by this command. Servers started separately remain running. Vite proxies API/audio requests to FastAPI and preserves same-origin write protection. Developers need Node.js 22.12+ (verified: 24.14).
-
-```powershell
+.\.venv-qwen3\Scripts\python.exe -m pip install --no-deps -r requirements-dev.txt
+.\.venv-qwen3\Scripts\python.exe -m pytest -q
 npm.cmd --prefix frontend run typecheck
 npm.cmd --prefix frontend run build
-# With FastAPI running and port 3000 free:
-npm.cmd --prefix frontend run check:dev
 ```
 
-Edit `frontend/src/`. Builds generate `app/static/ui/` and the `app/static/index.html` entry. Generated frontend files include the required dependency notices. Normal use needs only `start.bat` on port 8000.
+Real CUDA/browser verification requires an authorized reference, its confirmed transcript, Chrome, and the existing Playwright tooling. It creates isolated test projects, not replacements for user projects. Evidence and commands are in the integration report.
 
-## Data and configuration
-
-- `data/projects/`: scripts, sections, raw versions, and exports.
-- `data/narrators/`: saved reference profiles, decoded reference WAVs, and original uploads.
-- `data/logs/app.log`: current application log.
-- `model-cache/` and `.local-config.json`: this installation's model cache/configuration.
-- `docs/turbo-download.json`: required pinned model-file hashes.
-- `docs/licenses/`: required current third-party terms and dependency notice inventory.
-
-An explicit `HF_HOME` overrides the configured model cache. Guided setup defaults to persistent `%LOCALAPPDATA%\LocalNarration\huggingface`; an existing local configuration is retained. `TTS_DATA_DIR` selects another workspace before startup; `TTS_FFMPEG` selects an explicit FFmpeg executable. Startup never silently downloads a different model.
-
-No historical archives or benchmark material are kept in this project. User projects, saved narrators, and their normal export files remain application data. The supplied source/package has no default personal voice; new installations upload their own reference.
-
-## Verify and optionally package
+To build a source-only sharing ZIP after the frontend build:
 
 ```powershell
-.\.venv-chatterbox\Scripts\python.exe -m pip install --no-deps -r requirements-dev.txt
-.\.venv-chatterbox\Scripts\python.exe -m pytest -q
+.\.venv-qwen3\Scripts\python.exe scripts/build_release.py
 ```
 
-An optional real Chrome/CUDA workflow check requires installed Chrome, the pinned Playwright dependency, and an explicitly authorized reference:
-
-```powershell
-.\.venv-chatterbox\Scripts\python.exe scripts/react_browser_check.py --reference "path\to\authorized-reference.wav"
-```
-
-The current suite also tests packaging and rejects stale frontend source/modified bundles. To create a sharing ZIP only when you need one:
-
-```powershell
-npm.cmd --prefix frontend run build
-.\.venv-chatterbox\Scripts\python.exe scripts/build_release.py
-```
-
-The output is `dist/LocalNarration-Windows.zip`. It includes selected source, compiled frontend assets, locks, and notices; it excludes private data, model caches, installed environments, and `node_modules`. No sharing ZIP is retained as part of this cleanup. A second physical PC and a full empty-cache model download have not been verified.
+It excludes personal references/projects, installed environments, model caches, and benchmark audio. Setup downloads pinned assets; binaries carry their own distribution conditions. No sharing archive is created merely by normal startup.
 
 ## Troubleshooting
 
-- **502 on port 3000:** the frontend cannot reach FastAPI. Run `.\dev` from the project root and wait for the ready message. This starts the missing backend; keep that terminal open.
-- **CUDA unavailable:** run `check.bat`; verify NVIDIA hardware/driver and the pinned Python environment.
-- **Missing model/checksum mismatch:** check the cache configuration, then run `.\.venv-chatterbox\Scripts\python.exe scripts/download_turbo.py` with internet access.
-- **Missing interface:** build `frontend/` from source, or re-extract a complete application package.
-- **Generation/export failure:** read `data/logs/app.log`, correct the cause, and retry affected sections. Old successful audio remains intact.
-- **Port/data lock in use:** close the existing server first. Run one local process; do not enable Uvicorn reload or multiple workers.
-
-Required model, Python/native dependency, and frontend terms are retained in [THIRD_PARTY_NOTICES.txt](THIRD_PARTY_NOTICES.txt) and `docs/licenses/`. They are part of the current software, not optional historical documentation. Installed dependency directories are kept intact.
+- **502 on port 3000:** run `.\dev` and wait for readiness; keep the terminal open.
+- **Older backend on port 8000:** stop its terminal and restart with the Qwen launcher.
+- **Missing transcript:** enter the exact recording words in the saved reference form; existing projects keep their prior snapshot.
+- **CUDA or memory error:** close other GPU workloads and run `check.bat`. Existing audio stays intact; retry deliberately.
+- **Missing or changed assets/code:** run `setup.bat`; do not upgrade individual production packages.
+- **Interrupted generation:** reopen the project and generate missing/changed sections. Completed audio and last attempt seeds are retained.
+- **Port/data lock in use:** run one backend process per data directory. Do not enable Uvicorn reload or multiple workers.

@@ -25,7 +25,12 @@ from browser_support import start, stop, BASE
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--reference",type=Path,required=True,help="Authorized 10-30-second reference WAV")
-    reference=parser.parse_args().reference.resolve()
+    parser.add_argument("--transcript-file",type=Path,required=True,help="Confirmed exact reference transcript")
+    args=parser.parse_args()
+    reference=args.reference.resolve()
+    transcript=args.transcript_file.read_text(encoding="utf-8").strip()
+    if not transcript:
+        raise ValueError("Reference transcript is required.")
     if not reference.is_file():
         raise ValueError("Provide an existing authorized reference recording.")
     RUN.mkdir(parents=True)
@@ -66,6 +71,7 @@ def main():
                 page.locator("#voice-settings summary").click()
                 page.locator("#reference-label").fill("React QA narrator")
                 page.locator("#reference-file").set_input_files(reference)
+                page.locator("#reference-transcript").fill(transcript)
                 page.locator("#reference-rights").check()
                 page.locator('#reference-form button[type="submit"]').click()
                 expect(page.locator("#voice-label")).to_have_text("React QA narrator",timeout=30_000)
@@ -176,6 +182,7 @@ def main():
                 page.locator("#voice-settings summary").click()
                 page.locator("#reference-label").fill("Future QA narrator")
                 page.locator("#reference-file").set_input_files(reference)
+                page.locator("#reference-transcript").fill(transcript)
                 page.locator("#reference-rights").check()
                 page.locator('#reference-form button[type="submit"]').click()
                 expect(page.locator("#notice")).to_contain_text("Reference saved",timeout=30_000)
@@ -197,7 +204,11 @@ def main():
                 page.screenshot(path=str(RUN / "narrow.png"),full_page=True)
                 assert errors==[],errors
                 assert external==[],external
-                report.update(status="passed",react_production_bundle=True,reference_upload=True,create_confirmation_cancel=True,
+                assert saved['engine_id']=='qwen3-tts-0.6b-base' and saved['schema_version']==2
+                assert saved['narrator']['reference_transcript']==transcript
+                assert updated['segments'][1]['text']==saved['segments'][1]['text']
+                assert updated['segments'][1]['inference_text']!=saved['segments'][1]['text']
+                report.update(status="passed",engine_id=saved['engine_id'],react_production_bundle=True,reference_upload=True,create_confirmation_cancel=True,
                     real_cuda_generation=True,sections=3,reload_reattaches_active_job=True,no_duplicate_generation=True,
                     unsaved_edits_preserved_through_polling=True,navigation_discard_cancel=True,single_section_regeneration=True,
                     old_and_unrelated_raws_preserved=True,audio_playback_survives_polling=True,media_ranges=True,
@@ -205,6 +216,30 @@ def main():
                     saved_settings_and_export_reopen=True,replacement_affects_only_new_projects=True,
                     no_horizontal_overflow_at_620px=True,page_errors=errors,external_requests=external)
                 browser.close()
+            # Restart the real server with a simulated interrupted manifest and
+            # verify recovery never rewrites the previous completed recording.
+            stop(process)
+            process=None
+            manifest=RUN / "data/projects" / pid / "project.json"
+            state=json.loads(manifest.read_text(encoding="utf-8"))
+            unchanged={s['id']:s['sha256'] for s in state['segments']}
+            state['segments'][0].update(status='generating',stale=True,last_attempt_seed=2468)
+            state['segments'][0]['attempts'].append({'status':'generating','seed':2468,'inference_text':state['segments'][0]['text']})
+            manifest.write_text(json.dumps(state,indent=2),encoding="utf-8")
+            process,health=start(log)
+            assert not health['engine_loaded'] and health['active_job'] is None
+            restored=httpx.get(BASE+f"/api/projects/{pid}").json()
+            assert restored['segments'][0]['status']=='pending' and restored['segments'][0]['last_attempt_seed']==2468
+            assert restored['segments'][0]['attempts'][-1]['status']=='interrupted'
+            assert restored['narrator']['reference_transcript']==transcript
+            assert all(hashlib.sha256((RUN/'data'/s['audio_path']).read_bytes()).hexdigest()==unchanged[s['id']] for s in restored['segments'])
+            assert httpx.get(BASE+f"/api/projects/{pid}/segments/{restored['segments'][0]['id']}/audio").status_code==200
+            assert httpx.get(BASE+f"/api/projects/{pid}/exports/{restored['exports'][-1]['id']}/download").status_code==200
+            report.update(restart_reopen=True,simulated_interrupted_job_recovery=True,narrator_snapshot_persisted=True,
+                          offline_external_sockets_blocked=True,project_id=pid)
+            report['generation_metrics']=[s['metrics'] for s in restored['segments']]
+            report['generation_parameters']=[s['generation_parameters'] for s in restored['segments']]
+
         except Exception:
             import traceback
             report.update(status="failed",error=traceback.format_exc())

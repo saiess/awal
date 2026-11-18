@@ -16,7 +16,7 @@ def test_only_target_changes_and_failed_regeneration_preserves_audio(setup):
     p = client.get(f"/api/projects/{p['id']}").json()
     before = {s['id']: (s['audio_path'], file_hash(app.state.store.path(s['audio_path']))) for s in p['segments']}
     middle = p['segments'][1]['id']
-    changed = client.patch(f"/api/projects/{p['id']}/segments/{middle}", json={"text": "The revised middle section."}).json()
+    changed = client.patch(f"/api/projects/{p['id']}/segments/{middle}", json={"inference_text": "The revised middle section."}).json()
     assert changed['segments'][1]['stale']
     assert changed['segments'][1]['audio_path'] == before[middle][0]
     assert finish(client, client.post(f"/api/projects/{p['id']}/segments/{middle}/regenerate", json={}))['status'] == 'ready'
@@ -45,7 +45,7 @@ def test_restart_recovery_retains_good_audio_and_narrator_snapshot(setup, tmp_pa
     old_reference = p['narrator']['reference_sha256']
     replacement = tmp_path/'new.wav'
     replacement.write_bytes(store.path(narrator['reference_audio_relative_path']).read_bytes())
-    store.add_narrator('New profile', replacement, {'rights_confirmed': True})
+    store.add_narrator('New profile', replacement, {'rights_confirmed': True}, transcript='The exact reference words.')
     p['segments'][1]['status'] = 'generating'
     store.save(p)
     reopened = Store(store.settings)

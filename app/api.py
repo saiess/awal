@@ -11,7 +11,8 @@ from fastapi.responses import FileResponse
 from starlette.concurrency import run_in_threadpool
 
 from . import audio
-from .models import ExportInput, GenerateInput, ProjectInput, ScriptInput, SegmentInput
+from .models import ExportInput, GenerateInput, ProjectInput, ScriptInput, SegmentInput, TranscriptInput
+from .config import ENGINE_ID
 from .projects import now
 from .segmentation import segment_text
 
@@ -25,7 +26,7 @@ def routes(store, jobs, engine, settings):
     def health():
         return {"status": "ok", "engine_loaded": engine.loaded, "gpu_available": engine.gpu_available,
                 "busy": jobs.gate.locked(), "active_job": jobs.active(),
-                "engine_id": "chatterbox-turbo", "default_export_speed": settings.default_speed}
+                "engine_id": ENGINE_ID, "default_export_speed": settings.default_speed}
 
     @router.get("/narrators")
     def narrators():
@@ -39,11 +40,14 @@ def routes(store, jobs, engine, settings):
 
     @router.post("/narrators", status_code=201)
     async def upload_narrator(label: str = Form(..., min_length=1, max_length=120),
+                              reference_transcript: str = Form(..., min_length=1, max_length=4000),
                               rights_confirmed: bool = Form(...), reference_audio: UploadFile = File(...)):
         if not rights_confirmed:
             raise HTTPException(403, "Confirm permission to clone and publish this voice commercially.")
         if not label.strip():
             raise HTTPException(422, "Give the narrator a nonempty label.")
+        if not reference_transcript.strip():
+            raise HTTPException(422, "Provide the exact words spoken in the reference recording.")
         allowed_types = {"audio/wav", "audio/x-wav", "audio/wave", "audio/vnd.wave", "audio/ogg", "application/ogg",
                          "audio/opus", "audio/flac", "audio/x-flac", "audio/mpeg", "audio/mp3", "audio/mp4", "audio/x-m4a"}
         if reference_audio.content_type not in allowed_types:
@@ -74,8 +78,14 @@ def routes(store, jobs, engine, settings):
                     raise ValueError("Use a clear 10–30-second reference recording.")
                 return store.add_narrator(label.strip(), converted,
                                           {"rights_confirmed": True, "confirmed_at": now(),
-                                           "statement": "User confirmed rights to clone and publish commercially."}, source)
+                                           "statement": "User confirmed rights to clone and publish commercially."}, source,
+                                          transcript=reference_transcript)
         return await run_in_threadpool(decode_and_save)
+
+    @router.patch("/narrators/{narrator_id}/transcript")
+    def update_transcript(narrator_id: UUID, body: TranscriptInput):
+        with jobs.idle():
+            return store.set_reference_transcript(narrator_id, body.transcript)
 
     @router.post("/segment")
     def preview(body: ScriptInput):
@@ -97,7 +107,7 @@ def routes(store, jobs, engine, settings):
     @router.patch("/projects/{project_id}/segments/{segment_id}")
     def edit(project_id: UUID, segment_id: UUID, body: SegmentInput):
         with jobs.idle():
-            return store.edit(project_id, segment_id, body.text)
+            return store.edit(project_id, segment_id, body.inference_text)
 
     @router.post("/projects/{project_id}/generate", status_code=202)
     def generate(project_id: UUID, body: GenerateInput):
@@ -124,7 +134,8 @@ def routes(store, jobs, engine, settings):
             # Missing/stale sections are a state conflict, not a malformed format request.
             p = store.read(project_id)
             selected = [store.segment(p, s) for s in body.segment_ids] if body.segment_ids else p["segments"]
-            if any(s["status"] != "ready" or s["stale"] for s in selected):
+            legacy = p.get("engine_id") != ENGINE_ID
+            if any((not s.get("audio_path")) if legacy else (s["status"] != "ready" or s["stale"]) for s in selected):
                 raise HTTPException(409, "Generate the selected sections before exporting; some are missing, failed, or stale.")
             return audio.export_project(store, project_id, body)
 

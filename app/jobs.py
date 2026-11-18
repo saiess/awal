@@ -8,6 +8,7 @@ from uuid import uuid4
 
 from .audio import write_raw
 from .projects import file_hash, now
+from .config import ENGINE_ID, MODEL_REVISION, CODE_REVISION
 
 log = logging.getLogger(__name__)
 
@@ -54,6 +55,8 @@ class Jobs:
             raise BusyError("Generation or export is already running.")
         try:
             p = self.store.read(project_id)
+            if p.get("engine_id") != ENGINE_ID or p.get("engine_revision") != MODEL_REVISION or p.get("schema_version") != 2:
+                raise BusyError("This legacy project cannot generate with Qwen. Create a new Qwen project; existing recordings remain available.")
             targets = ([self.store.segment(p, segment_id)] if segment_id else
                        [s for s in p["segments"] if not only_missing or s["status"] != "ready" or s["stale"]])
             if not targets:
@@ -98,7 +101,14 @@ class Jobs:
                 try:
                     parameters = copy.deepcopy(project["narrator"]["engine_parameters"])
                     parameters["seed"] = segment["last_attempt_seed"]
-                    result = self.engine.synthesize(segment["text"], reference, parameters)
+                    parameters["reference_text"] = project["narrator"]["reference_transcript"]
+                    inference_text = segment.get("inference_text") or segment["text"]
+                    attempt = {"id": str(uuid4()), "started_at": now(), "seed": parameters["seed"],
+                               "parameters": copy.deepcopy(parameters), "source_text": segment["text"],
+                               "inference_text": inference_text, "engine_id": ENGINE_ID,
+                               "engine_revision": MODEL_REVISION, "code_revision": CODE_REVISION, "status": "generating"}
+                    self.store.change(project["id"], lambda p: self.store.segment(p, segment_id).setdefault("attempts", []).append(attempt))
+                    result = self.engine.synthesize(inference_text, reference, parameters)
                     version = segment["version"] + 1
                     folder = self.store.project_dir(project["id"]) / "segments" / segment_id
                     while (folder / f"v{version:04}_raw.wav").exists():
@@ -111,15 +121,24 @@ class Jobs:
                                  audio_path=target.relative_to(self.store.root).as_posix(),
                                  duration_seconds=info["duration_seconds"], sample_rate=result.sample_rate,
                                  sha256=info["sha256"], generated_at=now(), metrics=result.metrics,
-                                 generated_text=segment["text"],
+                                 generated_text=inference_text,
                                  generation_parameters=parameters)
+                        version_record = {"version": version, "audio_path": s["audio_path"], **info,
+                                          "generated_at": s["generated_at"], "source_text": segment["text"],
+                                          "inference_text": inference_text, "generation_parameters": copy.deepcopy(parameters),
+                                          "engine_id": ENGINE_ID, "engine_revision": MODEL_REVISION, "code_revision": CODE_REVISION}
+                        s.setdefault("versions", []).append(version_record)
+                        s["attempts"][-1].update(status="ready", finished_at=now(), version=version)
                     self.store.change(project["id"], commit)
                 except Exception:
                     log.exception("Section generation failed: project=%s section=%s", project["id"], segment_id)
                     failures += 1
                     error = "Generation failed. Previous audio is preserved. See data/logs/app.log, then retry this section."
                     def fail(p):
-                        self.store.segment(p, segment_id).update(status="failed", stale=True, error=error)
+                        s = self.store.segment(p, segment_id)
+                        s.update(status="failed", stale=True, error=error)
+                        if s.get("attempts"):
+                            s["attempts"][-1].update(status="failed", finished_at=now(), error=error)
                     self.store.change(project["id"], fail)
                     self.update(job_id, failed_segments=failures, error=error)
                 self.update(job_id, done_segments=self.read(job_id)["done_segments"] + 1)

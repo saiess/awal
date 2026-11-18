@@ -33,15 +33,15 @@ def release_files(root=ROOT):
             raise ValueError("Duplicate release member: " + name)
         files[name] = path.read_bytes()
     for name in ("README.md","THIRD_PARTY_NOTICES.txt","package.json","dev.bat","setup.bat","start.bat","check.bat","requirements.txt",
-                 "requirements-runtime.lock.txt",
-                 "scripts/serve.py","scripts/dev.mjs","scripts/setup_local.py","scripts/download_turbo.py","scripts/check_local_setup.py",
+                 "requirements-qwen.lock.txt",
+                 "scripts/serve.py","scripts/dev.mjs","scripts/setup_local.py","scripts/download_qwen.py","scripts/check_local_setup.py",
                  "app/__init__.py","app/config.py","app/main.py","app/api.py","app/audio.py","app/jobs.py",
                  "app/models.py","app/projects.py","app/segmentation.py","app/tts/__init__.py","app/tts/engine.py",
                  "app/static/index.html","app/static/docs.js","app/static/favicon.svg",
                  "app/static/vendor/swagger/swagger-ui.css","app/static/vendor/swagger/swagger-ui-bundle.js",
                  "app/static/vendor/swagger/LICENSE","app/static/vendor/swagger/NOTICE",
-                 "docs/licenses/chatterbox-code-LICENSE","docs/licenses/perth-code-LICENSE",
-                 "docs/licenses/turbo-README.txt","docs/licenses/ffmpeg-binary-license.txt"):
+                 "docs/licenses/qwen-code-LICENSE",
+                 "docs/licenses/qwen-model-README.txt","docs/licenses/ffmpeg-binary-license.txt"):
         add(name)
     # Generated assets are selected by a build receipt, never by walking the
     # static directory. Refuse stale source or modified bundles before sharing.
@@ -60,16 +60,14 @@ def release_files(root=ROOT):
     add(ui / "build-info.json")
     if files["app/static/index.html"] != files["app/static/ui/index.html"]:
         raise ValueError("Frontend entry is stale; run npm run build in frontend/.")
-    receipt = json.loads((root / "docs/turbo-download.json").read_text(encoding="utf-8"))
-    clean = dict(repo=receipt["repo"],revision=receipt["revision"],
-                 files=[{k:item[k] for k in ("name","bytes","sha256")} for item in receipt["files"]])
-    files["docs/turbo-download.json"] = json.dumps(clean,indent=2).encode()
-    inventory = json.loads((root / "docs/licenses/application-installed/inventory.json").read_text(encoding="utf-8"))
+    receipt = json.loads((root / "docs/qwen-download.json").read_text(encoding="utf-8"))
+    files["docs/qwen-download.json"] = json.dumps(receipt,indent=2).encode()
+    inventory = json.loads((root / "docs/licenses/qwen-production-installed/inventory.json").read_text(encoding="utf-8"))
     public_inventory = []
     for package in inventory:
         public_inventory.append({key:package.get(key) for key in ("name","version","license","license_expression","project_urls","license_files")})
         for item in package["license_files"]:
-            source = Path("docs/licenses/application-installed") / item["file"]
+            source = Path("docs/licenses/qwen-production-installed") / item["file"]
             if source.as_posix() not in files:
                 add(source)
             if digest(files[source.as_posix()])!=item["sha256"]:

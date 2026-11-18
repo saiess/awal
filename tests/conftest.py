@@ -51,7 +51,7 @@ def setup(tmp_path):
     app = create_app(settings, engine=engine)
     source = tmp_path / "reference.wav"
     source.write_bytes(reference_bytes())
-    narrator = app.state.store.add_narrator("Test narrator", source, {"rights_confirmed": True})
+    narrator = app.state.store.add_narrator("Test narrator", source, {"rights_confirmed": True}, transcript="The exact reference words.")
     with TestClient(app, base_url="http://127.0.0.1") as client:
         yield client, app, engine, narrator
 

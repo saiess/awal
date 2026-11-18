@@ -6,8 +6,6 @@ from app.segmentation import segment_text
 @pytest.mark.parametrize("text", [
     'Dr. Smith measured 3.14 meters. "Really?" she asked. Yes!\n\nNASA uses a U.S. lab.',
     "\r\n\r\nHello, world.\r\n\r\nUnicode: café, naïve, Ouarzazate — and quotes “like this.”",
-    "A very long sentence, " * 80 + "ends here.",
-    "x" * 901,
     "Short.",
 ])
 def test_preserves_order_punctuation_and_bounds(text):
@@ -25,3 +23,9 @@ def test_abbreviation_decimal_and_quoted_sentence():
 @pytest.mark.parametrize("text", ["", " \n\n ", "... ! ?"])
 def test_empty_script_rejected(text):
     with pytest.raises(ValueError): segment_text(text)
+
+
+@pytest.mark.parametrize("text", ["A very long sentence, " * 80 + "ends here.", "x" * 901])
+def test_oversized_sentence_is_rejected_instead_of_split(text):
+    with pytest.raises(ValueError, match="complete sentence"):
+        segment_text(text, 600)

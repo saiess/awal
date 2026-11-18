@@ -20,7 +20,7 @@ def sentences(paragraph):
         yield paragraph[start:].strip()
 
 
-def segment_text(text, max_chars=350):
+def segment_text(text, max_chars=600):
     if max_chars < 20:
         raise ValueError("Segment size must be at least 20 characters.")
     if not text.strip() or not any(c.isalnum() for c in text):
@@ -30,15 +30,9 @@ def segment_text(text, max_chars=350):
         paragraph = re.sub(r"\s+", " ", paragraph).strip()
         current = ""
         for sentence in sentences(paragraph):
-            pieces = []
-            while len(sentence) > max_chars:
-                cut = sentence.rfind(" ", 0, max_chars + 1)
-                if cut <= 0:
-                    cut = max_chars
-                pieces.append(sentence[:cut].strip())
-                sentence = sentence[cut:].strip()
-            if sentence:
-                pieces.append(sentence)
+            if len(sentence) > max_chars:
+                raise ValueError(f"A complete sentence exceeds {max_chars} characters. Shorten that sentence before generating.")
+            pieces = [sentence] if sentence else []
             for piece in pieces:
                 if current and len(current) + len(piece) + 1 > max_chars:
                     result.append(current)

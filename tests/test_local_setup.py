@@ -16,8 +16,8 @@ def pc_check(tmp_path,monkeypatch):
     monkeypatch.setattr(checker.sys,"platform","win32")
     monkeypatch.setattr(checker.sys,"version_info",(3,12,2))
     monkeypatch.setattr(checker.metadata,"version",lambda name:"installed")
-    origin=json.dumps({"vcs_info":{"commit_id":checker.CODE_REVISION}})
-    monkeypatch.setattr(checker.metadata,"distribution",lambda name:SimpleNamespace(version="0.1.7",read_text=lambda name:origin))
+    import app.tts.engine as engine
+    monkeypatch.setattr(engine,"verify_code",lambda:None)
     monkeypatch.setattr(checker.subprocess,"run",lambda *a,**kw:subprocess.CompletedProcess(a,0,"Version available\n",""))
     monkeypatch.setitem(sys.modules,"imageio_ffmpeg",SimpleNamespace(get_ffmpeg_exe=lambda:"ffmpeg.exe"))
     monkeypatch.setitem(sys.modules,"torch",SimpleNamespace(cuda=SimpleNamespace(is_available=lambda:False)))
@@ -27,9 +27,11 @@ def pc_check(tmp_path,monkeypatch):
     asset.write_bytes(b"correct-model")
     docs=tmp_path / "docs"
     docs.mkdir()
-    (docs / "turbo-download.json").write_text(json.dumps(dict(repo=checker.MODEL_REPO,revision=checker.MODEL_REVISION,
+    (docs / "qwen-download.json").write_text(json.dumps(dict(repo=checker.MODEL_REPO,revision=checker.MODEL_REVISION,code_revision=checker.CODE_REVISION,
         files=[dict(name=asset.name,bytes=asset.stat().st_size,sha256=hashlib.sha256(asset.read_bytes()).hexdigest())])))
     monkeypatch.setattr(checker,"ROOT",tmp_path)
+    monkeypatch.setattr(engine,"ROOT",tmp_path)
+    monkeypatch.setattr(checker,"Settings",lambda:SimpleNamespace(cache_root=tmp_path,qwen_model_dir=model))
     def local_snapshot(repo,**kwargs):
         assert kwargs["local_files_only"] is True
         assert kwargs["revision"] == checker.MODEL_REVISION
@@ -51,7 +53,7 @@ def test_no_cuda_reports_unsupported_pc_without_downloading(pc_check):
 def test_changed_model_checksum_is_rejected(pc_check):
     pc_check.write_bytes(b"changed-model")  # Same size: checksum must catch it.
     report=checker.inspect(verify_model=True)
-    model=next(c for c in report["checks"] if c["name"]=="Local Turbo model")
+    model=next(c for c in report["checks"] if c["name"]=="Local Qwen model")
     assert not model["ok"] and "checksum mismatch" in model["detail"]
 
 

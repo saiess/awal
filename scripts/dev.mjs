@@ -9,7 +9,7 @@ import { setTimeout as delay } from 'node:timers/promises';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const frontend = resolve(root, 'frontend');
 const requireFrontend = createRequire(resolve(frontend, 'package.json'));
-const python = resolve(root, '.venv-chatterbox/Scripts/python.exe');
+const python = resolve(root, '.venv-qwen3/Scripts/python.exe');
 let backend, backendExit, vite;
 let stopping = false;
 let finish;
@@ -29,7 +29,7 @@ async function health() {
     const response = await fetch('http://127.0.0.1:8000/api/health', { signal: AbortSignal.timeout(1500) });
     if (!response.ok) return false;
     const body = await response.json();
-    if (body.status !== 'ok' || body.engine_id !== 'chatterbox-turbo') {
+    if (body.status !== 'ok' || body.engine_id !== 'qwen3-tts-0.6b-base') {
       throw new Error('Port 8000 is occupied by another service. Close it before running .\\dev.');
     }
     return true;

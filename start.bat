@@ -9,17 +9,17 @@ if not exist "app\static\ui\build-info.json" (
   pause
   exit /b 1
 )
-if not exist ".venv-chatterbox\Scripts\python.exe" (
+if not exist ".venv-qwen3\Scripts\python.exe" (
   echo Application environment not found. Follow README.md.
   pause
   exit /b 1
 )
-".venv-chatterbox\Scripts\python.exe" -u scripts\check_local_setup.py
+".venv-qwen3\Scripts\python.exe" -u scripts\check_local_setup.py
 if errorlevel 1 (
   pause
   exit /b 1
 )
 echo Starting Local Narration. Open http://127.0.0.1:8000 when the server is ready.
 echo Keep this window open. Press Ctrl+C to stop the app.
-".venv-chatterbox\Scripts\python.exe" -u scripts\serve.py
+".venv-qwen3\Scripts\python.exe" -u scripts\serve.py
 if errorlevel 1 pause

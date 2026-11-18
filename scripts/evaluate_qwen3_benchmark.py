@@ -35,7 +35,8 @@ def main():
     from scripts.validate_long_form_words import alignment
     from scripts.expressive_delivery_experiment import waveform_metrics
     from app.audio import combine
-    from app.config import Settings, MODEL_REVISION
+    from app.config import Settings
+    from scripts.legacy_turbo_engine import MODEL_REVISION
     from transformers import WhisperProcessor, WhisperForConditionalGeneration, pipeline
     from transformers.models.whisper.english_normalizer import EnglishTextNormalizer
     from chatterbox.models.voice_encoder import VoiceEncoder

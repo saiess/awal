@@ -38,7 +38,7 @@ def test_ids_origin_filename_and_narrator_validation(setup):
 ], ids=['corrupt','no-consent','traversal','wrong-type','too-short','too-large'])
 def test_reference_upload_validation(setup, filename, content_type, data, rights, expected):
     c, app, e, n = setup
-    r = c.post('/api/narrators', data={'label':'Voice','rights_confirmed':rights}, files={'reference_audio':(filename,data,content_type)})
+    r = c.post('/api/narrators', data={'label':'Voice','rights_confirmed':rights,'reference_transcript':'The exact words in the recording.'}, files={'reference_audio':(filename,data,content_type)})
     assert r.status_code == expected, r.text
     assert app.state.store.narrator()['id'] == n['id']
 
@@ -46,7 +46,7 @@ def test_reference_upload_validation(setup, filename, content_type, data, rights
 def test_valid_reference_replacement_affects_new_projects_only(setup):
     c, app, e, n = setup
     old = create_project(c,n)
-    r=c.post('/api/narrators',data={'label':'New voice','rights_confirmed':'true'},files={'reference_audio':('ref.wav',reference_bytes(),'audio/wav')})
+    r=c.post('/api/narrators',data={'label':'New voice','rights_confirmed':'true','reference_transcript':'The exact words in the recording.'},files={'reference_audio':('ref.wav',reference_bytes(),'audio/wav')})
     assert r.status_code == 201, r.text
     assert c.get(f"/api/projects/{old['id']}").json()['narrator']['id'] == n['id']
     assert c.get('/api/narrators').json()[0]['id'] == r.json()['id']

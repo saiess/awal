@@ -13,13 +13,13 @@ from .api import routes
 from .config import ROOT, Settings
 from .jobs import BusyError, Jobs
 from .projects import Store
-from .tts.engine import TurboEngine
+from .tts.engine import QwenEngine
 
 
 def create_app(settings=None, engine=None):
     settings = settings or Settings()
     store = Store(settings)
-    engine = engine or TurboEngine(settings)
+    engine = engine or QwenEngine(settings)
     jobs = Jobs(store, engine)
 
     @asynccontextmanager

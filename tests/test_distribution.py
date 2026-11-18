@@ -9,7 +9,7 @@ from types import SimpleNamespace
 import pytest
 
 from scripts import build_release, setup_local
-from scripts import download_turbo
+from scripts import download_qwen
 from app import config
 
 
@@ -18,7 +18,7 @@ def test_archive_contains_only_selected_source_and_sanitized_receipts(tmp_path):
     manifest = build_release.build(archive)
     assert manifest == build_release.verify_archive(archive)
     names = set(manifest["files"])
-    assert {"setup.bat","start.bat","check.bat","scripts/download_turbo.py","app/static/index.html"} <= names
+    assert {"setup.bat","start.bat","check.bat","scripts/download_qwen.py","app/static/index.html"} <= names
     assert not any(part in {"data","website-data","test-results",".git","__pycache__","persistence","results"}
                    or part.startswith(".venv") for name in names for part in Path(name).parts)
     assert not any(name.endswith((".wav",".ogg",".mp3",".pyc",".sqlite3",".exe")) for name in names)
@@ -32,8 +32,8 @@ def test_archive_contains_only_selected_source_and_sanitized_receipts(tmp_path):
     assert 'THIRD_PARTY_NOTICES.txt' in names
     assert not any("node_modules" in Path(name).parts for name in names)
     with zipfile.ZipFile(archive) as z:
-        receipt=json.loads(z.read("LocalNarration/docs/turbo-download.json"))
-        assert set(receipt)=={"repo","revision","files"}
+        receipt=json.loads(z.read("LocalNarration/docs/qwen-download.json"))
+        assert {"repo","revision","files","code_revision","code_files"} <= set(receipt)
         assert "snapshot" not in receipt
         for name in names:
             assert b"C:\\\\Users\\\\saide" not in z.read("LocalNarration/"+name)
@@ -92,7 +92,7 @@ def test_wrong_existing_environment_is_not_deleted_or_recreated(tmp_path,monkeyp
     monkeypatch.setattr(setup_local.sys,"version_info",(3,12,2))
     monkeypatch.setattr(setup_local.shutil,"which",lambda name:"git.exe")
     monkeypatch.setattr(setup_local,"cache_location",lambda:tmp_path / "models")
-    python=tmp_path / ".venv-chatterbox/Scripts/python.exe"
+    python=tmp_path / ".venv-qwen3/Scripts/python.exe"
     python.parent.mkdir(parents=True)
     python.write_bytes(b"existing environment")
     data=tmp_path / "data/project.json"
@@ -120,13 +120,16 @@ def test_setup_download_is_pinned_and_never_rewrites_hash_receipt(tmp_path,monke
                  files=[dict(name="model.bin",bytes=8,sha256=build_release.digest(b"approved"))])
     docs=tmp_path / "docs"
     docs.mkdir()
-    record=docs / "turbo-download.json"
+    record=docs / "qwen-download.json"
     record.write_text(json.dumps(receipt))
     original=record.read_bytes()
     if corrupt:
         asset.write_bytes(b"modified")
-    monkeypatch.setattr(download_turbo,"ROOT",tmp_path)
-    monkeypatch.setattr(download_turbo,"Settings",lambda:SimpleNamespace(cache_root=tmp_path / "cache"))
+    monkeypatch.setattr(download_qwen,"ROOT",tmp_path)
+    import app.tts.engine as engine
+    def not_cached(*a,**kw): raise FileNotFoundError("not cached")
+    monkeypatch.setattr(engine,"local_snapshot",not_cached)
+    monkeypatch.setattr(download_qwen,"Settings",lambda:SimpleNamespace(cache_root=tmp_path / "cache",qwen_model_dir=None))
     def snapshot(repo,**kwargs):
         assert repo==config.MODEL_REPO
         assert kwargs["revision"]==config.MODEL_REVISION
@@ -134,10 +137,10 @@ def test_setup_download_is_pinned_and_never_rewrites_hash_receipt(tmp_path,monke
         return str(model)
     monkeypatch.setitem(sys.modules,"huggingface_hub",SimpleNamespace(snapshot_download=snapshot))
     if corrupt:
-        with pytest.raises(ValueError,match="verification"):
-            download_turbo.download()
+        with pytest.raises(RuntimeError,match="checksum mismatch"):
+            download_qwen.main()
     else:
-        download_turbo.download()
+        download_qwen.main()
     assert record.read_bytes()==original
 
 

@@ -22,10 +22,11 @@ os.environ["TRANSFORMERS_OFFLINE"] = "1"
 os.environ["HF_HUB_DISABLE_TELEMETRY"] = "1"
 
 from app.audio import combine, convert, validate_audio, write_raw
-from app.config import CODE_REVISION, MODEL_REPO, MODEL_REVISION, PARAMETERS, Settings
+from app.config import Settings
+from scripts.legacy_turbo_engine import CODE_REVISION, MODEL_REPO, MODEL_REVISION, PARAMETERS
 from app.projects import file_hash
-from app.segmentation import segment_text, sentences
-from app.tts.engine import TurboEngine
+from scripts.legacy_turbo_engine import segment_text, sentences
+from scripts.legacy_turbo_engine import TurboEngine
 
 SCRIPT = """Before sunrise, the harbor is already at work, as a baker lifts the shutters, delivery drivers check their routes, the first fishing boats move beyond the breakwater, and a small team in the control room follows the tide, the wind, and the quiet, carefully coordinated sequence of decisions that will keep the town moving long before most residents have opened their eyes. From the waterfront, it looks almost effortless.
 
@@ -97,7 +98,7 @@ def main():
         raise ValueError("Use a new directory under benchmarks/results.")
     # No directory or audio from another run is ever reused or overwritten.
     out.mkdir(parents=True, exist_ok=False)
-    settings = Settings()
+    settings = Settings(segment_chars=350)
     data_paths = [p for folder in ("projects", "narrators") for p in (settings.data_root/folder).rglob("*") if p.is_file()]
     production_paths = [p for folder in ("app", "frontend/src") for p in (ROOT/folder).rglob("*") if p.is_file() and "__pycache__" not in p.parts]
     before_data, before_code = hashes(data_paths), hashes(production_paths)

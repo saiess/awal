@@ -41,13 +41,11 @@ def inspect(*, verify_model=False, progress=None):
         result = subprocess.run([sys.executable, "-m", "pip", "check"], capture_output=True, text=True, timeout=60)
         if result.returncode:
             raise RuntimeError((result.stdout + result.stderr).strip() + " Restore the pinned requirements.txt environment.")
-        for package in ("fastapi", "uvicorn", "torch", "torchaudio", "soundfile", "imageio-ffmpeg", "huggingface-hub", "chatterbox-tts"):
+        for package in ("fastapi", "uvicorn", "torch", "torchaudio", "soundfile", "imageio-ffmpeg", "huggingface-hub", "qwen-tts"):
             metadata.version(package)
-        dist = metadata.distribution("chatterbox-tts")
-        origin = json.loads(dist.read_text("direct_url.json") or "{}")
-        if dist.version != "0.1.7" or origin.get("vcs_info", {}).get("commit_id") != CODE_REVISION:
-            raise RuntimeError("Chatterbox differs from the approved code revision. Restore requirements.txt.")
-        return "Dependencies consistent; approved Chatterbox code installed."
+        from app.tts.engine import verify_code
+        verify_code()
+        return "Dependencies consistent; approved Qwen code checksums match."
 
     def gpu():
         import torch
@@ -69,29 +67,15 @@ def inspect(*, verify_model=False, progress=None):
         return result.stdout.splitlines()[0]
 
     def model():
-        from huggingface_hub import snapshot_download
-        receipt = json.loads((ROOT / "docs/turbo-download.json").read_text(encoding="utf-8"))
-        if receipt["repo"] != MODEL_REPO or receipt["revision"] != MODEL_REVISION:
-            raise RuntimeError("Model receipt does not match the approved model revision.")
-        try:
-            folder = Path(snapshot_download(MODEL_REPO, revision=MODEL_REVISION, local_files_only=True,
-                                           allow_patterns=[item["name"] for item in receipt["files"]],
-                                           cache_dir=str(Settings().cache_root / "hub")))
-        except Exception as error:
-            raise RuntimeError("Pinned Turbo model is not cached. Run the model download command in README.md.") from error
-        for item in receipt["files"]:
-            path = folder / item["name"]
-            if not path.is_file() or path.stat().st_size != item["bytes"]:
-                raise RuntimeError("Missing or incomplete model asset: " + item["name"])
-            if verify_model and file_hash(path) != item["sha256"]:
-                raise RuntimeError("Model checksum mismatch: " + item["name"])
-        return f"{len(receipt['files'])} pinned model files present" + ("; SHA256 checks passed." if verify_model else ". Full checksums run when the engine loads.")
+        from app.tts.engine import local_snapshot
+        folder = local_snapshot(Settings(), verify=verify_model)
+        return f"Pinned Qwen snapshot present at {folder}" + ("; SHA256 checks passed." if verify_model else ". Full hashes checked on model load.")
 
     check("Windows / Python", runtime)
     check("Dependencies", dependencies)
     check("NVIDIA GPU", gpu)
     check("Audio export", ffmpeg)
-    check("Local Turbo model", model)
+    check("Local Qwen model", model)
     return dict(ok=all(c["ok"] for c in checks), checks=checks)
 
 

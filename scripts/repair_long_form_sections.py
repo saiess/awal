@@ -17,9 +17,10 @@ os.environ["HF_HUB_OFFLINE"] = "1"
 os.environ["TRANSFORMERS_OFFLINE"] = "1"
 
 from app.audio import convert, write_raw
-from app.config import Settings, CODE_REVISION, MODEL_REVISION
+from app.config import Settings
+from scripts.legacy_turbo_engine import CODE_REVISION, MODEL_REVISION
 from app.projects import file_hash
-from app.tts.engine import TurboEngine
+from scripts.legacy_turbo_engine import TurboEngine
 from scripts.expressive_delivery_experiment import context_sections, waveform_metrics
 
 

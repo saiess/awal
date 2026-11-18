@@ -18,7 +18,7 @@ from app.audio import combine,write_raw
 from app.config import Settings,CODE_REVISION,MODEL_REVISION
 from app.projects import file_hash
 from app.segmentation import sentences
-from app.tts.engine import TurboEngine
+from scripts.legacy_turbo_engine import TurboEngine
 from scripts.expressive_delivery_experiment import waveform_metrics
 
 

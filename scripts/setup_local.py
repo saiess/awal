@@ -39,10 +39,10 @@ def install(*, dry_run=False):
     if not shutil.which("git"):
         raise ValueError("Git for Windows is required for the pinned source packages. Install it, reopen the terminal, and retry.")
     cache = cache_location()
-    python = ROOT / ".venv-chatterbox/Scripts/python.exe"
+    python = ROOT / ".venv-qwen3/Scripts/python.exe"
     print("Local Narration setup: Windows / NVIDIA CUDA. No accounts or hosting.",flush=True)
     print(f"Environment: {python.parent.parent}\nPersistent model cache: {cache}",flush=True)
-    print("Installs the pinned Python packages and downloads the pinned Turbo model. Internet is required.",flush=True)
+    print("Installs the pinned Python packages and downloads the pinned Qwen model. Internet is required.",flush=True)
     print("Existing projects and recordings are preserved. Rerun setup.bat to retry an interrupted setup.",flush=True)
     if dry_run:
         print("Dry run: no environment, configuration, packages, or model files changed.")
@@ -56,7 +56,7 @@ def install(*, dry_run=False):
     environment = python.parent.parent
     if environment.exists():
         if not python.is_file():
-            raise ValueError("Existing .venv-chatterbox is incomplete. Preserve your data and move that environment aside before retrying.")
+            raise ValueError("Existing .venv-qwen3 is incomplete. Preserve your data and move that environment aside before retrying.")
         run([python,"-c","import sys,struct; assert sys.version_info[:2]==(3,12) and struct.calcsize('P')==8, 'Existing environment must use 64-bit Python 3.12'"])
     else:
         venv.EnvBuilder(with_pip=True).create(environment)
@@ -67,12 +67,14 @@ def install(*, dry_run=False):
     # Save machine-specific paths locally, never in the distribution/model receipt.
     config = ROOT / ".local-config.json"
     temporary = config.with_suffix(".json.tmp")
-    temporary.write_text(json.dumps(dict(schema_version=1,cache_root=str(cache)),indent=2),encoding="utf-8")
+    record = json.loads(config.read_text(encoding="utf-8")) if config.exists() else {}
+    record.update(schema_version=1,cache_root=str(cache))
+    temporary.write_text(json.dumps(record,indent=2),encoding="utf-8")
     os.replace(temporary,config)
     env = dict(os.environ,HF_HOME=str(cache))
     env.pop("HF_HUB_OFFLINE",None)
     env.pop("TRANSFORMERS_OFFLINE",None)
-    run([python,ROOT / "scripts/download_turbo.py"],env=env)
+    run([python,ROOT / "scripts/download_qwen.py"],env=env)
     run([python,ROOT / "scripts/check_local_setup.py","--verify-model"],env=env)
     print("\nSetup complete. Run start.bat, open http://127.0.0.1:8000, then add your own authorized voice reference.",flush=True)
 

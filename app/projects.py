@@ -112,9 +112,27 @@ class Store:
         path = self.path(f"narrators/{identifier(narrator_id)}/profile.json")
         if not path.exists():
             raise KeyError("Narrator not found.")
-        return json.loads(path.read_text(encoding="utf-8"))
+        profile = json.loads(path.read_text(encoding="utf-8"))
+        sidecar = path.with_name("reference-transcript.json")
+        if sidecar.is_file():
+            saved = json.loads(sidecar.read_text(encoding="utf-8"))
+            if saved["reference_sha256"] != profile["reference_sha256"]:
+                raise ValueError("Reference transcript does not match this recording.")
+            profile["reference_transcript"] = saved["transcript"]
+        return profile
 
-    def add_narrator(self, label, reference, consent, source=None):
+    def set_reference_transcript(self, narrator_id, transcript):
+        if not transcript.strip() or len(transcript) > 4000:
+            raise ValueError("Provide the exact reference transcript (up to 4000 characters).")
+        with self.lock:
+            profile = self.narrator(narrator_id)
+            if file_hash(self.path(profile["reference_audio_relative_path"])) != profile["reference_sha256"]:
+                raise ValueError("Reference recording checksum changed.")
+            atomic_json(self.path(f"narrators/{identifier(narrator_id)}/reference-transcript.json"),
+                        {"transcript": transcript.strip(), "reference_sha256": profile["reference_sha256"], "confirmed_at": now()})
+            return self.narrator(narrator_id)
+
+    def add_narrator(self, label, reference, consent, source=None, transcript=None):
         narrator_id = str(uuid4())
         folder = self.path(f"narrators/{narrator_id}")
         folder.mkdir(parents=True)
@@ -128,6 +146,8 @@ class Store:
                        "reference_sha256": file_hash(target), "engine_id": ENGINE_ID,
                        "engine_revision": MODEL_REVISION, "engine_parameters": copy.deepcopy(PARAMETERS),
                        "created_at": now(), "consent": consent}
+            if transcript:
+                profile["reference_transcript"] = transcript.strip()
             atomic_json(folder / "profile.json", profile)
             atomic_json(self.path("narrators/current.json"), {"id": narrator_id})
             return profile
@@ -139,14 +159,18 @@ class Store:
         if len(script) > self.settings.max_script_chars:
             raise ValueError("Script is too long.")
         narrator = self.narrator(narrator_id)
-        project = {"schema_version": 1, "id": str(uuid4()), "title": title, "language": "en",
+        if not narrator.get("reference_transcript", "").strip():
+            raise ValueError("Save the exact reference transcript before creating Qwen narration.")
+        narrator.update(engine_id=ENGINE_ID, engine_revision=MODEL_REVISION, engine_parameters=copy.deepcopy(PARAMETERS))
+        project = {"schema_version": 2, "id": str(uuid4()), "title": title, "language": "en",
                    "narrator_id": narrator["id"], "narrator": copy.deepcopy(narrator),
                    "engine_id": ENGINE_ID, "engine_revision": MODEL_REVISION,
                    "created_at": now(), "script": script,
                    "export_settings": {"speed": self.settings.default_speed, "processed": True,
-                                       "enhance": False, "gap_seconds": .12}, "exports": [], "segments": []}
+                                       "enhance": False, "gap_seconds": .12, "trim_trailing_silence": True}, "exports": [], "segments": []}
         for i, text in enumerate(segment_text(script, self.settings.segment_chars)):
             project["segments"].append({"id": str(uuid4()), "order": i, "text": text, "status": "pending",
+                                        "inference_text": None, "versions": [], "attempts": [],
                                         "stale": True, "audio_path": None, "version": 0, "duration_seconds": None,
                                         "error": None, "generation_parameters": None, "generated_at": None})
         self.save(project)
@@ -160,11 +184,14 @@ class Store:
                 return segment
         raise KeyError("Section not found.")
 
-    def edit(self, project_id, segment_id, text):
+    def edit(self, project_id, segment_id, inference_text):
         def update(p):
+            if p.get("engine_id") != ENGINE_ID or p.get("schema_version") != 2:
+                raise ValueError("Legacy projects retain their recordings. Create a new Qwen project to change narration.")
             segment = self.segment(p, segment_id)
-            if segment["text"] != text:
-                segment.update(text=text, stale=True, status="pending", error=None)
+            value = inference_text if inference_text != segment["text"] else None
+            if segment.get("inference_text") != value:
+                segment.update(inference_text=value, stale=True, status="pending", error=None)
         return self.change(project_id, update)
 
     def recover(self):
@@ -175,6 +202,8 @@ class Store:
                 if s["status"] == "generating":
                     s.update(status="pending", stale=True,
                              error="Generation was interrupted. Previous audio, if any, is preserved; retry this section.")
+                    if s.get("attempts") and s["attempts"][-1].get("status") == "generating":
+                        s["attempts"][-1].update(status="interrupted", finished_at=now())
                     changed = True
             if changed:
                 self.save(p)

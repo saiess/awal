@@ -13,14 +13,15 @@ const remember = (id: string | null) => {
   catch { /* Project files remain authoritative when browser storage is unavailable. */ }
 };
 
-function SectionCard({ section, index, saved, value, selected, locked, onText, onSelect, onSave, onRegenerate, projectId }: {
-  section: Segment; index: number; saved: boolean; value: string; selected: boolean; locked: boolean;
+function SectionCard({ section, index, saved, value, selected, locked, legacy, onText, onSelect, onSave, onRegenerate, projectId }: {
+  section: Segment; index: number; saved: boolean; value: string; selected: boolean; locked: boolean; legacy: boolean;
   onText: (text: string) => void; onSelect: (selected: boolean) => void;
   onSave: () => void; onRegenerate: () => void; projectId?: string;
 }) {
-  const dirty = value !== section.text;
-  const stale = section.stale && Boolean(section.audio_path);
-  const status = dirty ? 'Unsaved text' : section.status === 'generating' ? 'Generating…' : stale ? 'Audio needs regeneration'
+  const dirty = value !== (section.inference_text ?? section.text);
+  const stale = !legacy && section.stale && Boolean(section.audio_path);
+  const status = legacy ? (section.audio_path ? `Saved recording · ${duration(section.duration_seconds)}` : 'No saved recording')
+    : dirty ? 'Unsaved text' : section.status === 'generating' ? 'Generating…' : stale ? 'Audio needs regeneration'
     : section.status === 'ready' ? `Ready · ${duration(section.duration_seconds)}` : section.status === 'failed' ? 'Failed — retry' : 'Pending';
   const audio = saved && section.audio_path ? `/api/projects/${projectId}/segments/${section.id}/audio?v=${section.version}` : undefined;
   return <article className="section-card" data-id={section.id}>
@@ -30,31 +31,33 @@ function SectionCard({ section, index, saved, value, selected, locked, onText, o
       <strong>{String(index + 1).padStart(2, '0')} / {section.text.length} characters</strong>
       <span className={`status ${stale ? 'stale' : section.status}`}>{status}</span>
     </div>
-    <label><span className="sr-label">Section {index + 1} text</span>
-      <textarea maxLength={350} rows={3} value={value} readOnly={!saved} disabled={locked}
+    <label><span className="sr-label">Section {index + 1} inference text</span>
+      <textarea maxLength={600} rows={3} value={value} readOnly={!saved || legacy} disabled={locked}
         data-dirty={dirty ? 'true' : 'false'} onChange={event => onText(event.target.value)} />
     </label>
+    {(section.inference_text || dirty) && <details><summary>Original script text</summary><p>{section.text}</p></details>}
     <p className="section-error" hidden={!section.error}>{section.error}</p>
     <div className="actions" hidden={!saved}>
       <audio controls preload="none" hidden={!audio} src={audio} aria-label={`Section ${index + 1} original audio`} />
-      <button className="save-section" type="button" disabled={locked || !dirty} data-original={section.text} onClick={onSave}>Save text</button>
-      <button className="regenerate-section" type="button" disabled={locked} onClick={onRegenerate}>Regenerate section</button>
+      <button className="save-section" type="button" disabled={locked || legacy || !dirty} data-original={section.inference_text ?? section.text} onClick={onSave}>Save inference text</button>
+      <button className="regenerate-section" type="button" disabled={locked || legacy} onClick={onRegenerate}>Regenerate section</button>
     </div>
   </article>;
 }
 
-function NarratorPanel({ narrator, locked, onUpload }: {
-  narrator: Narrator | null; locked: boolean; onUpload: (data: FormData) => Promise<boolean>;
+function NarratorPanel({ narrator, locked, onUpload, onTranscript, canEditTranscript }: {
+  narrator: Narrator | null; locked: boolean; canEditTranscript: boolean; onUpload: (data: FormData) => Promise<boolean>; onTranscript: (text: string) => Promise<boolean>;
 }) {
   const [open, setOpen] = useState(false);
   const [label, setLabel] = useState('Voice C');
   const [file, setFile] = useState<File | null>(null);
   const [rights, setRights] = useState(false);
+  const [transcript, setTranscript] = useState('');
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!file || !rights) return;
     const data = new FormData();
-    data.append('label', label); data.append('rights_confirmed', String(rights)); data.append('reference_audio', file);
+    data.append('label', label); data.append('rights_confirmed', String(rights)); data.append('reference_audio', file); data.append('reference_transcript', transcript);
     if (await onUpload(data)) setOpen(false);
   }
   return <section className="narrator panel" aria-label="Narrator">
@@ -64,11 +67,16 @@ function NarratorPanel({ narrator, locked, onUpload }: {
     </div>
     <audio id="reference-audio" controls preload="none" aria-label="Saved voice reference" hidden={!narrator}
       src={narrator ? `/api/narrators/${narrator.id}/reference` : undefined} />
+    {narrator && !narrator.reference_transcript && canEditTranscript && <form className="transcript-form" onSubmit={event => { event.preventDefault(); void onTranscript(transcript); }}>
+      <label>Exact words in this saved reference<textarea required maxLength={4000} value={transcript} disabled={locked} onChange={event => setTranscript(event.target.value)} /></label>
+      <button disabled={locked || !transcript.trim()}>Save reference transcript</button>
+    </form>}
     <details id="voice-settings" open={open} onToggle={event => setOpen(event.currentTarget.open)}><summary>{narrator ? 'Change voice' : 'Add voice'}</summary>
       <form id="reference-form" onSubmit={event => { void submit(event); }}>
         <p>New projects use the new reference. Existing projects retain their saved narrator.</p>
         <label>Voice label<input id="reference-label" maxLength={120} value={label} required disabled={locked} onChange={event => setLabel(event.target.value)} /></label>
         <label>Clear 10–30-second recording<input id="reference-file" type="file" accept=".wav,.ogg,.opus,.flac,.mp3,.m4a" required disabled={locked} onChange={event => setFile(event.target.files?.[0] ?? null)} /></label>
+        <label>Exact words spoken in the reference<textarea id="reference-transcript" maxLength={4000} required value={transcript} disabled={locked} onChange={event => setTranscript(event.target.value)} /></label>
         <label className="check"><input id="reference-rights" type="checkbox" checked={rights} required disabled={locked} onChange={event => setRights(event.target.checked)} />I own this recording or have permission to clone and publish the voice commercially.</label>
         <button type="submit" disabled={locked}>Save reference for new projects</button>
       </form>
@@ -96,16 +104,18 @@ export default function App() {
   const [processed, setProcessed] = useState(true);
   const [enhance, setEnhance] = useState(false);
   const [gap, setGap] = useState('0.12');
+  const [trimTrailing, setTrimTrailing] = useState(true);
   const [master, setMaster] = useState<ExportRecord | null>(null);
+  const legacy = Boolean(project && project.engine_id !== 'qwen3-tts-0.6b-base');
   const busy = Boolean(job && !terminal(job));
   const locked = initializing || operation || busy;
-  const hasDirty = project?.segments.some(section => drafts[section.id] !== undefined && drafts[section.id] !== section.text) ?? false;
+  const hasDirty = project?.segments.some(section => drafts[section.id] !== undefined && drafts[section.id] !== (section.inference_text ?? section.text)) ?? false;
 
   function adoptProject(value: Project) {
     setProject(value); setTitle(value.title); setScript(value.script); setPreview([]); setDrafts({});
     setSelected(new Set(value.segments.map(section => section.id)));
     setSpeed(value.export_settings.speed.toFixed(2)); setProcessed(value.export_settings.processed);
-    setEnhance(value.export_settings.enhance); setGap(String(value.export_settings.gap_seconds));
+    setTrimTrailing(value.export_settings.trim_trailing_silence ?? false); setEnhance(value.export_settings.enhance); setGap(String(value.export_settings.gap_seconds));
     setMaster(value.exports.at(-1) ?? null); setJob(null); remember(value.id);
   }
 
@@ -119,7 +129,7 @@ export default function App() {
         ]);
         if (controller.signal.aborted) return;
         setNarrator(voices[0] ?? null); setProjects(list);
-        setHealthText(health.gpu_available ? 'NVIDIA GPU available · Turbo loads on first generation' : 'CUDA unavailable · run check.bat before generating');
+        setHealthText(health.gpu_available ? 'NVIDIA GPU available · Qwen loads on first generation' : 'CUDA unavailable · run check.bat before generating');
         let last: string | null = null;
         try { last = localStorage.getItem('narration-project'); } catch { /* Optional browser preference. */ }
         const id = health.active_job?.project_id ?? (list.some(item => item.id === last) ? last : null);
@@ -190,8 +200,8 @@ export default function App() {
   }
   async function saveSection(section: Segment): Promise<Project> {
     if (!project) throw new Error('Open a saved project first.');
-    const text = drafts[section.id] ?? section.text;
-    const updated = await jsonRequest<Project>(`/api/projects/${project.id}/segments/${section.id}`, 'PATCH', { text });
+    const text = drafts[section.id] ?? section.inference_text ?? section.text;
+    const updated = await jsonRequest<Project>(`/api/projects/${project.id}/segments/${section.id}`, 'PATCH', { inference_text: text === section.text ? null : text });
     setProject(updated);
     setDrafts(previous => { const next = { ...previous }; delete next[section.id]; return next; });
     return updated;
@@ -201,7 +211,7 @@ export default function App() {
     let saved = project;
     if (!saved) {
       if (!title.trim()) throw new Error('Give this project a title.');
-      if (!narrator) throw new Error('Add an authorized narrator reference first.');
+      if (!narrator?.reference_transcript) throw new Error('Save an authorized reference and its exact transcript first.');
       const result = await jsonRequest<{ segments: string[] }>('/api/segment', 'POST', { script });
       if (!window.confirm(`Create this project and generate ${result.segments.length} sections?`)) return;
       saved = await jsonRequest<Project>('/api/projects', 'POST', { title, script, narrator_id: narrator.id });
@@ -212,7 +222,7 @@ export default function App() {
   }
   async function regenerate(section: Segment) {
     if (!project) return;
-    if ((drafts[section.id] ?? section.text) !== section.text) await saveSection(section);
+    if ((drafts[section.id] ?? section.inference_text ?? section.text) !== (section.inference_text ?? section.text)) await saveSection(section);
     setJob(await jsonRequest<Job>(`/api/projects/${project.id}/segments/${section.id}/regenerate`, 'POST', {}));
   }
   async function makeExport(format: 'wav' | 'mp3', sections = false, download = true) {
@@ -221,7 +231,7 @@ export default function App() {
     if (sections && !selected.size) throw new Error('Select at least one section.');
     if (!speed || !gap || !Number.isFinite(Number(speed)) || !Number.isFinite(Number(gap))) throw new Error('Enter a valid speed and boundary gap.');
     const options: ExportOptions = { format, include_segments: sections, segment_ids: sections ? [...selected] : null,
-      speed: Number(speed), processed, enhance: processed && enhance, gap_seconds: Number(gap) };
+      speed: Number(speed), processed, trim_trailing_silence: trimTrailing, enhance: processed && enhance, gap_seconds: Number(gap) };
     const record = await jsonRequest<ExportRecord>(`/api/projects/${project.id}/exports`, 'POST', options);
     setMaster(record); setProject(await api<Project>(`/api/projects/${project.id}`));
     if (download) {
@@ -261,7 +271,12 @@ export default function App() {
     <main>
       <header><div><p className="eyebrow">NARRATION</p><h1 id="heading">{project?.title ?? 'New project'}</h1></div><span className="local-badge"><span className="local-dot" aria-hidden="true" />Local</span></header>
       <div id="error" role="alert" hidden={!error}>{error}</div><div id="notice" role="status" hidden={!notice}>{notice}</div>
-      <NarratorPanel narrator={project?.narrator ?? narrator} locked={locked} onUpload={data =>
+      {legacy && <p className="muted" role="status">This Chatterbox project keeps its saved recordings. Preview and export remain available. Create a new Qwen project to generate narration.</p>}
+      <NarratorPanel narrator={project?.narrator ?? narrator} locked={locked} canEditTranscript={!project} onTranscript={text => action(async () => {
+        if (!narrator) return;
+        setNarrator(await jsonRequest<Narrator>(`/api/narrators/${narrator.id}/transcript`, 'PATCH', { transcript: text }));
+        setNotice('Reference transcript saved for new projects.');
+      })} onUpload={data =>
         action(async () => {
           setNarrator(await api<Narrator>('/api/narrators', { method: 'POST', body: data }));
           setNotice('Reference saved for new projects. Existing projects keep their saved voice.');
@@ -275,7 +290,7 @@ export default function App() {
             const result = await jsonRequest<{ segments: string[] }>('/api/segment', 'POST', { script });
             setPreview(result.segments); setSelected(new Set(result.segments.map((_, index) => `preview-${index}`)));
           }); }}>Preview sections</button>
-          {!project && <button id="generate" className="primary" disabled={locked || !narrator} onClick={() => { void action(generate); }}>Create & generate</button>}
+          {!project && <button id="generate" className="primary" disabled={locked || !narrator?.reference_transcript} onClick={() => { void action(generate); }}>Create & generate</button>}
           <span id="script-hint" className="muted">Your original audio is always kept.</span>
         </div>
       </section>
@@ -286,14 +301,14 @@ export default function App() {
       </section>
       <section id="sections-panel" className="panel" hidden={!project && !preview.length}>
         <div className="section-heading"><div><p className="eyebrow">REVIEW</p><h2>Sections</h2></div>
-          {project && <button id="generate" className="primary" disabled={locked} onClick={() => { void action(generate); }}>Generate missing / changed</button>}
+          {project && <button id="generate" className="primary" disabled={locked || legacy} onClick={() => { void action(generate); }}>Generate missing / changed</button>}
         </div>
         <div className="section-selection"><span id="section-count" className="muted">{segments.length} sections</span><label className="check"><input id="select-all" type="checkbox" checked={allSelected} disabled={locked} onChange={event => setSelected(new Set(event.target.checked ? segments.map(section => section.id) : []))} />Select all</label></div>
-        <p className="muted">Edit a section, save it, then regenerate just that section. Audio previews play the original 1.00× recording.</p>
+        <p className="muted">{legacy ? 'Preview and export the last saved recordings. Create a separate Qwen project for new narration.' : 'Correct inference text, save it, then regenerate just that section. Your original script is kept. Audio previews play the original 1.00× recording.'}</p>
         <div id="sections">{segments.map((section, index) => <SectionCard key={section.id} section={section} index={index}
-          saved={Boolean(project)} value={drafts[section.id] ?? section.text} selected={selected.has(section.id)} locked={locked} projectId={project?.id}
+          saved={Boolean(project)} value={drafts[section.id] ?? section.inference_text ?? section.text} selected={selected.has(section.id)} locked={locked} legacy={legacy} projectId={project?.id}
           onText={text => setDrafts(previous => ({ ...previous, [section.id]: text }))} onSelect={checked => selectSection(section.id, checked)}
-          onSave={() => { void action(async () => { await saveSection(section); setNotice('Section text saved. Regenerate it to update the audio.'); }); }}
+          onSave={() => { void action(async () => { await saveSection(section); setNotice('Inference text saved. Original script and audio are preserved until you regenerate.'); }); }}
           onRegenerate={() => { void action(() => regenerate(section)); }} />)}</div>
       </section>
       <section id="export-panel" className="panel" hidden={!project}>
@@ -302,6 +317,7 @@ export default function App() {
           <label className="check"><input id="processed" type="checkbox" checked={processed} disabled={locked} onChange={event => setProcessed(event.target.checked)} />Apply export processing</label>
           <label>Playback speed (pitch preserved)<input id="speed" type="number" min="0.5" max="2" step="0.05" value={speed} disabled={locked || !processed} onChange={event => setSpeed(event.target.value)} /></label>
           <label>Minimum section gap (seconds)<input id="gap" type="number" min="0" max="0.5" step="0.01" value={gap} disabled={locked} onChange={event => setGap(event.target.value)} /></label>
+          {!legacy && <label className="check"><input id="trim-trailing" type="checkbox" checked={trimTrailing} disabled={locked || !processed} onChange={event => setTrimTrailing(event.target.checked)} />Shorten excessive trailing silence (keep 0.35 seconds)</label>}
           <label className="check"><input id="enhance" type="checkbox" checked={enhance} disabled={locked || !processed} onChange={event => setEnhance(event.target.checked)} />Conservative volume adjustment</label>
         </div>
         <p className="muted">Turn off export processing for original speed. Existing pauses count toward the section gap.</p>

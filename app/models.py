@@ -1,7 +1,7 @@
-from typing import Literal
+from typing import Literal, Annotated
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, StringConstraints
 
 
 class InputModel(BaseModel):
@@ -9,7 +9,7 @@ class InputModel(BaseModel):
 
 
 class ScriptInput(InputModel):
-    script: str = Field(min_length=1, max_length=100_000)
+    script: Annotated[str, StringConstraints(strip_whitespace=False)] = Field(min_length=1, max_length=100_000)
 
 
 class ProjectInput(ScriptInput):
@@ -18,14 +18,18 @@ class ProjectInput(ScriptInput):
 
 
 class SegmentInput(InputModel):
-    text: str = Field(min_length=1, max_length=350)
+    inference_text: str | None = Field(..., min_length=1, max_length=600)
 
-    @field_validator("text")
+    @field_validator("inference_text")
     @classmethod
     def has_words(cls, value):
-        if not any(c.isalnum() for c in value):
+        if value is not None and not any(c.isalnum() for c in value):
             raise ValueError("Include at least one letter or number.")
         return value
+
+
+class TranscriptInput(InputModel):
+    transcript: str = Field(min_length=1, max_length=4000)
 
 
 class GenerateInput(InputModel):
@@ -37,6 +41,7 @@ class ExportSettings(InputModel):
     processed: bool = True
     enhance: bool = False
     gap_seconds: float = Field(default=.12, ge=0, le=.5)
+    trim_trailing_silence: bool = False
 
 
 class ExportInput(ExportSettings):

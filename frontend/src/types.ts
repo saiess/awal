@@ -4,12 +4,14 @@ export interface Narrator {
   language: string;
   reference_audio_relative_path: string;
   reference_sha256: string;
+  reference_transcript?: string;
 }
 
 export interface Segment {
   id: string;
   order: number;
   text: string;
+  inference_text?: string | null;
   status: 'pending' | 'generating' | 'ready' | 'failed';
   stale: boolean;
   audio_path: string | null;
@@ -23,6 +25,7 @@ export interface ExportSettings {
   processed: boolean;
   enhance: boolean;
   gap_seconds: number;
+  trim_trailing_silence: boolean;
 }
 
 export interface ExportOptions extends ExportSettings {
@@ -40,6 +43,7 @@ export interface ExportRecord {
 }
 
 export interface Project {
+  engine_id: string;
   id: string;
   title: string;
   script: string;

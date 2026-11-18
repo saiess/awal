@@ -8,7 +8,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
 
-from app.config import MODEL_REPO, MODEL_REVISION, Settings
+from app.config import Settings
+from scripts.legacy_turbo_engine import MODEL_REPO, MODEL_REVISION
 from app.projects import file_hash
 
 

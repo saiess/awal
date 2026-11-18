@@ -207,3 +207,5 @@ footer { font-family: var(--sans); font-style: normal; font-size: 13px; color: v
 @media (prefers-reduced-motion: reduce) {
   button { transition: none; }
 }
+
+.transcript-form { flex-basis: 100%; }

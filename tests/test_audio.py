@@ -58,7 +58,7 @@ def test_incomplete_stale_and_unknown_sections_reject_export(setup):
     c,app,e,n=setup;p=create_project(c,n)
     assert c.post(f"/api/projects/{p['id']}/exports",json={}).status_code==409
     finish(c,c.post(f"/api/projects/{p['id']}/generate",json={}))
-    c.patch(f"/api/projects/{p['id']}/segments/{p['segments'][0]['id']}",json={'text':'Changed text.'})
+    c.patch(f"/api/projects/{p['id']}/segments/{p['segments'][0]['id']}",json={'inference_text':'Changed text.'})
     assert c.post(f"/api/projects/{p['id']}/exports",json={}).status_code==409
     assert c.post(f"/api/projects/{p['id']}/exports",json={'segment_ids':[str(uuid4())]}).status_code==404
     for speed in [.1,2.1,'NaN']:
@@ -105,9 +105,15 @@ def test_export_cleanup_is_processed_only_and_preserves_raws(setup):
     p=create_project(c,n,'First.\n\nSecond.')
     finish(c,c.post(f"/api/projects/{p['id']}/generate",json={}))
     p=app.state.store.read(p['id'])
+    p['engine_id']='chatterbox-turbo'
+    p['schema_version']=1
+    app.state.store.save(p)
     voice=np.full(12000,.1,dtype=np.float32);quiet=np.zeros(24000,dtype=np.float32)
     arrays=[np.r_[voice,quiet],np.r_[quiet,voice]]
-    for s,a in zip(p['segments'],arrays): sf.write(app.state.store.path(s['audio_path']),a,24000,subtype='FLOAT')
+    for s,a in zip(p['segments'],arrays):
+        sf.write(app.state.store.path(s['audio_path']),a,24000,subtype='FLOAT')
+        s['sha256']=file_hash(app.state.store.path(s['audio_path']))
+    app.state.store.save(p)
     hashes=[file_hash(app.state.store.path(s['audio_path'])) for s in p['segments']]
     for processed in (False,True):
         r=c.post(f"/api/projects/{p['id']}/exports",json={'processed':processed,'speed':1,'gap_seconds':0})

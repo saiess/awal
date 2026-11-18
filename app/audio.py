@@ -10,7 +10,7 @@ from uuid import uuid4
 import numpy as np
 import soundfile as sf
 
-from .config import SAMPLE_RATE
+from .config import SAMPLE_RATE, ENGINE_ID
 from .projects import file_hash, now
 
 
@@ -121,6 +121,25 @@ def smooth_joins(arrays):
                     "minimum_quiet_seconds": .5, "retained_edge_seconds": .15, "fade_seconds": .003}
 
 
+def trim_trailing_quiet(arrays):
+    """Processed copies only; retain speech prefix exactly, never edit an interior pause."""
+    threshold = 10**(-45/20)
+    retained = round(.35*SAMPLE_RATE)
+    minimum = round(.8*SAMPLE_RATE)
+    result, cuts = [], []
+    for a in arrays:
+        active = np.flatnonzero(np.abs(a) >= threshold)
+        cut = len(a)
+        # All-quiet/very soft sections are left alone instead of guessing.
+        if len(active) and len(a)-int(active[-1])-1 >= minimum:
+            cut = min(len(a), int(active[-1])+1+retained)
+        result.append(a[:cut].copy())
+        cuts.append({"original_samples": len(a), "retained_samples": cut,
+                     "removed_samples": len(a)-cut, "removed_seconds": (len(a)-cut)/SAMPLE_RATE})
+    return result, {"method": "trailing suffix only; unchanged retained samples", "threshold_dbfs": -45,
+                    "minimum_tail_seconds": .8, "retained_seconds": .35, "sections": cuts}
+
+
 def protect_peak(path, ceiling_dbfs=-1):
     """Attenuation only, applied to an export working copy; no hard clipping."""
     a, sr = sf.read(path, dtype="float32")
@@ -179,7 +198,8 @@ def export_project(store, project_id, options):
         raise ValueError("Select each section once.")
     selected = [store.segment(p, i) for i in ids]
     selected.sort(key=lambda s: s["order"])
-    if any(s["status"] != "ready" or s["stale"] or not s["audio_path"] for s in selected):
+    legacy = p.get("engine_id") != ENGINE_ID
+    if any((not s.get("audio_path")) if legacy else (s["status"] != "ready" or s["stale"] or not s["audio_path"]) for s in selected):
         raise ValueError("Generate all selected sections before exporting; some are missing, failed, or stale.")
     if options.enhance and not options.processed:
         raise ValueError("Enable processed export to apply volume enhancement.")
@@ -193,8 +213,12 @@ def export_project(store, project_id, options):
         a, sr = sf.read(path, dtype="float32")
         arrays.append(validate_audio(a, sr))
         raw_hashes[s["id"]] = file_hash(path)
+        if s.get("sha256") and raw_hashes[s["id"]] != s["sha256"]:
+            raise ValueError("Saved raw recording checksum changed; restore it before exporting.")
     join_processing = None
-    if options.processed:
+    if options.processed and not legacy and options.trim_trailing_silence:
+        arrays, join_processing = trim_trailing_quiet(arrays)
+    elif options.processed and legacy:
         arrays, join_processing = smooth_joins(arrays)
     assembled, inserted = combine(arrays, options.gap_seconds)
     working = folder / "assembly.wav"
@@ -223,17 +247,26 @@ def export_project(store, project_id, options):
             z.write(master, master.name)
             for i, s in enumerate(selected):
                 raw = store.project_file(project_id, s["audio_path"])
+                # Use the same export-only trimming as the assembled Qwen master.
+                individual_source = raw
+                trimmed_source = None
+                if options.processed and not legacy and options.trim_trailing_silence:
+                    trimmed_source = folder / f"section-{i+1:03}-working.wav"
+                    sf.write(trimmed_source, arrays[i], SAMPLE_RATE, subtype="FLOAT")
+                    individual_source = trimmed_source
                 individual = folder / f"section-{i+1:03}.wav"
                 if effective_speed != 1:
-                    convert(raw, individual, effective_speed)
+                    convert(individual_source, individual, effective_speed)
                 else:
-                    shutil.copyfile(raw, individual)
+                    shutil.copyfile(individual_source, individual)
                 if options.enhance:
                     enhance(individual)
                 if options.processed:
                     protect_peak(individual)
                 z.write(individual, individual.name)
                 individual.unlink()
+                if trimmed_source:
+                    trimmed_source.unlink()
             z.writestr("sections.json", json.dumps({"export": record, "sections": selected}, indent=2))
     record["download_path"] = artifact.relative_to(store.root).as_posix()
     record["sha256"] = file_hash(artifact)
@@ -244,7 +277,7 @@ def export_project(store, project_id, options):
     working.unlink()
     tempo.unlink()
     def commit(project):
-        project["export_settings"] = options.model_dump(include={"speed", "processed", "enhance", "gap_seconds"})
+        project["export_settings"] = options.model_dump(include={"speed", "processed", "enhance", "gap_seconds", "trim_trailing_silence"})
         project["exports"].append(record)
     store.change(project_id, commit)
     return record

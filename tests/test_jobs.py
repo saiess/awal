@@ -14,7 +14,7 @@ def test_second_generation_and_edit_return_busy_without_blocking_health(setup):
     try:
         assert e.entered.wait(5)
         assert c.post(f"/api/projects/{p['id']}/generate", json={}).status_code == 409
-        assert c.patch(f"/api/projects/{p['id']}/segments/{p['segments'][0]['id']}", json={'text':'Changed'}).status_code == 409
+        assert c.patch(f"/api/projects/{p['id']}/segments/{p['segments'][0]['id']}", json={'inference_text':'Changed'}).status_code == 409
         health = c.get('/api/health').json()
         assert health['busy'] and health['active_job']['id'] == first.json()['id']
     finally: e.release.set()

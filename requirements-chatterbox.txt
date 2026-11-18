@@ -1,0 +1,5 @@
+# Install with --no-deps: the complete resolved stack is pinned below, including
+# the reviewed Perth commit instead of Chatterbox's mutable upstream URL.
+--extra-index-url https://download.pytorch.org/whl/cu124
+-r requirements-runtime.lock.txt
+imageio-ffmpeg==0.6.0

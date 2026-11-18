@@ -30,7 +30,7 @@ def stop(process):
 def start(log):
     token=uuid4().hex
     env=dict(os.environ,HF_HUB_OFFLINE="1",TRANSFORMERS_OFFLINE="1",TTS_TEST_TOKEN=token)
-    process=subprocess.Popen([sys.executable,str(ROOT / "tests/live_server.py")],cwd=ROOT,env=env,
+    process=subprocess.Popen([str(ROOT / ".venv-qwen3/Scripts/python.exe"),str(ROOT / "tests/live_server.py")],cwd=ROOT,env=env,
         stdin=subprocess.PIPE,stdout=log,stderr=log,text=True,
         creationflags=subprocess.CREATE_NO_WINDOW if os.name=="nt" else 0)
     deadline=time.monotonic()+180
