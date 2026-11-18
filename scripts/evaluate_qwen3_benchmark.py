@@ -19,6 +19,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--run', type=Path)
     parser.add_argument('--long-form', action='store_true', help='Word timestamps, issue clips, and tempo listening export')
+    parser.add_argument('--word-timestamps', action='store_true', help='Localize word differences without long-form exports')
     args = parser.parse_args()
     root = (args.run or ROOT / 'benchmarks/results/qwen3-vs-chatterbox/2026-11-18').resolve()
     if not root.is_relative_to((ROOT/'benchmarks/results').resolve()):
@@ -112,7 +113,7 @@ def main():
                     entry['speaker_cosine_to_reference'] = cosine(np.asarray(entry['speaker_embedding']),reference)
                     tick = time.perf_counter()
                     for name, beams in [('greedy',1),('beam',5)]:
-                        kwargs = {'return_timestamps':'word'} if args.long_form and beams==1 else {}
+                        kwargs = {'return_timestamps':'word'} if (args.long_form or args.word_timestamps) and beams==1 else {}
                         prediction = recognizer({'array':audio,'sampling_rate':16000},
                             generate_kwargs={'do_sample':False,'num_beams':beams,'max_new_tokens':440},**kwargs)
                         transcript = prediction['text']
@@ -120,7 +121,7 @@ def main():
                         if kwargs:
                             entry['word_timestamps'] = prediction['chunks']
                     entry['asr_seconds'] = time.perf_counter()-tick
-                    if args.long_form:
+                    if args.long_form or args.word_timestamps:
                         for name in ('greedy','beam'):
                             entry[name]['localized_differences'] = timestamp_differences(entry[name],entry['word_timestamps'],len(a)/sr)
                     report['takes'][key] = entry

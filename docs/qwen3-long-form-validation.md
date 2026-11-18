@@ -122,10 +122,91 @@ Qwen's existing decoder clamps internally to ±1. The run contains **20 samples 
 
 All 18 raw take hashes, exact script text, raw-master concatenation, 20 listening-copy gain transformations, 13 focused clips, and tempo duration were verified. The 1.10× duration differs from raw duration divided by 1.1 by only about 3 ms. `assets-verified.json` records local model verification; `diagnostics.json` retains transcripts, word timestamps, voice vectors, quiet/peak descriptors, joins, and clip ranges. The two existing benchmark helpers were extended for a supplied frozen run directory and long-form diagnostics; no application module or dependency was changed.
 
-## Recommendation pending listening approval
+## Original validation recommendation pending listening approval
 
 **Technical feasibility passes; retain Qwen outside production until listening review.** The complete eight-minute narration fits this GPU and maintains strong speaker-embedding consistency without retries. No repeated passages or missing sentences were detected. That is sufficient to prepare a long-form audition, not to approve reliable wording or natural delivery automatically.
 
 Review the **17,400**, **a/the conversation**, and **quiet/quite** clips first, then the names, both joins, and the full master for stable identity and natural phrasing. The consistent recognition flags prevent declaring wording fully cleared. If listening confirms a synthesis defect, retain these originals and decide on a narrowly scoped repair separately; no repair or tuning was performed here.
 
 No Dessa-level delivery claim, new model, production integration, UI change, model switch, or cloud service is introduced. Chatterbox Turbo's production behavior is preserved. Stop here for long-form listening approval.
+
+## Focused accuracy review — 18 November 2026
+
+**Outcome:** the explicit spoken-number expansion improves section 12's transcription, but the one new full-section take introduces a long trailing quiet interval. It is **not approved as a replacement**. Sections 13 and 18 are preserved, with no regenerated audio: section 13 still needs direct listening confirmation before its conditional alternative take; section 18's cropped beam decode recovers the intended word.
+
+This session can inspect waveforms and run local recognition but cannot directly audition WAV audio. The findings below distinguish measured audio properties and ASR evidence from human listening confirmation. A listening question was presented for sections 13/18; no answer has been assumed.
+
+### Exactly what was generated
+
+One new take of the **complete original section 12 paragraph**, with only this inference-text substitution:
+
+```text
+Source:     There are now 17,400 files in the night's working directory, counting the supporting records as well as the images.
+Inference:  There are now seventeen thousand four hundred files in the night's working directory, counting the supporting records as well as the images.
+```
+
+The paragraph's `02:17`, all other words, punctuation, and sentence order remain unchanged. The complete original and inference paragraphs, the explicit replacement, seed, and one-take limit are saved in `benchmarks/results/qwen3-accuracy-review/2026-11-18/number/plan.json`. The original script and narrator recording were not edited. This is a single documented test substitution, **not an automatic text-normalization feature**.
+
+Generation uses the same pinned 0.6B Base model/code/reference/transcript, English, BF16, CUDA SDPA, default ICL (`x_vector_only_mode=False`, `non_streaming_mode=False`). Seed **1234** matches the original. Saved generation settings match the long-form run exactly: sampling enabled; temperature **0.9**, top-k **50**, top-p **1.0**, repetition penalty **1.05**; subtalker sampling enabled with temperature **0.9**, top-k **50**, top-p **1.0**; max new tokens **8192**. There were no alternative seeds or retries, no added models/dependencies, and no production changes. Inference and diagnostics remain local/offline.
+
+### Section 12: before/after evidence
+
+| Measurement | Original | Expanded-number take |
+| --- | --- | --- |
+| Generation time | 49.018 s | 130.327 s |
+| Raw duration | 28.64 s | 35.20 s |
+| Raw integrated loudness | −19.876 LUFS | −17.142 LUFS |
+| Raw sample peak | −0.818 dBFS | 0.000 dBFS |
+| Quiet-frame fraction, below −45 dBFS | 20.15% | 31.39% |
+| Leading / trailing quiet, 10 ms RMS measurement | 0.12 / 0.07 s | 0.21 / **5.34 s** |
+| Speaker cosine to the reference | 0.9262 | 0.9318 |
+| Peak allocated / reserved VRAM | 2.805 / 3.918 GiB | 2.812 / 3.490 GiB |
+| Greedy / beam normalized ASR edit counts | 5 / 5 | 4 / 2 |
+
+The before/after speaker-embedding cosine is **0.9715**, supporting identity consistency but not proving perceived voice, accent, or delivery equivalence. The new take generated 440 codec frames without a token-cap hit, OOM, or generation exception. Runtime is one observation under current machine conditions, not evidence that spelling out a number intrinsically takes 2.7 times longer.
+
+Both original decodes render the number as **“17 Zvar 400” / “17 Svar 400.”** Both new decodes render it as **“17,400.”** The intended number has stronger diagnostic support after expansion. Listen around **12.90–14.46 s** in the original section and **14.92–16.14 s** in the candidate. The new take's greedy decode spells “night's” as “Knights,” while beam recovers the original wording; these are homophonic and are not confirmed new spoken errors. Both retain the `02:17` versus `02.17` formatting flag. No repeated sentence, missing ending, or large addition is detected.
+
+The substantial pacing change is measurable: the new take ends with approximately **5.34 seconds below −45 dBFS**. It would delay the unchanged opening of section 13 in a direct concatenation. That tail is preserved, not silently trimmed. The new decoder output also has four full-scale samples (longest run two samples), versus none in the original section; audible significance remains a listening question. Consequently, clearer numeral recognition alone does not establish a better full-section replacement.
+
+### Comparison recordings
+
+All files below are in `benchmarks/results/qwen3-accuracy-review/2026-11-18/comparison/`:
+
+| Comparison | Before / original | After / candidate |
+| --- | --- | --- |
+| Complete section 12, individually level-matched to −23 LUFS | [Before](../benchmarks/results/qwen3-accuracy-review/2026-11-18/comparison/section_12_before_levelmatched.wav) | [After](../benchmarks/results/qwen3-accuracy-review/2026-11-18/comparison/section_12_after_levelmatched.wav) |
+| Complete number sentence, approximate ASR word boundaries | [Before](../benchmarks/results/qwen3-accuracy-review/2026-11-18/comparison/number_sentence_before.wav) | [After](../benchmarks/results/qwen3-accuracy-review/2026-11-18/comparison/number_sentence_after.wav) |
+| Four seconds of original section 11 + section 12 + four seconds of original section 13 | [Before transition](../benchmarks/results/qwen3-accuracy-review/2026-11-18/comparison/section_12_transitions_before.wav) | [After transition](../benchmarks/results/qwen3-accuracy-review/2026-11-18/comparison/section_12_transitions_after.wav) |
+
+The full-section comparison uses independent constant gain to avoid a louder-is-better bias: −3.124076 dB before and −5.858370 dB after. Number-sentence clips retain their parent section's gain (approximately −22.18 and −22.45 LUFS); neither is locally boosted. Transition previews use the **same −4.100403 dB original-master gain** and **identical neighbor samples** on both sides. Their overall levels differ (−23.41 versus −21.39 LUFS), intentionally exposing the candidate's relative loudness in the existing narration. Judge voice quality using the level-matched full sections; judge pauses and relative levels using the transition previews.
+
+The preview files are separate artifacts. No sentence or section has been inserted into the original eight-minute master. The untouched raw candidate is `number/qwen06_default/main/section_12.wav`; source/candidate copies, independent recognition, word timestamps, and embeddings are in `evaluation/`. `comparison.json` documents crops, gain, durations, and hashes.
+
+### Section 13: evidence and conditional limit
+
+Exact source sentence:
+
+> Inside, a conversation drifts from a stubborn software message to the journey home.
+
+The full-paragraph greedy/beam decodes both say **“the conversation.”** A separate crop of this complete original sentence, approximately **10.50–16.20 s** in section 13, again gives **“the conversation”** in both decodes. The suspected article is near **10.92–11.14 s** section-relative, or **05:29.48–05:29.70** in the original master.
+
+[Listen to the preserved original sentence](../benchmarks/results/qwen3-accuracy-review/2026-11-18/comparison/section_13_original_sentence.wav). Four consistent recognition outputs strengthen the suspicion, but they are not independent human confirmation of what the waveform says. **No alternative was generated because the user's “if confirmed” condition remains unverified by listening.** The complete source wording and original audio are preserved; no seed search occurred. One alternative complete-sentence take can proceed after that confirmation, without regenerating the surrounding section.
+
+### Section 18: retain the original
+
+Exact source sentence:
+
+> Behind her, the observatory looks quiet again.
+
+Full-paragraph decodes give “quite again.” On the isolated original sentence (approximately **5.56–9.96 s** section-relative), greedy still gives “quite,” but beam gives **“quiet again” with zero normalized edits**. This demonstrates recognition instability rather than establishing a genuine pronunciation failure. [Listen to the preserved original sentence](../benchmarks/results/qwen3-accuracy-review/2026-11-18/comparison/section_18_original_sentence.wav). The target word is around **8.24–8.88 s** section-relative, or **07:45.44–07:46.08** in the original master.
+
+**Section 18 was not regenerated.** No pronunciation defect has been confirmed by listening, and there is positive diagnostic support for the intended word.
+
+### Decision and preservation
+
+Do not integrate or replace the original sections from this evidence alone. The explicit number expansion is promising for word fidelity, but its one full-paragraph take introduces a clear transition/pacing concern. Section 13 remains a high-priority listening check, and section 18 should remain untouched unless an actual pronunciation defect is heard. No extra attempts were made to conceal those limitations.
+
+`benchmarks/results/qwen3-accuracy-review/2026-11-18/preservation-and-audio-checks.json` verifies **239 protected files unchanged**, including the original script, every original long-form artifact and WAV, earlier narration WAVs, application/UI code, projects, and reference profiles. All **119 production package versions** are unchanged. All eight comparison files and the identical original neighbor samples in both transition previews were verified; both existing localhost endpoints return HTTP 200. The held runtime mutex `data/.app.lock` is excluded from file hashing.
+
+The only benchmark-helper change adds word-timestamp diagnostics without generating unrelated tempo exports; it is not imported by the application. Exactly one new TTS take was generated (section 12), with zero for sections 13 and 18. Chatterbox remains production, with no application rebuild, model switch, automatic script rewriting, or project-data modification.
