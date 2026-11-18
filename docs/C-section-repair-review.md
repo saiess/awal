@@ -1,5 +1,7 @@
 # Configuration C: sections 6 and 9 review
 
+> Historical results: superseded local audio/results were removed on 18 November 2026 at the user's request. Findings below describe the earlier experiment; retired paths are shown as text. Current listening files are in `benchmarks/results/CURRENT-section-12/`; see the [latest Qwen validation report](qwen3-long-form-validation.md).
+
 **Result: the two-seed repair limit is exhausted; no replacement is cleared.** Section 6 still repeats a phrase in both takes. Section 9 seed 1236 improves the flagged words but introduces an article change at the end. No full narration, project, production setting, or original recording was replaced. Stop for listening review.
 
 ## Source versus original audio
@@ -8,8 +10,8 @@
 
 Separate, non-overlapping audio windows decode as:
 
-- Section-relative **17.44-21.16 s**: “Sometimes the first promising result leads nowhere.” [First phrase](../benchmarks/results/expressive-delivery/C-section-repair-2026-11-15/s06-before-first_review.wav).
-- **21.16-24.60 s**: the additional “Sometimes the promising result leads nowhere.” [Extra phrase](../benchmarks/results/expressive-delivery/C-section-repair-2026-11-15/s06-before-extra_review.wav).
+- Section-relative **17.44-21.16 s**: “Sometimes the first promising result leads nowhere.” First phrase (retired local result: `../benchmarks/results/expressive-delivery/C-section-repair-2026-11-15/s06-before-first_review.wav`).
+- **21.16-24.60 s**: the additional “Sometimes the promising result leads nowhere.” Extra phrase (retired local result: `../benchmarks/results/expressive-delivery/C-section-repair-2026-11-15/s06-before-extra_review.wav`).
 
 This localizes the unwanted repeat in the synthesized recording, independently of long-audio recognizer chunk merging. It is **not a repeated source passage**. In the original raw full narration, the extra phrase is approximately **2:23.40-2:26.84**. The text was not rewritten.
 
@@ -22,7 +24,7 @@ This localizes the unwanted repeat in the synthesized recording, independently o
 | “cart” | 15.70-15.92 s | 3:38.02-3:38.24 | Recognized as “car” or “card” |
 | “catalogue” | 19.24-19.52 s | 3:41.56-3:41.84 | Recognized as “catalog”; **no correction warranted on this evidence** |
 
-Times are word-alignment estimates from the existing local recognizer, not manually certified phoneme boundaries. Listen with surrounding context; ASR may mishear accent or weak consonants. [Original timestamp trace](../benchmarks/results/expressive-delivery/C-section-repair-2026-11-15/original-word-timestamps.json).
+Times are word-alignment estimates from the existing local recognizer, not manually certified phoneme boundaries. Listen with surrounding context; ASR may mishear accent or weak consonants. Original timestamp trace (retired local result: `../benchmarks/results/expressive-delivery/C-section-repair-2026-11-15/original-word-timestamps.json`).
 
 ## Before/after listening
 
@@ -30,8 +32,8 @@ All table files are **1.00x**, statically matched to **-24.266 LUFS** with sampl
 
 | Section | Original seed 1234 | Alternative seed 1235 | Alternative seed 1236 |
 | --- | --- | --- | --- |
-| 6 | [Before](../benchmarks/results/expressive-delivery/C-section-repair-2026-11-15/section-06-before_listening_1.00x.wav) | [After 1235](../benchmarks/results/expressive-delivery/C-section-repair-2026-11-15/section-06-seed-1235_listening_1.00x.wav) | [After 1236](../benchmarks/results/expressive-delivery/C-section-repair-2026-11-15/section-06-seed-1236_listening_1.00x.wav) |
-| 9 | [Before](../benchmarks/results/expressive-delivery/C-section-repair-2026-11-15/section-09-before_listening_1.00x.wav) | [After 1235](../benchmarks/results/expressive-delivery/C-section-repair-2026-11-15/section-09-seed-1235_listening_1.00x.wav) | [After 1236](../benchmarks/results/expressive-delivery/C-section-repair-2026-11-15/section-09-seed-1236_listening_1.00x.wav) |
+| 6 | Before (retired local result: `../benchmarks/results/expressive-delivery/C-section-repair-2026-11-15/section-06-before_listening_1.00x.wav`) | After 1235 (retired local result: `../benchmarks/results/expressive-delivery/C-section-repair-2026-11-15/section-06-seed-1235_listening_1.00x.wav`) | After 1236 (retired local result: `../benchmarks/results/expressive-delivery/C-section-repair-2026-11-15/section-06-seed-1236_listening_1.00x.wav`) |
+| 9 | Before (retired local result: `../benchmarks/results/expressive-delivery/C-section-repair-2026-11-15/section-09-before_listening_1.00x.wav`) | After 1235 (retired local result: `../benchmarks/results/expressive-delivery/C-section-repair-2026-11-15/section-09-seed-1235_listening_1.00x.wav`) | After 1236 (retired local result: `../benchmarks/results/expressive-delivery/C-section-repair-2026-11-15/section-09-seed-1236_listening_1.00x.wav`) |
 
 | Take | Duration | Full-section normalized ASR edits, greedy / beam | Finding |
 | --- | --- | --- | --- |
@@ -40,7 +42,7 @@ All table files are **1.00x**, statically matched to **-24.266 LUFS** with sampl
 | 9 / 1235 | 23.84 s | 3 / 1 | Beam decode recovers the opening and “through,” but “cart” becomes “card”; greedy opening is also unstable |
 | 9 / 1236 | 25.68 s | 1 / 1 | “Shelves themselves,” “through,” “cart,” and “catalogue/catalog” are recovered; the ending becomes “straighten **the** shelf” instead of “straighten **a** shelf” |
 
-Independent short-window decodes retain both section 6 repeats and section 9 seed 1236's changed ending. [Isolated clip evidence](../benchmarks/results/expressive-delivery/C-section-repair-2026-11-15/isolated-phrase-checks.json), [ending clip](../benchmarks/results/expressive-delivery/C-section-repair-2026-11-15/s09-seed-1236-ending_review.wav), [complete transcripts/differences](../benchmarks/results/expressive-delivery/C-section-repair-2026-11-15/comparisons.json).
+Independent short-window decodes retain both section 6 repeats and section 9 seed 1236's changed ending. Isolated clip evidence (retired local result: `../benchmarks/results/expressive-delivery/C-section-repair-2026-11-15/isolated-phrase-checks.json`), ending clip (retired local result: `../benchmarks/results/expressive-delivery/C-section-repair-2026-11-15/s09-seed-1236-ending_review.wav`), complete transcripts/differences (retired local result: `../benchmarks/results/expressive-delivery/C-section-repair-2026-11-15/comparisons.json`).
 
 These checks do **not** clear either section as defect-free. They show that changing seeds alone did not remove the repeated phrase, and the strongest section 9 candidate still has a new word-fidelity concern. Naturalness, audible artifacts, accent, and narrator identity require human approval; no claim of “no new problems” is justified.
 
@@ -50,4 +52,4 @@ Exactly four calls: two per affected section, seeds **1235 and 1236**. Same pinn
 
 Four takes generated in **91.974 s**, with peak allocated GPU memory **3.44 GiB**, no generation errors or token-limit hits. Speaker cosine to each corresponding original section is **0.975-0.986**, a similarity proxy rather than listening approval. Original/project/production hashes are unchanged; all other fourteen narration sections remain untouched. No failed take was hidden and no third seed was attempted.
 
-[Generation/seed manifest](../benchmarks/results/expressive-delivery/C-section-repair-2026-11-15/repair-measurements.json). Reproducer: `scripts/repair_long_form_sections.py`; existing repair directories are not overwritten. **Keep the original narration in place. Review these candidates; do not integrate or claim a fully corrected narration.**
+Generation/seed manifest (retired local result: `../benchmarks/results/expressive-delivery/C-section-repair-2026-11-15/repair-measurements.json`). Reproducer: `scripts/repair_long_form_sections.py`; existing repair directories are not overwritten. **Keep the original narration in place. Review these candidates; do not integrate or claim a fully corrected narration.**

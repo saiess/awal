@@ -1,14 +1,16 @@
 # Configuration C: long-form validation
 
+> Historical results: superseded local audio/results were removed on 18 November 2026 at the user's request. Findings below describe the earlier experiment; retired paths are shown as text. Current listening files are in `benchmarks/results/CURRENT-section-12/`; see the [latest Qwen validation report](qwen3-long-form-validation.md).
+
 **Decision: do not integrate yet.** Technical generation passed, but word fidelity is not cleared. A repeated phrase is consistently detected in section 6; section 9 has pronunciation/word-recognition flags. Human listening must settle these and audible identity stability. Production is unchanged.
 
 ## Listening samples
 
-- [Original 1.00x, 6:48](../benchmarks/results/expressive-delivery/C-long-form-2026-11-15/C_long_form_raw_1.00x.wav): untouched float master; peaks can exceed full scale.
-- [Safe listening 1.00x, 6:48](../benchmarks/results/expressive-delivery/C-long-form-2026-11-15/C_long_form_listening_levelmatch_1.00x.wav): static gain only, -23.774 LUFS, no tempo or pause changes.
-- [YouTube listening 1.10x, 6:11](../benchmarks/results/expressive-delivery/C-long-form-2026-11-15/C_long_form_tempo_1.10x.wav): pitch-preserving FFmpeg `atempo=1.1`, then -2.149 dB static attenuation for a -1 dBFS sample-peak ceiling; no compression, fades, or pause trimming.
+- Original 1.00x, 6:48 (retired local result: `../benchmarks/results/expressive-delivery/C-long-form-2026-11-15/C_long_form_raw_1.00x.wav`): untouched float master; peaks can exceed full scale.
+- Safe listening 1.00x, 6:48 (retired local result: `../benchmarks/results/expressive-delivery/C-long-form-2026-11-15/C_long_form_listening_levelmatch_1.00x.wav`): static gain only, -23.774 LUFS, no tempo or pause changes.
+- YouTube listening 1.10x, 6:11 (retired local result: `../benchmarks/results/expressive-delivery/C-long-form-2026-11-15/C_long_form_tempo_1.10x.wav`): pitch-preserving FFmpeg `atempo=1.1`, then -2.149 dB static attenuation for a -1 dBFS sample-peak ceiling; no compression, fades, or pause trimming.
 
-**The Hidden Life of a City Library:** 1,118 source words, 97 sentences. [Script](../benchmarks/results/expressive-delivery/C-long-form-2026-11-15/script.txt), [time cues](../benchmarks/results/expressive-delivery/C-long-form-2026-11-15/listening-cues.csv), [measurements](../benchmarks/results/expressive-delivery/C-long-form-2026-11-15/measurements.json), and all 16 emitted sections are retained locally.
+**The Hidden Life of a City Library:** 1,118 source words, 97 sentences. Script (retired local result: `../benchmarks/results/expressive-delivery/C-long-form-2026-11-15/script.txt`), time cues (retired local result: `../benchmarks/results/expressive-delivery/C-long-form-2026-11-15/listening-cues.csv`), measurements (retired local result: `../benchmarks/results/expressive-delivery/C-long-form-2026-11-15/measurements.json`), and all 16 emitted sections are retained locally.
 
 ## Exact settings and measurements
 
@@ -37,12 +39,12 @@ Unprompted local **Whisper small.en** found **13 normalized word edits / 1,120 n
 
 | Passage | Observation and listening action |
 | --- | --- |
-| Section 6, raw 2:02-2:32; tempo about 1:51-2:19 | Both full-section and focused decoding detect an extra **“Sometimes the promising result leads nowhere”** after the intended sentence. This is a repetition concern, not a token-limit issue. [Focused clip](../benchmarks/results/expressive-delivery/C-long-form-2026-11-15/review-section-06-possible-repeated-phrase.wav). |
-| Section 9 | “Consider the shelves themselves” is recognized as “Consider the chefs”; “through constant attention” and “cart” are also unstable. Exact pronunciation/word fidelity is unresolved. [Opening clip](../benchmarks/results/expressive-delivery/C-long-form-2026-11-15/review-section-09-shelves-and-through.wav), [later clip](../benchmarks/results/expressive-delivery/C-long-form-2026-11-15/review-section-09-cart-pronunciation.wav). |
+| Section 6, raw 2:02-2:32; tempo about 1:51-2:19 | Both full-section and focused decoding detect an extra **“Sometimes the promising result leads nowhere”** after the intended sentence. This is a repetition concern, not a token-limit issue. Focused clip (retired local result: `../benchmarks/results/expressive-delivery/C-long-form-2026-11-15/review-section-06-possible-repeated-phrase.wav`). |
+| Section 9 | “Consider the shelves themselves” is recognized as “Consider the chefs”; “through constant attention” and “cart” are also unstable. Exact pronunciation/word fidelity is unresolved. Opening clip (retired local result: `../benchmarks/results/expressive-delivery/C-long-form-2026-11-15/review-section-09-shelves-and-through.wav`), later clip (retired local result: `../benchmarks/results/expressive-delivery/C-long-form-2026-11-15/review-section-09-cart-pronunciation.wav`). |
 | Sections 3 and 12 | Possible article substitutions: “a display” / “the display,” and “a class” / “the class.” Check exact wording. |
 | Section 4 | Whole-section ASR heard “disc”; focused decoding recovered the expected “desk.” Treat this as uncertain recognition, not a confirmed speech error. |
 
-Full [transcripts/alignments](../benchmarks/results/expressive-delivery/C-long-form-2026-11-15/word-coverage.json) and [focused checks](../benchmarks/results/expressive-delivery/C-long-form-2026-11-15/word-coverage-focused.json) are preserved. All 16 endings have no last-five-word mismatch; internal errors remain. No script prompt or narration regeneration concealed flags.
+Full transcripts/alignments (retired local result: `../benchmarks/results/expressive-delivery/C-long-form-2026-11-15/word-coverage.json`) and focused checks (retired local result: `../benchmarks/results/expressive-delivery/C-long-form-2026-11-15/word-coverage-focused.json`) are preserved. All 16 endings have no last-five-word mismatch; internal errors remain. No script prompt or narration regeneration concealed flags.
 
 **Acceptance:** duration, no OOM, sentence input boundaries, and raw preservation pass. Repetitions/omissions and pronunciation are **not cleared**. Audible identity drift, pacing, transitions, and artifacts remain **pending listening**. No proxy deterioration or internal quiet run over 0.90 seconds was detected; neither establishes naturalness.
 

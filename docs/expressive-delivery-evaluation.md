@@ -1,5 +1,7 @@
 # Awal: expressive speech delivery evaluation
 
+> Historical results: superseded local audio/results were removed on 18 November 2026 at the user's request. Findings below describe the earlier experiment; retired paths are shown as text. Current listening files are in `benchmarks/results/CURRENT-section-12/`; see the [latest Qwen validation report](qwen3-long-form-validation.md).
+
 Experiment date: 2026-11-15. **Listening approval pending. Nothing is integrated into production.**
 
 **Segmentation-only follow-up:** reviewers preferred C's sentence continuity, but its temperature change was a confound. One additional configuration, D, now tests A's exact baseline sampling with C's exact segmentation. D removes the same boundary without higher temperature; it also has a longer pause that needs listening review. **Review D next and prefer it if delivery is at least as good as C; production remains on A.** See [the A/D/C control comparison](#segmentation-only-control-adc) below. The original A/B/C experiment and audio are preserved.
@@ -10,7 +12,7 @@ Exactly three configurations use the same authorized Voice C reference and the s
 
 **Keep production on A until listening review.** C is the candidate to assess first for a later integration because it removes an observed mid-sentence boundary, not because acoustic metrics establish that it sounds better. Approve it only if its flow improves while word accuracy, voice identity, and artifacts are at least as good as A. If B sounds better than C, prefer B; if neither is clearly better, retain A. No Dessa-equivalence claim is made.
 
-The run, independent raw sections, exact text, settings, hashes, traces, and measurements are in [the experiment directory](../benchmarks/results/expressive-delivery/2026-11-15/). Audio stays local and is ignored by Git. The previous benchmark framework was removed during the requested cleanup; this experiment uses one isolated script and the existing engine/audio helpers rather than rebuilding a framework.
+The run, independent raw sections, exact text, settings, hashes, traces, and measurements are in the experiment directory (retired local result: `../benchmarks/results/expressive-delivery/2026-11-15/`). Audio stays local and is ignored by Git. The previous benchmark framework was removed during the requested cleanup; this experiment uses one isolated script and the existing engine/audio helpers rather than rebuilding a framework.
 
 ## Start listening here
 
@@ -18,17 +20,17 @@ Use headphones and a fixed volume. First compare these **1.00x, statically level
 
 | Sample | Listen |
 | --- | --- |
-| A: baseline | [A at 1.00x](../benchmarks/results/expressive-delivery/2026-11-15/A_baseline_listening_levelmatch_1.00x.wav) |
-| B: sampling hypothesis | [B at 1.00x](../benchmarks/results/expressive-delivery/2026-11-15/B_expressive_listening_levelmatch_1.00x.wav) |
-| C: context hypothesis | [C at 1.00x](../benchmarks/results/expressive-delivery/2026-11-15/C_context_listening_levelmatch_1.00x.wav) |
+| A: baseline | A at 1.00x (retired local result: `../benchmarks/results/expressive-delivery/2026-11-15/A_baseline_listening_levelmatch_1.00x.wav`) |
+| B: sampling hypothesis | B at 1.00x (retired local result: `../benchmarks/results/expressive-delivery/2026-11-15/B_expressive_listening_levelmatch_1.00x.wav`) |
+| C: context hypothesis | C at 1.00x (retired local result: `../benchmarks/results/expressive-delivery/2026-11-15/C_context_listening_levelmatch_1.00x.wav`) |
 
 Then check the preserved **unprocessed masters**:
 
-- [A raw](../benchmarks/results/expressive-delivery/2026-11-15/A_baseline_raw_1.00x.wav)
-- [B raw](../benchmarks/results/expressive-delivery/2026-11-15/B_expressive_raw_1.00x.wav)
-- [C raw](../benchmarks/results/expressive-delivery/2026-11-15/C_context_raw_1.00x.wav)
+- A raw (retired local result: `../benchmarks/results/expressive-delivery/2026-11-15/A_baseline_raw_1.00x.wav`)
+- B raw (retired local result: `../benchmarks/results/expressive-delivery/2026-11-15/B_expressive_raw_1.00x.wav`)
+- C raw (retired local result: `../benchmarks/results/expressive-delivery/2026-11-15/C_context_raw_1.00x.wav`)
 
-Optional, identically processed tempo comparisons: [A 1.10x](../benchmarks/results/expressive-delivery/2026-11-15/A_baseline_tempo_1.10x.wav), [B 1.10x](../benchmarks/results/expressive-delivery/2026-11-15/B_expressive_tempo_1.10x.wav), [C 1.10x](../benchmarks/results/expressive-delivery/2026-11-15/C_context_tempo_1.10x.wav). These use only FFmpeg `atempo=1.1`; tempo acceleration is **not** evidence of improved generation.
+Optional, identically processed tempo comparisons: A 1.10x (retired local result: `../benchmarks/results/expressive-delivery/2026-11-15/A_baseline_tempo_1.10x.wav`), B 1.10x (retired local result: `../benchmarks/results/expressive-delivery/2026-11-15/B_expressive_tempo_1.10x.wav`), C 1.10x (retired local result: `../benchmarks/results/expressive-delivery/2026-11-15/C_context_tempo_1.10x.wav`). These use only FFmpeg `atempo=1.1`; tempo acceleration is **not** evidence of improved generation.
 
 Every emitted section is also retained under `A_baseline/`, `B_expressive/`, and `C_context/` as `section-NN_raw.wav`. These are 24 kHz mono float WAVs, including the model's normal PerTh watermark. Masters concatenate the untouched sections and use the same existing minimum 0.12-second boundary gap rule. No edge trimming, fades, compression, gain normalization, or peak attenuation touches the raw masters. The separate level-matched copies apply static gain only; no changes to rhythm or pauses. No best-of selection or regeneration was used.
 
@@ -55,7 +57,7 @@ Reference duration: 19.1135 seconds. SHA256: `fc03ae6e7225642e8cf83e5160aff1d7f0
 
 B changes **only temperature**, modestly widening the speech-token sampling distribution. It is not an emotion-strength setting, and more randomness can also worsen diction or stability. Repetition penalty is held fixed to avoid confounding this test. C retains B's settings as the provisional candidate and changes only grouping; B was not declared a perceptual winner before generating C.
 
-The full script is [script.txt](../benchmarks/results/expressive-delivery/2026-11-15/script.txt). Its generation-text SHA256 is `07faa361303a886766e7fe8a209266ed43f38f2ec41bcb43626a720665553a2a` (without the file's final newline). Whitespace-normalized text identity across all three sets of sections is asserted. The long opening sentence deliberately tests the current boundary limit; this is a focused stress test, not a broad narration corpus.
+The full script is script.txt (retired local result: `../benchmarks/results/expressive-delivery/2026-11-15/script.txt`). Its generation-text SHA256 is `07faa361303a886766e7fe8a209266ed43f38f2ec41bcb43626a720665553a2a` (without the file's final newline). Whitespace-normalized text identity across all three sets of sections is asserted. The long opening sentence deliberately tests the current boundary limit; this is a focused stress test, not a broad narration corpus.
 
 ## What the pinned implementation actually supports
 
@@ -135,7 +137,7 @@ Run again into a **different, new directory**:
 .\.venv-chatterbox\Scripts\python.exe -B -u scripts\expressive_delivery_experiment.py --output benchmarks\results\expressive-delivery\another-run
 ```
 
-The script refuses an existing output directory, records settings and per-section timings/memory, and verifies production source/reference/project hashes afterward. [measurements.json](../benchmarks/results/expressive-delivery/2026-11-15/measurements.json) is the machine-readable evidence. Production settings, project records, raw audio, selective regeneration, references, export behavior, UI, and model versions have not been changed. A context candidate above 350 characters is not a drop-in production setting: the current section editor/API also have a 350-character limit, which would need a separately approved design if C wins.
+The script refuses an existing output directory, records settings and per-section timings/memory, and verifies production source/reference/project hashes afterward. measurements.json (retired local result: `../benchmarks/results/expressive-delivery/2026-11-15/measurements.json`) is the machine-readable evidence. Production settings, project records, raw audio, selective regeneration, references, export behavior, UI, and model versions have not been changed. A context candidate above 350 characters is not a drop-in production setting: the current section editor/API also have a 350-character limit, which would need a separately approved design if C wins.
 
 **Stop point: experiment and report only. Await listening review before integration.**
 
@@ -157,13 +159,13 @@ Thus **A versus D isolates segmentation**, and **D versus C isolates temperature
 
 Start with these statically level-matched **1.00x** copies; only D involves new speech synthesis:
 
-- [Existing A, comparison copy](../benchmarks/results/expressive-delivery/2026-11-15-segmentation-control/A_baseline_listening_levelmatch_1.00x.wav)
-- [New D, baseline sampling with context](../benchmarks/results/expressive-delivery/2026-11-15-segmentation-control/D_baseline_context_listening_levelmatch_1.00x.wav)
-- [Existing C, comparison copy](../benchmarks/results/expressive-delivery/2026-11-15-segmentation-control/C_context_listening_levelmatch_1.00x.wav)
+- Existing A, comparison copy (retired local result: `../benchmarks/results/expressive-delivery/2026-11-15-segmentation-control/A_baseline_listening_levelmatch_1.00x.wav`)
+- New D, baseline sampling with context (retired local result: `../benchmarks/results/expressive-delivery/2026-11-15-segmentation-control/D_baseline_context_listening_levelmatch_1.00x.wav`)
+- Existing C, comparison copy (retired local result: `../benchmarks/results/expressive-delivery/2026-11-15-segmentation-control/C_context_listening_levelmatch_1.00x.wav`)
 
 The A/C comparison files are derived into the **new** run directory, so the old raw and listening files are never overwritten. Level matching uses the same original method: choose a common integrated target of -23 LUFS or lower if any raw peak requires it to maintain -1 dBFS headroom, then apply static gain only. No compression, fades, time changes, or pause trimming affect this comparison.
 
-D's untouched [raw 1.00x master](../benchmarks/results/expressive-delivery/2026-11-15-segmentation-control/D_baseline_context_raw_1.00x.wav) and its three emitted `D_baseline_context/section-NN_raw.wav` files are retained. An optional [tempo-only 1.10x copy](../benchmarks/results/expressive-delivery/2026-11-15-segmentation-control/D_baseline_context_tempo_1.10x.wav) is separate; use the 1.00x files to judge delivery. The [new measurement manifest](../benchmarks/results/expressive-delivery/2026-11-15-segmentation-control/measurements.json) records all settings, traces, measurements, comparisons, and integrity checks.
+D's untouched raw 1.00x master (retired local result: `../benchmarks/results/expressive-delivery/2026-11-15-segmentation-control/D_baseline_context_raw_1.00x.wav`) and its three emitted `D_baseline_context/section-NN_raw.wav` files are retained. An optional tempo-only 1.10x copy (retired local result: `../benchmarks/results/expressive-delivery/2026-11-15-segmentation-control/D_baseline_context_tempo_1.10x.wav`) is separate; use the 1.00x files to judge delivery. The new measurement manifest (retired local result: `../benchmarks/results/expressive-delivery/2026-11-15-segmentation-control/measurements.json`) records all settings, traces, measurements, comparisons, and integrity checks.
 
 ### Results
 

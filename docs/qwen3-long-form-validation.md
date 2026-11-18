@@ -1,5 +1,7 @@
 # Qwen3-TTS default: final long-form validation
 
+> **Latest comparison — Section 12, trim only:** [before transition](../benchmarks/results/CURRENT-section-12/03-transition-before.wav) · [after transition](../benchmarks/results/CURRENT-section-12/04-transition-after.wav) · [trimmed WAV](../benchmarks/results/CURRENT-section-12/02-corrected-trimmed.wav). Files are numbered in `benchmarks/results/CURRENT-section-12/`. No speech was regenerated or integrated.
+
 Date: 18 November 2026. Validation only; Chatterbox remains Awal's production engine.
 
 ## Frozen test
@@ -210,3 +212,59 @@ Do not integrate or replace the original sections from this evidence alone. The 
 `benchmarks/results/qwen3-accuracy-review/2026-11-18/preservation-and-audio-checks.json` verifies **239 protected files unchanged**, including the original script, every original long-form artifact and WAV, earlier narration WAVs, application/UI code, projects, and reference profiles. All **119 production package versions** are unchanged. All eight comparison files and the identical original neighbor samples in both transition previews were verified; both existing localhost endpoints return HTTP 200. The held runtime mutex `data/.app.lock` is excluded from file hashing.
 
 The only benchmark-helper change adds word-timestamp diagnostics without generating unrelated tempo exports; it is not imported by the application. Exactly one new TTS take was generated (section 12), with zero for sections 13 and 18. Chatterbox remains production, with no application rebuild, model switch, automatic script rewriting, or project-data modification.
+
+## Trim-only Section 12 transition review — 18 November 2026
+
+The user listened and confirmed that the expanded-number take correctly pronounces **“seventeen thousand four hundred.”** This follow-up addresses only its excessive trailing quiet. It does not regenerate speech, change model settings, alter the source script, replace a project recording, or integrate Qwen.
+
+### Files to review
+
+Open `C:\Users\saide\Desktop\awal\benchmarks\results\CURRENT-section-12\`:
+
+| File | Purpose |
+| --- | --- |
+| [01-corrected-untrimmed.wav](../benchmarks/results/CURRENT-section-12/01-corrected-untrimmed.wav) | Byte-identical copy of the existing 35.20 s corrected raw take. |
+| [02-corrected-trimmed.wav](../benchmarks/results/CURRENT-section-12/02-corrected-trimmed.wav) | New raw comparison: the same retained samples, with the excessive suffix removed. |
+| [03-transition-before.wav](../benchmarks/results/CURRENT-section-12/03-transition-before.wav) | Final speech plus the original long end pause, followed by the first eight seconds of original Section 13. |
+| [04-transition-after.wav](../benchmarks/results/CURRENT-section-12/04-transition-after.wav) | The exact same speech and Section 13 opening, with only the shorter end pause. |
+
+The original long-form Section 12 and its first corrected take remain at their existing paths. These new files are separate review artifacts. `trim-details.json` records the sample cut, gains, measurements, source hashes, and output hashes.
+
+### Exact trim and speech preservation
+
+| Property | Value |
+| --- | --- |
+| Format | Mono, 24,000 Hz, FLOAT WAV |
+| Original corrected length | 844,800 samples / 35.200000 s |
+| Last sample at or above −45 dBFS | Zero-based index **716,950**; activity end at **29.872958 s** |
+| Quiet retained after that activity boundary | **8,400 samples / 0.350000 s** |
+| Cut index, exclusive | **725,351** |
+| Trimmed length | **30.222958 s** |
+| Suffix removed | **119,449 samples / 4.977042 s** |
+| Removed suffix peak / RMS | **−53.043 / −77.530 dBFS** |
+| End quiet using the previous 10 ms, −45 dBFS RMS measure | Before **5.34 s**; after **0.36 s** |
+
+The operation is exactly `trimmed = corrected[:725351]`. Every retained sample compares equal after saving and reloading. There is no fade, gain change, filtering, resampling, time stretching, or speech regeneration in file 02. The discarded suffix is entirely below the activity threshold, and the retained 0.35 s includes the low-level decay after stronger speech ends. The last retained sample has amplitude 0.000713 (approximately −62.9 dBFS); no fade or invented replacement silence was applied.
+
+The untouched corrected take's SHA-256 remains `90b203197f0fb0a3177880c0da33eee668b7b7ed6050b3b71961a09511933b8d`. The trimmed copy's SHA-256 is `35218916545ac51b8b04c629870f059ee292042f1d69498f755848fe5e75aa7f`. Identity, pronunciation, and rhythm within the retained speech cannot change through this sample-preserving prefix operation.
+
+### Pacing and loudness at the join
+
+The previews start at **24.872958 s** in the corrected take, five seconds before its measured activity end. They then append the same eight seconds of original Section 13, without fades or extra gap insertion. The join occurs at **10.327042 s** in the before preview and **5.350000 s** in the after preview. Preview lengths are **18.327042 s** and **13.350000 s**.
+
+Section 13 contributes approximately **0.24 s** of its own leading quiet. The total measured quiet interval around the join falls from approximately **5.58 s to 0.60 s**. That is consistent with a paragraph pause; its perceived naturalness still needs the user's listening approval. Section 13's wording, voice, and samples are unchanged.
+
+The raw trimmed WAV preserves the corrected take's original level. For the separate listening previews, fixed gains derived from each complete untrimmed section align Section 12 and Section 13 to **−23 LUFS**: **−5.858370 dB** and **−3.476223 dB**, respectively. Both previews use those identical gains. This compensates for the corrected take being about **2.38 LU louder** than original Section 13, without modifying either raw recording. Before/after preview loudness is **−22.959 / −22.924 LUFS**, a difference of only **0.034 LU**. Every retained Section 12 sample and every Section 13 sample is identical between the two previews after the shared gain operations; only the quiet suffix is absent from the after version.
+
+**Recommendation:** audition file 04 for the Section 12 → 13 pacing decision. The measured pause and loudness are suitable for review, and the already approved number pronunciation is preserved. No new model inference or ASR pass is needed to validate the unchanged speech samples. This does not resolve the separately pending Section 13 article check or constitute production integration approval.
+
+### Results cleanup
+
+At the user's request, superseded local results were deleted, not archived:
+
+- The older Chatterbox expressive-delivery experiment tree: 99 files.
+- Superseded Qwen-versus-Chatterbox listening/raw WAVs: 30 files. Its settings, license/source receipts, measurements, and other metadata remain.
+
+Total removed: **129 files / 406.19 MiB**. Older reports mark retired paths as historical text rather than offering dead audio links. The full Qwen long-form validation, all its original sections/masters, the current corrected number take, the focused accuracy comparisons, model caches, narrator profiles, project data, and dependency environments are retained. No archive copies were created. `CURRENT-section-12/cleanup-manifest.json` records exactly which older files were removed; the numbered current folder provides the new listening entry point.
+
+`CURRENT-section-12/verification.json` confirms **164 protected current files unchanged**, all **119 production package versions unchanged**, the exact raw prefix and untouched corrected-copy hashes, identical retained speech/Section 13 samples in the two previews, sufficient preview peak headroom, and all document links resolving. Both existing localhost endpoints return HTTP 200. No model or ASR inference was run for this trim-only follow-up. Production remains unchanged, and transition acceptance awaits listening approval.

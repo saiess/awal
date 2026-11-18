@@ -1,5 +1,7 @@
 # Qwen3-TTS versus Chatterbox Turbo
 
+> Historical results: superseded local audio/results were removed on 18 November 2026 at the user's request. Findings below describe the earlier experiment; retired paths are shown as text. Current listening files are in `benchmarks/results/CURRENT-section-12/`; see the [latest Qwen validation report](qwen3-long-form-validation.md).
+
 Benchmark date: 18 November 2026. This experiment does not integrate Qwen into Awal.
 
 ## Compatibility and provenance
@@ -71,16 +73,16 @@ Start with the three **level-matched 1.00× masters**, in this order within each
 
 | Configuration | Listening master | Original 1.00× master |
 | --- | --- | --- |
-| Chatterbox C | [Listen](../benchmarks/results/qwen3-vs-chatterbox/2026-11-18/listening/chatterbox_C__raw_1.00x_levelmatched.wav) | [Raw](../benchmarks/results/qwen3-vs-chatterbox/2026-11-18/chatterbox_C/raw_1.00x.wav) |
-| Qwen recommended ICL/default layout | [Listen](../benchmarks/results/qwen3-vs-chatterbox/2026-11-18/listening/qwen06_default__raw_1.00x_levelmatched.wav) | [Raw](../benchmarks/results/qwen3-vs-chatterbox/2026-11-18/qwen06_default/raw_1.00x.wav) |
-| Qwen full-text layout | [Listen](../benchmarks/results/qwen3-vs-chatterbox/2026-11-18/listening/qwen06_fulltext__raw_1.00x_levelmatched.wav) | [Raw](../benchmarks/results/qwen3-vs-chatterbox/2026-11-18/qwen06_fulltext/raw_1.00x.wav) |
+| Chatterbox C | Listen (retired local result: `../benchmarks/results/qwen3-vs-chatterbox/2026-11-18/listening/chatterbox_C__raw_1.00x_levelmatched.wav`) | Raw (retired local result: `../benchmarks/results/qwen3-vs-chatterbox/2026-11-18/chatterbox_C/raw_1.00x.wav`) |
+| Qwen recommended ICL/default layout | Listen (retired local result: `../benchmarks/results/qwen3-vs-chatterbox/2026-11-18/listening/qwen06_default__raw_1.00x_levelmatched.wav`) | Raw (retired local result: `../benchmarks/results/qwen3-vs-chatterbox/2026-11-18/qwen06_default/raw_1.00x.wav`) |
+| Qwen full-text layout | Listen (retired local result: `../benchmarks/results/qwen3-vs-chatterbox/2026-11-18/listening/qwen06_fulltext__raw_1.00x_levelmatched.wav`) | Raw (retired local result: `../benchmarks/results/qwen3-vs-chatterbox/2026-11-18/qwen06_fulltext/raw_1.00x.wav`) |
 
 For focused review:
 
 | Passage | Chatterbox C | Qwen default | Qwen full-text |
 | --- | --- | --- | --- |
-| Section 6 | [Listen](../benchmarks/results/qwen3-vs-chatterbox/2026-11-18/listening/chatterbox_C__main__library_06_levelmatched.wav) | [Listen](../benchmarks/results/qwen3-vs-chatterbox/2026-11-18/listening/qwen06_default__main__library_06_levelmatched.wav) | [Listen](../benchmarks/results/qwen3-vs-chatterbox/2026-11-18/listening/qwen06_fulltext__main__library_06_levelmatched.wav) |
-| Section 9 | [Listen](../benchmarks/results/qwen3-vs-chatterbox/2026-11-18/listening/chatterbox_C__main__library_09_levelmatched.wav) | [Listen](../benchmarks/results/qwen3-vs-chatterbox/2026-11-18/listening/qwen06_default__main__library_09_levelmatched.wav) | [Listen](../benchmarks/results/qwen3-vs-chatterbox/2026-11-18/listening/qwen06_fulltext__main__library_09_levelmatched.wav) |
+| Section 6 | Listen (retired local result: `../benchmarks/results/qwen3-vs-chatterbox/2026-11-18/listening/chatterbox_C__main__library_06_levelmatched.wav`) | Listen (retired local result: `../benchmarks/results/qwen3-vs-chatterbox/2026-11-18/listening/qwen06_default__main__library_06_levelmatched.wav`) | Listen (retired local result: `../benchmarks/results/qwen3-vs-chatterbox/2026-11-18/listening/qwen06_fulltext__main__library_06_levelmatched.wav`) |
+| Section 9 | Listen (retired local result: `../benchmarks/results/qwen3-vs-chatterbox/2026-11-18/listening/chatterbox_C__main__library_09_levelmatched.wav`) | Listen (retired local result: `../benchmarks/results/qwen3-vs-chatterbox/2026-11-18/listening/qwen06_default__main__library_09_levelmatched.wav`) | Listen (retired local result: `../benchmarks/results/qwen3-vs-chatterbox/2026-11-18/listening/qwen06_fulltext__main__library_09_levelmatched.wav`) |
 
 All paths above are relative to the project. The absolute listening directory is `C:\Users\saide\Desktop\awal\benchmarks\results\qwen3-vs-chatterbox\2026-11-18\listening`.
 
