@@ -245,19 +245,21 @@ export default function App() {
   return <>
     <aside className="sidebar">
       <div className="brand"><span className="brand-mark">N</span><div>Local Narration<small>Personal workspace</small></div></div>
-      <button id="new-project" className="primary wide" disabled={locked} onClick={() => { void action(newProject); }}>+ New project</button>
-      <div className="sidebar-label">SAVED PROJECTS</div>
+      <button id="new-project" className="primary wide" disabled={locked} onClick={() => { void action(newProject); }}><span aria-hidden="true">+</span>New project</button>
+      <div className="sidebar-label"><span>Your projects</span><span className="project-count" aria-label={`${projects.length} saved projects`}>{projects.length}</span></div>
       <nav id="projects" aria-label="Saved projects">
         {!projects.length && <p className="muted">{initializing ? 'Loading projects…' : 'Your saved projects will appear here.'}</p>}
         {projects.map(item => <button key={item.id} className={project?.id === item.id ? 'active' : ''} data-project-id={item.id}
+          aria-current={project?.id === item.id ? 'page' : undefined} title={item.title}
           disabled={locked} onClick={() => { void action(() => openProject(item.id)); }}>
-          <span>{item.title}</span><small>{item.ready_count} / {item.segment_count} sections ready</small>
+          <span className="project-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" /><path d="M14 3v6h6M8 13h8M8 17h5" /></svg></span>
+          <span className="project-copy"><span className="project-name">{item.title}</span><small>{item.ready_count} / {item.segment_count} sections ready</small></span>
         </button>)}
       </nav>
       <div id="health" className="health" role="status">{healthText}</div>
     </aside>
     <main>
-      <header><div><p className="eyebrow">NARRATION</p><h1 id="heading">{project?.title ?? 'New project'}</h1></div><span className="local-badge">● Local</span></header>
+      <header><div><p className="eyebrow">NARRATION</p><h1 id="heading">{project?.title ?? 'New project'}</h1></div><span className="local-badge"><span className="local-dot" aria-hidden="true" />Local</span></header>
       <div id="error" role="alert" hidden={!error}>{error}</div><div id="notice" role="status" hidden={!notice}>{notice}</div>
       <NarratorPanel narrator={project?.narrator ?? narrator} locked={locked} onUpload={data =>
         action(async () => {
